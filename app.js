@@ -363,9 +363,10 @@ function initChart(data) {
                     display: true, 
                     position: 'right', 
                     reverse: true, // Inverted scale for splits (faster is higher on graph)
+                    max: 300, // Culls any splits slower than 5:00.0 (300 seconds) - assume this is stationary: sorry!
                     title: { display: true, text: 'Split (m:ss.t)' },
                     ticks: {
-                        // Formats the labels drawn on the actual right-hand y-axis
+                        // Formats the labels drawn on the actual right-hand y-axis to m:ss.t
                         callback: function(value) {
                             const m = Math.floor(value / 60);
                             const s = (value % 60).toFixed(1).padStart(4, '0');
