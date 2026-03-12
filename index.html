@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoxOrb Data Visualiser</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>🚣 CoxOrb Data Visualiser</h1>
+        <p>Client-side processing application hosted via GitHub Pages.</p>
+    </header>
+
+    <main>
+        <section class="panel">
+            <h2>1. Upload Data</h2>
+            <div class="upload-grid">
+                <div>
+                    <label>GPX File (Route)</label>
+                    <input type="file" id="gpx-upload" accept=".gpx">
+                </div>
+                <div>
+                    <label>CSV File (Metrics)</label>
+                    <input type="file" id="csv-upload" accept=".csv">
+                </div>
+                <div>
+                    <label>Audio File (Optional)</label>
+                    <input type="file" id="audio-upload" accept="audio/*">
+                </div>
+            </div>
+            <button id="process-btn">Process & Merge Data</button>
+        </section>
+
+        <section class="panel hidden" id="replay-section">
+            <h2>2. Interactive Analysis</h2>
+            
+            <div id="map-container">
+                <div id="map"></div>
+            </div>
+
+            <div class="controls">
+                <input type="range" id="time-slider" min="0" max="100" value="0" step="1">
+                <div id="audio-container" class="hidden">
+                    <audio id="audio-player" controls></audio>
+                </div>
+            </div>
+
+            <div class="dashboard">
+                <div class="stat-box">Time: <span id="val-time">--:--</span></div>
+                <div class="stat-box">Rate: <span id="val-rate">--</span></div>
+                <div class="stat-box">Split: <span id="val-split">--</span></div>
+                <div class="stat-box">Dist/Stroke: <span id="val-dist">--</span></div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="metricsChart"></canvas>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
