@@ -41,6 +41,10 @@ processBtn.addEventListener('click', async () => {
         gpxData = parseGPX(gpxText);
         csvData = parseCSV(csvText);
 
+        // DEGBUGGING for GPX CSV merging - log first few entries to verify parsing
+        console.log("GPX Sample:", gpxData.slice(0, 3));
+        console.log("CSV Sample:", csvData.slice(0, 3));
+
         // Merge datasets based on timestamp
         mergedData = mergeAsOf(gpxData, csvData, 5);
 
@@ -111,40 +115,83 @@ function parseGPX(gpxText) {
 }
 
 /**
- * Parses raw CSV text into an array of JSON objects using PapaParse.
- * Converts 'Elapsed Time' strings into numeric 'seconds_elapsed'.
- * @param {string} csvText - Raw CSV text.
- * @returns {Array<Object>} Array of data objects representing each stroke.
+ * Parses raw CSV/TSV text into an array of JSON objects using PapaParse.
+ * Built with heavy regex normalization to conquer CoxOrb file formatting.
  */
 function parseCSV(csvText) {
-    // Skip the first row if it contains the device header (CoxOrb format)
-    const lines = csvText.split('\n');
-    let targetCSV = csvText;
-    if (lines[0].includes("COXORB")) {
-        targetCSV = lines.slice(1).join('\n');
+    console.log("--- CSV PARSER DEBUG ---");
+    // Print the raw string so we can see if it's full of weird characters
+    console.log("Raw First 100 chars:", csvText.substring(0, 100).replace(/\n/g, '\\n').replace(/\t/g, '[TAB]'));
+
+    const lines = csvText.split(/\r\n|\n|\r/);
+    let headerLineIdx = -1;
+
+    // 1. Find Header Line
+    for (let i = 0; i < Math.min(20, lines.length); i++) {
+        // Strip absolutely everything except letters. "Elapsed Time" becomes "ELAPSEDTIME"
+        const rawLine = lines[i].toUpperCase().replace(/[^A-Z]/g, ''); 
+        if (rawLine.includes("ELAPSEDTIME") || rawLine.includes("DISTANCE")) {
+            headerLineIdx = i;
+            break;
+        }
     }
 
-    const results = Papa.parse(targetCSV, { header: true, skipEmptyLines: true });
+    if (headerLineIdx === -1) {
+        console.error("Could not detect header row! Check if the file is corrupted.");
+        return [];
+    }
+
+    // 2. Detect Delimiter (Comma vs Tab)
+    const headerString = lines[headerLineIdx];
+    let delim = ',';
+    if (headerString.includes('\t')) delim = '\t';
+    else if (headerString.includes(';')) delim = ';';
+    
+    console.log(`Header found at line ${headerLineIdx}. Using delimiter: ${delim === '\t' ? 'TAB' : 'COMMA'}`);
+
+    // 3. Parse with PapaParse
+    const targetCSV = lines.slice(headerLineIdx).join('\n');
+    const results = Papa.parse(targetCSV, {
+        header: true,
+        skipEmptyLines: true,
+        delimiter: delim
+    });
+
+    console.log(`PapaParse extracted ${results.data.length} rows.`);
+    if (results.data.length > 0) {
+        console.log("Raw headers array detected:", Object.keys(results.data[0]));
+    }
+
+    // 4. Extract Data Safely
     const parsed = [];
-
     results.data.forEach(row => {
-        // Clean keys (trim whitespace)
-        const cleanRow = {};
-        for (let key in row) {
-            cleanRow[key.trim()] = row[key];
-        }
+        const keys = Object.keys(row);
+        
+        // Normalize keys to find the ones we want, ignoring all spacing/symbols
+        const timeKey = keys.find(k => k.replace(/[^a-zA-Z]/g, '').toUpperCase().includes("ELAPSEDTIME"));
+        const rateKey = keys.find(k => k.replace(/[^a-zA-Z]/g, '').toUpperCase().includes("RATE"));
+        const speedKey = keys.find(k => k.toUpperCase().includes("M/S"));
+        const distKey = keys.find(k => k.replace(/[^a-zA-Z]/g, '').toUpperCase().includes("DISTANCE"));
 
-        if (cleanRow['Elapsed Time']) {
-            cleanRow.seconds_elapsed = parseTimeStr(cleanRow['Elapsed Time']);
+        // If the row has an elapsed time, process it
+        if (timeKey && row[timeKey] && row[timeKey].trim() !== "") {
+            const cleanRow = {};
+            cleanRow.seconds_elapsed = parseTimeStr(row[timeKey]);
             
-            // Calculate split from Speed (m/s) if applicable
-            const speed = parseFloat(cleanRow['Speed (m/s)']);
+            cleanRow['Elapsed Time'] = row[timeKey].trim();
+            cleanRow['Rate'] = rateKey ? parseFloat(row[rateKey]) : null;
+            cleanRow['Distance/Stroke'] = distKey ? parseFloat(row[distKey]) : null;
+            
+            const speed = speedKey ? parseFloat(row[speedKey]) : 0;
+            cleanRow['Speed (m/s)'] = speed;
             cleanRow.split_seconds = (speed > 0) ? (500 / speed) : null;
             
             parsed.push(cleanRow);
         }
     });
 
+    console.log(`Successfully formatted ${parsed.length} rows for the app.`);
+    console.log("------------------------");
     return parsed;
 }
 
@@ -154,14 +201,24 @@ function parseCSV(csvText) {
  * @returns {number} Total seconds elapsed.
  */
 function parseTimeStr(timeStr) {
-    const parts = timeStr.split(':');
+    if (!timeStr) return 0;
+    
+    // Convert to string and clean whitespace
+    const str = String(timeStr).trim();
+    const parts = str.split(':');
     let totalSeconds = 0;
+    
     if (parts.length === 3) {
         totalSeconds = parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseFloat(parts[2]);
     } else if (parts.length === 2) {
         totalSeconds = parseInt(parts[0]) * 60 + parseFloat(parts[1]);
+    } else if (parts.length === 1) {
+        // Handles cases where the time is just raw seconds (e.g., "45.5")
+        totalSeconds = parseFloat(parts[0]);
     }
-    return Math.round(totalSeconds);
+    
+    // Fallback to 0 if parsing fails
+    return Math.round(totalSeconds) || 0;
 }
 
 /**
