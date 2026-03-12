@@ -282,9 +282,12 @@ function initMap(data) {
  * @param {Array<Object>} data - Merged dataset.
  */
 function initChart(data) {
+    // Destroy existing chart to prevent memory leaks during reloads
     if (chartInstance) chartInstance.destroy();
 
     const ctx = document.getElementById('metricsChart').getContext('2d');
+
+    // Extract arrays once to feed into the chart
     const labels = data.map(d => d['Elapsed Time'] || d.seconds_elapsed);
     const rateData = data.map(d => parseFloat(d['Rate']) || null);
     const splitData = data.map(d => d.split_seconds || null);
@@ -298,13 +301,15 @@ function initChart(data) {
                     label: 'Stroke Rate',
                     data: rateData,
                     borderColor: 'blue',
-                    yAxisID: 'y'
+                    yAxisID: 'y',
+                    normalized: true // Tells Chart.js data is sorted, skipping expensive parsing
                 },
                 {
-                    label: 'Split (s/500m)',
+                    label: 'Split',
                     data: splitData,
                     borderColor: 'green',
-                    yAxisID: 'y1'
+                    yAxisID: 'y1',
+                    normalized: true // Speeds up rendering workload
                 }
             ]
         },
@@ -312,9 +317,62 @@ function initChart(data) {
             responsive: true,
             maintainAspectRatio: false,
             animation: false, // Disabling animation ensures real-time slider sync is seamless
+            elements: {
+                point: {
+                    radius: 0, // Disables drawing hundreds of individual dots
+                    hitRadius: 10,
+                    hoverRadius: 5
+                },
+                line: {
+                    tension: 0 // Disables bezier curve calculations for instant, straight lines
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        // Formats the tooltip text when you hover over the chart
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            
+                            // If we are hovering over the split line, format the number
+                            if (context.dataset.yAxisID === 'y1') {
+                                const val = context.parsed.y;
+                                const m = Math.floor(val / 60);
+                                const s = (val % 60).toFixed(1).padStart(4, '0');
+                                label += `${m}:${s}`;
+                            } else {
+                                label += context.parsed.y;
+                            }
+                            return label;
+                        }
+                    }
+                }
+            },
             scales: {
-                y: { type: 'linear', display: true, position: 'left' },
-                y1: { type: 'linear', display: true, position: 'right', reverse: true } // Inverted scale for splits
+                y: { 
+                    type: 'linear', 
+                    display: true, 
+                    position: 'left',
+                    title: { display: true, text: 'Stroke Rate' }
+                },
+                y1: { 
+                    type: 'linear', 
+                    display: true, 
+                    position: 'right', 
+                    reverse: true, // Inverted scale for splits (faster is higher on graph)
+                    title: { display: true, text: 'Split (m:ss.t)' },
+                    ticks: {
+                        // Formats the labels drawn on the actual right-hand y-axis
+                        callback: function(value) {
+                            const m = Math.floor(value / 60);
+                            const s = (value % 60).toFixed(1).padStart(4, '0');
+                            return `${m}:${s}`;
+                        }
+                    }
+                }
             }
         }
     });
