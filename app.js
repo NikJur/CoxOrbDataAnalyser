@@ -52,13 +52,14 @@ processBtn.addEventListener('click', async () => {
             throw new Error("Could not align GPX and CSV timestamps.");
         }
 
+        // Expose replay section
+        replaySection.classList.remove('hidden');
+        
         // Initialize UI components
         initMap(mergedData);
         initChart(mergedData);
         setupAudio();
         
-        // Expose replay section
-        replaySection.classList.remove('hidden');
         timeSlider.max = mergedData.length - 1;
         
         processBtn.innerText = "Process & Merge Data";
@@ -78,7 +79,7 @@ function readFileAsText(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (e) => resolve(e.target.result);
-        reader.onerror = (e) => reject(e);
+        reader.onerror = (e) > reject(e);
         reader.readAsText(file);
     });
 }
