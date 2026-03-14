@@ -54,7 +54,7 @@ processBtn.addEventListener('click', async () => {
 
         // Expose replay section
         replaySection.classList.remove('hidden');
-        
+    
         // Initialize UI components
         initMap(mergedData);
         initChart(mergedData);
@@ -79,7 +79,7 @@ function readFileAsText(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (e) => resolve(e.target.result);
-        reader.onerror = (e) > reject(e);
+        reader.onerror = (e) => reject(e);
         reader.readAsText(file);
     });
 }
@@ -257,10 +257,13 @@ function mergeAsOf(gpx, csv, tolerance) {
 }
 
 /**
- * Initializes the Leaflet map and draws the polyline path.
+ * Initializes the Leaflet map, draws the polyline path, and adds the boat marker.
+ * Implements a ResizeObserver to automatically redraw the map canvas when the user 
+ * manually drags the bottom-right corner to change the container size.
  * @param {Array<Object>} data - Merged dataset containing latitudes and longitudes.
  */
 function initMap(data) {
+    // Destroy previous map instance if a new file is uploaded
     if (mapInstance) mapInstance.remove();
 
     const startLoc = [data[0].lat, data[0].lon];
@@ -276,6 +279,18 @@ function initMap(data) {
     // Initialise the draggable boat marker
     boatMarker = L.circleMarker(startLoc, { color: 'red', radius: 6, fillOpacity: 1 }).addTo(mapInstance);
     mapInstance.fitBounds(L.polyline(latlngs).getBounds());
+
+    // Watch the #map-container for dimension changes triggered by the CSS resize handle
+    const mapContainer = document.getElementById('map-container');
+    const resizeObserver = new ResizeObserver(() => {
+        if (mapInstance) {
+            // Forces Leaflet to recalculate tile placements to fill the newly created space
+            mapInstance.invalidateSize();
+        }
+    });
+    
+    // Start watching the container
+    resizeObserver.observe(mapContainer);
 }
 
 /**
