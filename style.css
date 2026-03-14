@@ -57,12 +57,25 @@ button {
 
 button:hover { background-color: #1d405e; }
 
-#map {
-    height: 500px;
+/* Container holding the map and enabling the bottom-right resize handle */
+#map-container {
+    height: 500px; /* Default starting height */
+    min-height: 100px; /* Prevents the user from crushing the map out of existence */
     width: 100%;
+    resize: both; /* Adds the drag handle to allow vertical and horizontal resizing */
+    overflow: hidden; /* CSS requires overflow: hidden (or auto/scroll) for 'resize' to function */
+    margin-bottom: 1rem;
     border-radius: 8px;
-    z-index: 1; /* Prevents Leaflet from overlapping dropdowns */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2); /* Subtle shadow to define the draggable edge */
 }
+
+/* Forces the Leaflet map to stretch exactly to whatever size the user drags the container to */
+#map {
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+}
+
 
 .controls {
     margin: 1.5rem 0;
