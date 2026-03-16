@@ -8,6 +8,7 @@ let mergedData = [];
 let mapInstance = null;
 let boatMarker = null;
 let chartInstance = null;
+let currentSliderIndex = 0; // Tracks the current stroke for the chart's vertical line
 
 // DOM Elements
 const processBtn = document.getElementById('process-btn');
@@ -393,7 +394,33 @@ function initChart(data) {
                     }
                 }
             }
-        }
+        },
+        plugins: [{
+            id: 'verticalLinePlugin',
+            afterDraw: (chart) => {
+                // Ensure we have a valid index before attempting to draw
+                if (typeof currentSliderIndex === 'undefined' || currentSliderIndex === null) return;
+                
+                // Get the physical pixel coordinates of the current data point
+                const meta = chart.getDatasetMeta(0); // Uses dataset 0 (Rate) for the X-axis mapping
+                const dataPoint = meta.data[currentSliderIndex];
+                
+                if (!dataPoint) return;
+
+                const ctx = chart.ctx;
+                ctx.save();
+                
+                // Draw a 2px red line from the top of the graph area to the bottom
+                ctx.beginPath();
+                ctx.moveTo(dataPoint.x, chart.chartArea.top);
+                ctx.lineTo(dataPoint.x, chart.chartArea.bottom);
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = 'red';
+                ctx.stroke();
+                
+                ctx.restore();
+            }
+        }]
     });
 }
 
@@ -445,8 +472,11 @@ function updateUI(index) {
         document.getElementById('val-split').innerText = "--";
     }
 
-    // Optional: Render a vertical line on Chart.js to track position
-    // (Implementation omitted for brevity, but relies on Chart.js plugin API)
+    // Update the global index and trigger an instant chart redraw
+    currentSliderIndex = index;
+    if (chartInstance) {
+        chartInstance.update('none'); 
+    }
 }
 
 /**
