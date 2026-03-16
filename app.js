@@ -54,7 +54,8 @@ processBtn.addEventListener('click', async () => {
 
         // Expose replay section
         replaySection.classList.remove('hidden');
-    
+        
+        
         // Initialize UI components
         initMap(mergedData);
         initChart(mergedData);
@@ -85,6 +86,7 @@ function readFileAsText(file) {
 }
 
 /**
+.
  * Parses raw GPX XML string into an array of coordinate objects.
  * Calculates 'seconds_elapsed' relative to the first track point.
  * @param {string} gpxText - Raw XML string.
