@@ -66,6 +66,20 @@ button {
 
 button:hover { background-color: #1d405e; }
 
+/* demo data link to sit next to the processing button */
+.demo-link {
+    display: inline-block;
+    margin-left: 1.5rem;
+    color: var(--primary);
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.demo-link:hover {
+    color: #1d405e;
+}
+
 /* Container holding the map and enabling the bottom-right resize handle */
 #map-container {
     position: relative; /* anchors resize emblem.to the box */

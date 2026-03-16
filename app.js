@@ -485,3 +485,68 @@ function updateUI(index) {
 timeSlider.addEventListener('input', (e) => {
     updateUI(e.target.value);
 });
+
+
+/**
+ * Fetches pre-uploaded demo data from the repository and initializes the application.
+ * Uses the native Fetch API to retrieve files directly from the demo_data directory.
+ * @param {Event} e - The click event object to prevent default page jumping.
+ */
+document.getElementById('demo-link').addEventListener('click', async (e) => {
+    e.preventDefault(); 
+    const demoLink = document.getElementById('demo-link');
+    demoLink.innerText = "Loading Demo...";
+
+    try {
+        // Retrieve raw file data from the server directories
+        const gpxResponse = await fetch('demo_data/example.GPX');
+        const csvResponse = await fetch('demo_data/example_GRAPH.CSV');
+
+        if (!gpxResponse.ok || !csvResponse.ok) {
+            throw new Error("Could not locate demo files on the server.");
+        }
+
+        const gpxText = await gpxResponse.text();
+        const csvText = await csvResponse.text();
+
+        // Parse extracted text into data arrays
+        gpxData = parseGPX(gpxText);
+        csvData = parseCSV(csvText);
+
+        // Merge temporal datasets
+        mergedData = mergeAsOf(gpxData, csvData, 5);
+
+        if (mergedData.length === 0) {
+            throw new Error("Could not align GPX and CSV timestamps.");
+        }
+
+        // Expose the replay container to allow Leaflet and Chart.js to calculate dimensions
+        replaySection.classList.remove('hidden');
+
+        // Render visualisations
+        initMap(mergedData);
+        initChart(mergedData);
+        
+        // Configure the audio player with the demo recording
+        audioContainer.classList.remove('hidden');
+        audioPlayer.src = 'demo_data/example_recording.m4a';
+        
+        // Attach the synchronization event listener specifically for the demo audio
+        audioPlayer.addEventListener('timeupdate', () => {
+            const currentTime = Math.round(audioPlayer.currentTime);
+            const index = mergedData.findIndex(d => d.seconds_elapsed >= currentTime);
+            if (index !== -1) {
+                timeSlider.value = index;
+                updateUI(index);
+            }
+        });
+
+        timeSlider.max = mergedData.length - 1;
+        demoLink.innerText = "Load Demo Data";
+
+    } catch (error) {
+        console.error(error);
+        alert(`Error loading demo data: ${error.message}`);
+        demoLink.innerText = "Load Demo Data";
+    }
+});
