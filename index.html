@@ -15,21 +15,22 @@
     </header>
     <main>
         <section class="panel">
-            <h2>1. Upload Data</h2>
+            <h2>A: Interactive Analysis</h2>
             <div class="upload-grid">
                 <div>
                     <label>GPX File (Route)</label>
                     <input type="file" id="gpx-upload" accept=".gpx">
                 </div>
                 <div>
-                    <label>CSV File (Metrics)</label>
+                    <label>CSV File (Metrics/Optional)</label>
                     <input type="file" id="csv-upload" accept=".csv">
                 </div>
                 <div>
-                    <label>Audio File (Optional)</label>
+                    <label>Cox Recording (Optional)</label>
                     <input type="file" id="audio-upload" accept="audio/*">
                 </div>
             </div>
+
             <div class="action-buttons">
                 <button id="process-btn">Process & Merge Data</button>
                 <span class="or-divider">or</span>
@@ -38,9 +39,7 @@
             </div>
         </section>
 
-        <section class="panel hidden" id="replay-section">
-            <h2>2. Interactive Analysis</h2>
-            
+        <section class="panel hidden" id="replay-section">            
             <div id="map-container">
                 <div id="map"></div>
             </div>
@@ -64,8 +63,8 @@
             </div>
         </section>
 
-<section class="panel hidden" id="compare-section">
-            <h2>3. Compare Routes</h2>
+        <section class="panel" id="compare-section">
+            <h2>B: Compare Routes</h2>
             <p>Upload up to 5 GPX files to compare steering lines side-by-side. Use the toggles to show or hide them individually.</p>
             
             <div id="compare-inputs" class="upload-grid" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem;">
@@ -122,8 +121,10 @@
 
             </div>
             
-            <button id="compare-btn">Render Comparison Map</button>
-            <button id="clear-compare-btn" class="clear-btn">Clear</button>
+            <div class="action-buttons">
+                <button id="compare-btn">Render Comparison Map</button>
+                <button id="clear-compare-btn" class="clear-btn">Clear</button>
+            </div>
 
             <div id="compare-map-container" class="hidden">
                 <div id="compare-map"></div>
