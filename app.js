@@ -722,35 +722,42 @@ for (let i = 1; i <= 5; i++) {
  * Resets global arrays, destroys the chart, pauses audio, clears file inputs.
  */
 document.getElementById('clear-primary-btn').addEventListener('click', () => {
-    // 1. Clear global data arrays
+    // Clear global data arrays
     gpxData = [];
     csvData = [];
     mergedData = [];
     currentSliderIndex = 0;
 
-    // 2. Reset the physical file input fields
+    // Reset the physical file input fields
     document.getElementById('gpx-upload').value = '';
     document.getElementById('csv-upload').value = '';
     document.getElementById('audio-upload').value = '';
 
 
-    // 3. Safely destroy the Chart.js instance to free up memory
+    // Safely destroy the Chart.js instance to free up memory
     if (chartInstance) {
         chartInstance.destroy();
         chartInstance = null;
     }
 
-    // 4. Stop audio playback and reset the source
+    // Safely destroy the Leaflet map instance to clear the route and boat marker
+    if (mapInstance) {
+        mapInstance.remove();
+        mapInstance = null;
+        boatMarker = null;
+    }
+
+    // Stop audio playback and reset the source
     audioPlayer.pause();
     audioPlayer.src = '';
 
-    // 5. Reset Dashboard text metrics back to default state
+    // Reset Dashboard text metrics back to default state
     document.getElementById('val-time').innerText = '--';
     document.getElementById('val-rate').innerText = '--';
     document.getElementById('val-dist').innerText = '--';
     document.getElementById('val-split').innerText = '--';
     
-    // 6. Reset the slider
+    // Reset the slider
     timeSlider.value = 0;
     timeSlider.max = 0;
 });
