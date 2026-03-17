@@ -26,43 +26,60 @@ const audioContainer = document.getElementById('audio-container');
  * Event Listener for the main processing button.
  * Triggers the parsing of uploaded files.
  */
-processBtn.addEventListener('click', async () => {
+document.getElementById('process-btn').addEventListener('click', async () => {
     const gpxFile = document.getElementById('gpx-upload').files[0];
     const csvFile = document.getElementById('csv-upload').files[0];
 
-    if (!gpxFile || !csvFile) {
-        alert("Please upload both GPX and CSV files.");
+    if (!gpxFile) {
+        alert("Please upload at least a GPX file to visualize the route.");
         return;
     }
 
     try {
         processBtn.innerText = "Processing...";
         
-        // Read files asynchronously
+        // parse the GPX file
         const gpxText = await readFileAsText(gpxFile);
-        const csvText = await readFileAsText(csvFile);
-
-        // Parse extracted texts
         gpxData = parseGPX(gpxText);
-        csvData = parseCSV(csvText);
 
-        // DEGBUGGING for GPX CSV merging - log first few entries to verify parsing
-        console.log("GPX Sample:", gpxData.slice(0, 3));
-        console.log("CSV Sample:", csvData.slice(0, 3));
+        const chartContainer = document.querySelector('.chart-container');
+        const dashboard = document.getElementById('dashboard');
 
-        // Merge datasets based on timestamp
-        mergedData = mergeAsOf(gpxData, csvData, 5);
+        // Did the user upload a CSV?
+        if (csvFile) {
+            const csvText = await readFileAsText(csvFile);
+            csvData = parseCSV(csvText);
 
-        if (mergedData.length === 0) {
-            throw new Error("Could not align GPX and CSV timestamps.");
+            // Merge datasets based on timestamp
+            mergedData = mergeAsOf(gpxData, csvData, 5);
+
+            if (mergedData.length === 0) {
+                throw new Error("Could not align GPX and CSV timestamps.");
+            }
+
+            // Un-hide the metric elements and render the chart
+            chartContainer.style.display = 'block';
+            dashboard.style.display = 'flex';
+            initChart(mergedData);
+        } else {
+            // If no CSV is present, use the temporal GPX data
+            mergedData = gpxData; 
+            
+            // Hide the empty chart and dashboard elements to keep the UI clean
+            chartContainer.style.display = 'none';
+            dashboard.style.display = 'none';
+            
+            if (chartInstance) {
+                chartInstance.destroy();
+                chartInstance = null;
+            }
         }
 
         // Expose replay section
-        replaySection.classList.remove('hidden'); // Expose the replay container
+        replaySection.classList.remove('hidden');
         
-        // Initialize UI components
+        // Initialize universal UI components
         initMap(mergedData);
-        initChart(mergedData);
         setupAudio();
         
         timeSlider.max = mergedData.length - 1;
@@ -758,6 +775,10 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
     // Reset the slider
     timeSlider.value = 0;
     timeSlider.max = 0;
+
+    // Hide the visualization containers again
+    replaySection.classList.add('hidden');
+    audioContainer.classList.add('hidden');
 });
 
 /**
@@ -780,4 +801,6 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
         // Reset the toggle switch back to its default checked state
         document.getElementById(`toggle-compare-${i+1}`).checked = true;
     }
+    // Hide the comparison map container again
+    document.getElementById('compare-map-container').classList.add('hidden');
 });
