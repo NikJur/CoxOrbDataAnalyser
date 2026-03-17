@@ -1,5 +1,5 @@
 :root {
-    --primary: #2b5b84;
+    --primary: #25476D;
     --bg-color: #f8f9fa;
     --panel-bg: #ffffff;
     --text-main: #333333;
@@ -66,18 +66,34 @@ button {
 
 button:hover { background-color: #1d405e; }
 
-/* demo data link to sit next to the processing button */
-.demo-link {
-    display: inline-block;
-    margin-left: 1.5rem;
-    color: var(--primary);
-    text-decoration: underline;
-    cursor: pointer;
-    font-weight: 500;
+/* Container to align the primary action buttons and the divider horizontally */
+.action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
 }
 
-.demo-link:hover {
-    color: #1d405e;
+/* Styling for the text divider between the action buttons */
+.or-divider {
+    color: #888888;
+    font-size: 0.95rem;
+}
+
+/* Styles the demo button to match the primary button dimensions but in orange */
+.demo-btn {
+    background-color: #F08118; /* Vibrant orange */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+/* Hover state for the demo button */
+.demo-btn:hover {
+    background-color: #d68910; /* Darker orange */
 }
 
 /* Container holding the map and enabling the bottom-right resize handle */

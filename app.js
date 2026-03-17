@@ -492,10 +492,10 @@ timeSlider.addEventListener('input', (e) => {
  * Uses the native Fetch API to retrieve files directly from the demo_data directory.
  * @param {Event} e - The click event object to prevent default page jumping.
  */
-document.getElementById('demo-link').addEventListener('click', async (e) => {
+document.getElementById('demo-btn').addEventListener('click', async (e) => {
     e.preventDefault(); 
-    const demoLink = document.getElementById('demo-link');
-    demoLink.innerText = "Loading Demo...";
+    const demoBtn = document.getElementById('demo-btn');
+    demoBtn.innerText = "Loading Demo...";
 
     try {
         // Retrieve raw file data from the server directories
@@ -542,11 +542,10 @@ document.getElementById('demo-link').addEventListener('click', async (e) => {
         });
 
         timeSlider.max = mergedData.length - 1;
-        demoLink.innerText = "Load Demo Data";
-
+        demoBtn.innerText = "Load Demo Data"; // Reset button text on success
     } catch (error) {
         console.error(error);
         alert(`Error loading demo data: ${error.message}`);
-        demoLink.innerText = "Load Demo Data";
+        demoBtn.innerText = "Load Demo Data";
     }
 });
