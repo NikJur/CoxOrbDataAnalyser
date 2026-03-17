@@ -63,16 +63,65 @@
             </div>
         </section>
 
-        <section class="panel hidden" id="compare-section">
-            <h2>3. Compare Route</h2>
-            <p>Upload a second GPX file to compare your steering line against another outing or cox.</p>
-            <div class="upload-grid">
-                <div>
-                    <label>Comparison GPX File</label>
-                    <input type="file" id="gpx-compare-upload" accept=".gpx">
+<section class="panel hidden" id="compare-section">
+            <h2>3. Compare Routes</h2>
+            <p>Upload up to 5 GPX files to compare steering lines side-by-side. Use the toggles to show or hide them individually.</p>
+            
+            <div id="compare-inputs" class="upload-grid" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem;">
+                
+                <div class="compare-row">
+                    <span class="legend-color" style="background: #25476D;"></span>
+                    <span class="route-label">Route 1</span>
+                    <input type="file" id="gpx-compare-1" accept=".gpx">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-compare-1" checked>
+                        <span class="slider round"></span>
+                    </label>
                 </div>
+
+                <div class="compare-row">
+                    <span class="legend-color" style="background: #F08118;"></span>
+                    <span class="route-label">Route 2</span>
+                    <input type="file" id="gpx-compare-2" accept=".gpx">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-compare-2" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="compare-row">
+                    <span class="legend-color" style="background: #000000;"></span>
+                    <span class="route-label">Route 3</span>
+                    <input type="file" id="gpx-compare-3" accept=".gpx">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-compare-3" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="compare-row">
+                    <span class="legend-color" style="background: #C0392B;"></span>
+                    <span class="route-label">Route 4</span>
+                    <input type="file" id="gpx-compare-4" accept=".gpx">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-compare-4" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="compare-row">
+                    <span class="legend-color" style="background: #8E44AD;"></span>
+                    <span class="route-label">Route 5</span>
+                    <input type="file" id="gpx-compare-5" accept=".gpx">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-compare-5" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
             </div>
-            <button id="compare-btn">Compare Routes</button>
+            
+            <button id="compare-btn">Render Comparison Map</button>
 
             <div id="compare-map-container" class="hidden">
                 <div id="compare-map"></div>

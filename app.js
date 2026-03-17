@@ -9,7 +9,10 @@ let mapInstance = null;
 let boatMarker = null;
 let chartInstance = null;
 let currentSliderIndex = 0; // Tracks the current stroke for the chart's vertical line
+
 let compareMapInstance = null;
+let compareLayers = [null, null, null, null, null];
+const compareColors = ['#25476D', '#F08118', '#000000', '#C0392B', '#8E44AD'];
 
 // DOM Elements
 const processBtn = document.getElementById('process-btn');
@@ -566,94 +569,86 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
 });
 
 /**
- * Renders a secondary Leaflet map dedicated solely to route comparison.
- * Extracts the primary route coordinates from the global mergedData state 
- * and plots them alongside the newly uploaded comparison route.
- * Both paths are rendered as solid lines (Blue vs Orange) and the map bounds 
- * are calculated to ensure both entire routes are visible.
- * @param {Array<Object>} compareData - Parsed GPX coordinates from the secondary file.
- */
-function renderCompareMap(compareData) {
-    document.getElementById('compare-map-container').classList.remove('hidden');
-
-    // Destroy previous instance if a new comparison is uploaded
-    if (compareMapInstance) compareMapInstance.remove();
-
-    // Ensure primary data exists to compare against
-    if (!mergedData || mergedData.length === 0) return;
-
-    // Extract coordinates
-    const primaryLatlngs = mergedData.map(pt => [pt.lat, pt.lon]);
-    const compareLatlngs = compareData.map(pt => [pt.lat, pt.lon]);
-
-    const startLoc = primaryLatlngs[0];
-    compareMapInstance = L.map('compare-map').setView(startLoc, 15);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(compareMapInstance);
-
-    // Draw both lines as solid, distinct colors
-    const primaryLine = L.polyline(primaryLatlngs, { color: 'blue', weight: 3 }).addTo(compareMapInstance);
-    const compareLine = L.polyline(compareLatlngs, { color: '#F08118', weight: 3 }).addTo(compareMapInstance);
-
-    // Calculate the bounding box to encapsulate both routes
-    const bounds = primaryLine.getBounds().extend(compareLine.getBounds());
-    compareMapInstance.fitBounds(bounds);
-
-    // Legend:
-    const legend = L.control({ position: 'topright' }); // Places it safely out of the way of the zoom controls
-
-    legend.onAdd = function () {
-        // Creates a standard div and applies custom CSS class
-        const div = L.DomUtil.create('div', 'map-legend');
-        
-        // Injects the raw HTML for the text and color swatches
-        div.innerHTML = `
-            <div class="legend-item">
-                <span class="legend-color" style="background: blue;"></span> Route 1
-            </div>
-            <div class="legend-item">
-                <span class="legend-color" style="background: #F08118;"></span> Route 2
-            </div>
-        `;
-        return div;
-    };
-
-    legend.addTo(compareMapInstance);
-
-    // Attach resize observer to ensure smooth scaling
-    const container = document.getElementById('compare-map-container');
-    const resizeObserver = new ResizeObserver(() => {
-        if (compareMapInstance) compareMapInstance.invalidateSize();
-    });
-    resizeObserver.observe(container);
-}
-
-/**
- * Event Listener for the comparison GPX upload button.
- * Parses a secondary GPX file and plots it onto a new dedicated map canvas.
+ * Event Listener for the "Render Comparison Map" button.
+ * Loops through all 5 file inputs, parses any uploaded GPX files, 
+ * creates colored polylines, and manages map boundaries.
  */
 document.getElementById('compare-btn').addEventListener('click', async () => {
-    const compareFile = document.getElementById('gpx-compare-upload').files[0];
     const compareBtn = document.getElementById('compare-btn');
+    compareBtn.innerText = "Processing...";
 
-    if (!compareFile) {
-        alert("Please upload a comparison GPX file.");
-        return;
+    document.getElementById('compare-map-container').classList.remove('hidden');
+
+    // Initialize the comparison map if it does not exist yet
+    if (!compareMapInstance) {
+        compareMapInstance = L.map('compare-map').setView([51.474, -0.271], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(compareMapInstance);
+
+        const container = document.getElementById('compare-map-container');
+        const resizeObserver = new ResizeObserver(() => {
+            if (compareMapInstance) compareMapInstance.invalidateSize();
+        });
+        resizeObserver.observe(container);
     }
 
-    try {
-        compareBtn.innerText = "Processing...";
-        const gpxText = await readFileAsText(compareFile);
-        const compareData = parseGPX(gpxText);
+    let bounds = L.latLngBounds([]);
 
-        renderCompareMap(compareData); // Pass data to the new map function
+    // Loop through all 5 input slots
+    for (let i = 1; i <= 5; i++) {
+        const fileInput = document.getElementById(`gpx-compare-${i}`);
+        const isChecked = document.getElementById(`toggle-compare-${i}`).checked;
 
-        compareBtn.innerText = "Compare Routes";
-    } catch (error) {
-        console.error(error);
-        alert(`Error loading comparison data: ${error.message}`);
-        compareBtn.innerText = "Compare Routes";
+        if (fileInput.files.length > 0) {
+            try {
+                // Clear existing layer from this slot if overwriting
+                if (compareLayers[i-1]) {
+                    compareMapInstance.removeLayer(compareLayers[i-1]);
+                }
+
+                // Read and parse the local file
+                const gpxText = await readFileAsText(fileInput.files[0]);
+                const parsedData = parseGPX(gpxText);
+                const latlngs = parsedData.map(pt => [pt.lat, pt.lon]);
+
+                // Create the polyline using the designated row color
+                const polyline = L.polyline(latlngs, { color: compareColors[i-1], weight: 3 });
+                compareLayers[i-1] = polyline;
+
+                bounds.extend(polyline.getBounds());
+
+                // Immediately draw it if the toggle is currently switched "on"
+                if (isChecked) {
+                    polyline.addTo(compareMapInstance);
+                }
+            } catch (err) {
+                console.error(`Error parsing Route ${i}:`, err);
+            }
+        }
     }
+
+    // Zoom the map out just enough to see all drawn lines
+    if (bounds.isValid()) {
+        compareMapInstance.fitBounds(bounds);
+    }
+
+    compareBtn.innerText = "Render Comparison Map";
 });
+
+/**
+ * Attaches event listeners to all 5 toggle switches.
+ * Instantly adds or removes the corresponding line from the map when clicked.
+ */
+for (let i = 1; i <= 5; i++) {
+    document.getElementById(`toggle-compare-${i}`).addEventListener('change', (e) => {
+        const layer = compareLayers[i-1];
+        if (layer && compareMapInstance) {
+            if (e.target.checked) {
+                layer.addTo(compareMapInstance);
+            } else {
+                compareMapInstance.removeLayer(layer);
+            }
+        }
+    });
+}

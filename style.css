@@ -237,3 +237,62 @@ button:hover { background-color: #1C3754; }
     border-radius: 3px;
     display: inline-block;
 }
+
+/* Layout for each individual comparison route row */
+.compare-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.route-label {
+    font-weight: bold;
+    width: 65px;
+}
+
+/* CSS implementation of an iOS-style toggle switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    margin-left: auto; /* Pushes the toggle to the far right of the row */
+}
+
+/* Hides the default HTML checkbox */
+.toggle-switch input { 
+    opacity: 0; 
+    width: 0; 
+    height: 0; 
+}
+
+/* The visual track of the slider */
+.slider {
+    position: absolute; 
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc; 
+    transition: .4s; 
+    border-radius: 24px;
+}
+
+/* The moving circular nub inside the slider */
+.slider:before {
+    position: absolute; 
+    content: "";
+    height: 16px; 
+    width: 16px; 
+    left: 4px; 
+    bottom: 4px;
+    background-color: white; 
+    transition: .4s; 
+    border-radius: 50%;
+}
+
+/* Changes track color and slides the nub when checked */
+input:checked + .slider { background-color: var(--primary); }
+input:checked + .slider:before { transform: translateX(20px); }
