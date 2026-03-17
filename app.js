@@ -560,6 +560,70 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
         });
 
         timeSlider.max = mergedData.length - 1;
+
+        // --- MULTI-ROUTE COMPARISON DEMO SETUP ---
+        document.getElementById('compare-map-container').classList.remove('hidden');
+
+        // Initialize the secondary comparison map if it does not exist
+        if (!compareMapInstance) {
+            const startLoc = [gpxData[0].lat, gpxData[0].lon];
+            compareMapInstance = L.map('compare-map').setView(startLoc, 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(compareMapInstance);
+
+            const container = document.getElementById('compare-map-container');
+            const resizeObserver = new ResizeObserver(() => {
+                if (compareMapInstance) compareMapInstance.invalidateSize();
+            });
+            resizeObserver.observe(container);
+        }
+
+        try {
+            // Clear any previously existing layers from manual uploads
+            for(let i = 0; i < 5; i++) {
+                if (compareLayers[i]) {
+                    compareMapInstance.removeLayer(compareLayers[i]);
+                    compareLayers[i] = null;
+                }
+                // Reset toggles to unchecked to start fresh
+                document.getElementById(`toggle-compare-${i+1}`).checked = false;
+            }
+
+            let bounds = L.latLngBounds([]);
+
+            // Slot 1: The Primary Demo Route (Blue)
+            const latlngs1 = gpxData.map(pt => [pt.lat, pt.lon]);
+            const poly1 = L.polyline(latlngs1, { color: compareColors[0], weight: 3 });
+            compareLayers[0] = poly1;
+            document.getElementById('toggle-compare-1').checked = true; // Visually switch toggle ON
+            poly1.addTo(compareMapInstance);
+            bounds.extend(poly1.getBounds());
+
+            // Slot 2: Fetch and render the secondary Comparison Demo Route (Orange)
+            const compareResponse = await fetch('demo_data/example_comparison.gpx');
+            if (compareResponse.ok) {
+                const compareText = await compareResponse.text();
+                const compareData = parseGPX(compareText);
+                const latlngs2 = compareData.map(pt => [pt.lat, pt.lon]);
+                
+                const poly2 = L.polyline(latlngs2, { color: compareColors[1], weight: 3 });
+                compareLayers[1] = poly2;
+                document.getElementById('toggle-compare-2').checked = true; // Visually switch toggle ON
+                poly2.addTo(compareMapInstance);
+                bounds.extend(poly2.getBounds());
+            }
+
+            // Adjust map view to encompass both routes
+            if (bounds.isValid()) {
+                compareMapInstance.fitBounds(bounds);
+            }
+
+        } catch (err) {
+            console.warn("Could not load secondary comparison demo data.", err);
+        }
+
+        
         demoBtn.innerText = "Load Demo Data"; // Reset button text on success
     } catch (error) {
         console.error(error);
