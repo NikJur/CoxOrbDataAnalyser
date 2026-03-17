@@ -64,7 +64,7 @@ button {
     font-size: 1rem;
 }
 
-button:hover { background-color: #1d405e; }
+button:hover { background-color: #1C3754; }
 
 /* Container to align the primary action buttons and the divider horizontally */
 .action-buttons {
@@ -93,7 +93,7 @@ button:hover { background-color: #1d405e; }
 
 /* Hover state for the demo button */
 .demo-btn:hover {
-    background-color: #d68910; /* Darker orange */
+    background-color: #D27014; /* Darker orange */
 }
 
 /* Container holding the map and enabling the bottom-right resize handle */
