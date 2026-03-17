@@ -59,7 +59,6 @@ processBtn.addEventListener('click', async () => {
 
         // Expose replay section
         replaySection.classList.remove('hidden'); // Expose the replay container
-        document.getElementById('compare-section').classList.remove('hidden'); // Expose the comparison tool
         
         // Initialize UI components
         initMap(mergedData);
@@ -526,7 +525,6 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
 
         // Expose the replay container to allow Leaflet and Chart.js to calculate dimensions
         replaySection.classList.remove('hidden');
-        document.getElementById('compare-section').classList.remove('hidden');
 
         // Render visualisations
         initMap(mergedData);
