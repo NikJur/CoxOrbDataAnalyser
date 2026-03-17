@@ -296,3 +296,16 @@ button:hover { background-color: #1C3754; }
 /* Changes track color and slides the nub when checked */
 input:checked + .slider { background-color: var(--primary); }
 input:checked + .slider:before { transform: translateX(20px); }
+
+/* Styling for the clear/reset buttons */
+.clear-btn {
+    background-color: transparent;
+    color: #C0392B; /* Red text */
+    border: 1px solid #C0392B;
+}
+
+/* Hover state for the clear buttons */
+.clear-btn:hover {
+    background-color: #FADBD8; /* Soft red background */
+    color: #A93226;
+}

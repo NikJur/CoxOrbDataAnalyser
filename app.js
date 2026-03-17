@@ -623,7 +623,7 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
             console.warn("Could not load secondary comparison demo data.", err);
         }
 
-        
+
         demoBtn.innerText = "Load Demo Data"; // Reset button text on success
     } catch (error) {
         console.error(error);
@@ -716,3 +716,63 @@ for (let i = 1; i <= 5; i++) {
         }
     });
 }
+
+/**
+ * Event Listener for the Primary "Clear" button.
+ * Resets global arrays, destroys the chart, pauses audio, clears file inputs.
+ */
+document.getElementById('clear-primary-btn').addEventListener('click', () => {
+    // 1. Clear global data arrays
+    gpxData = [];
+    csvData = [];
+    mergedData = [];
+    currentSliderIndex = 0;
+
+    // 2. Reset the physical file input fields
+    document.getElementById('gpx-upload').value = '';
+    document.getElementById('csv-upload').value = '';
+    document.getElementById('audio-upload').value = '';
+
+
+    // 3. Safely destroy the Chart.js instance to free up memory
+    if (chartInstance) {
+        chartInstance.destroy();
+        chartInstance = null;
+    }
+
+    // 4. Stop audio playback and reset the source
+    audioPlayer.pause();
+    audioPlayer.src = '';
+
+    // 5. Reset Dashboard text metrics back to default state
+    document.getElementById('val-time').innerText = '--';
+    document.getElementById('val-rate').innerText = '--';
+    document.getElementById('val-dist').innerText = '--';
+    document.getElementById('val-split').innerText = '--';
+    
+    // 6. Reset the slider
+    timeSlider.value = 0;
+    timeSlider.max = 0;
+});
+
+/**
+ * Event Listener for the Comparison "Clear" button.
+ * Removes all polyline layers from the comparison map, clears the 5 file inputs, 
+ * resets the toggles.
+ */
+document.getElementById('clear-compare-btn').addEventListener('click', () => {
+    // Loop through all 5 slots to remove layers and reset UI
+    for (let i = 0; i < 5; i++) {
+        // Remove the colored line from the map if it exists
+        if (compareLayers[i] && compareMapInstance) {
+            compareMapInstance.removeLayer(compareLayers[i]);
+            compareLayers[i] = null;
+        }
+        
+        // Clear the file input
+        document.getElementById(`gpx-compare-${i+1}`).value = '';
+        
+        // Reset the toggle switch back to its default checked state
+        document.getElementById(`toggle-compare-${i+1}`).checked = true;
+    }
+});
