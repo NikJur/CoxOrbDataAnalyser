@@ -206,3 +206,34 @@ button:hover { background-color: #1C3754; }
     width: 100%;
     z-index: 1;
 }
+
+/* Styling for the comparison map legend */
+.map-legend {
+    background: white;
+    padding: 10px 12px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+
+/* Flexbox container to align the color swatches with the text */
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+/* Removes the bottom margin from the last item so the box padding stays even */
+.legend-item:last-child {
+    margin-bottom: 0;
+}
+
+/* The physical colored square drawn next to the text */
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    display: inline-block;
+}

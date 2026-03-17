@@ -601,6 +601,27 @@ function renderCompareMap(compareData) {
     const bounds = primaryLine.getBounds().extend(compareLine.getBounds());
     compareMapInstance.fitBounds(bounds);
 
+    // Legend:
+    const legend = L.control({ position: 'topright' }); // Places it safely out of the way of the zoom controls
+
+    legend.onAdd = function () {
+        // Creates a standard div and applies custom CSS class
+        const div = L.DomUtil.create('div', 'map-legend');
+        
+        // Injects the raw HTML for the text and color swatches
+        div.innerHTML = `
+            <div class="legend-item">
+                <span class="legend-color" style="background: blue;"></span> Route 1
+            </div>
+            <div class="legend-item">
+                <span class="legend-color" style="background: #F08118;"></span> Route 2
+            </div>
+        `;
+        return div;
+    };
+
+    legend.addTo(compareMapInstance);
+
     // Attach resize observer to ensure smooth scaling
     const container = document.getElementById('compare-map-container');
     const resizeObserver = new ResizeObserver(() => {
