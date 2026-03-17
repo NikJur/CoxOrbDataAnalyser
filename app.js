@@ -9,6 +9,7 @@ let mapInstance = null;
 let boatMarker = null;
 let chartInstance = null;
 let currentSliderIndex = 0; // Tracks the current stroke for the chart's vertical line
+let compareMapInstance = null;
 
 // DOM Elements
 const processBtn = document.getElementById('process-btn');
@@ -54,8 +55,8 @@ processBtn.addEventListener('click', async () => {
         }
 
         // Expose replay section
-        replaySection.classList.remove('hidden');
-        
+        replaySection.classList.remove('hidden'); // Expose the replay container
+        document.getElementById('compare-section').classList.remove('hidden'); // Expose the comparison tool
         
         // Initialize UI components
         initMap(mergedData);
@@ -522,10 +523,24 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
 
         // Expose the replay container to allow Leaflet and Chart.js to calculate dimensions
         replaySection.classList.remove('hidden');
+        document.getElementById('compare-section').classList.remove('hidden');
 
         // Render visualisations
         initMap(mergedData);
         initChart(mergedData);
+
+        // Fetch and render the comparison GPX automatically for the demo
+        try {
+            const compareResponse = await fetch('demo_data/example_comparison.gpx');
+            if (compareResponse.ok) {
+                const compareText = await compareResponse.text();
+                const compareData = parseGPX(compareText);
+                
+                renderCompareMap(compareData); // Renders the second map automatically
+            }
+        } catch (err) {
+            console.warn("Could not load comparison demo data.", err);
+        }
         
         // Configure the audio player with the demo recording
         audioContainer.classList.remove('hidden');
@@ -547,5 +562,77 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
         console.error(error);
         alert(`Error loading demo data: ${error.message}`);
         demoBtn.innerText = "Load Demo Data";
+    }
+});
+
+/**
+ * Renders a secondary Leaflet map dedicated solely to route comparison.
+ * Extracts the primary route coordinates from the global mergedData state 
+ * and plots them alongside the newly uploaded comparison route.
+ * Both paths are rendered as solid lines (Blue vs Orange) and the map bounds 
+ * are calculated to ensure both entire routes are visible.
+ * @param {Array<Object>} compareData - Parsed GPX coordinates from the secondary file.
+ */
+function renderCompareMap(compareData) {
+    document.getElementById('compare-map-container').classList.remove('hidden');
+
+    // Destroy previous instance if a new comparison is uploaded
+    if (compareMapInstance) compareMapInstance.remove();
+
+    // Ensure primary data exists to compare against
+    if (!mergedData || mergedData.length === 0) return;
+
+    // Extract coordinates
+    const primaryLatlngs = mergedData.map(pt => [pt.lat, pt.lon]);
+    const compareLatlngs = compareData.map(pt => [pt.lat, pt.lon]);
+
+    const startLoc = primaryLatlngs[0];
+    compareMapInstance = L.map('compare-map').setView(startLoc, 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(compareMapInstance);
+
+    // Draw both lines as solid, distinct colors
+    const primaryLine = L.polyline(primaryLatlngs, { color: 'blue', weight: 3 }).addTo(compareMapInstance);
+    const compareLine = L.polyline(compareLatlngs, { color: '#F08118', weight: 3 }).addTo(compareMapInstance);
+
+    // Calculate the bounding box to encapsulate both routes
+    const bounds = primaryLine.getBounds().extend(compareLine.getBounds());
+    compareMapInstance.fitBounds(bounds);
+
+    // Attach resize observer to ensure smooth scaling
+    const container = document.getElementById('compare-map-container');
+    const resizeObserver = new ResizeObserver(() => {
+        if (compareMapInstance) compareMapInstance.invalidateSize();
+    });
+    resizeObserver.observe(container);
+}
+
+/**
+ * Event Listener for the comparison GPX upload button.
+ * Parses a secondary GPX file and plots it onto a new dedicated map canvas.
+ */
+document.getElementById('compare-btn').addEventListener('click', async () => {
+    const compareFile = document.getElementById('gpx-compare-upload').files[0];
+    const compareBtn = document.getElementById('compare-btn');
+
+    if (!compareFile) {
+        alert("Please upload a comparison GPX file.");
+        return;
+    }
+
+    try {
+        compareBtn.innerText = "Processing...";
+        const gpxText = await readFileAsText(compareFile);
+        const compareData = parseGPX(gpxText);
+
+        renderCompareMap(compareData); // Pass data to the new map function
+
+        compareBtn.innerText = "Compare Routes";
+    } catch (error) {
+        console.error(error);
+        alert(`Error loading comparison data: ${error.message}`);
+        compareBtn.innerText = "Compare Routes";
     }
 });

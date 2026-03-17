@@ -62,6 +62,23 @@
                 <canvas id="metricsChart"></canvas>
             </div>
         </section>
+
+        <section class="panel hidden" id="compare-section">
+            <h2>3. Compare Route</h2>
+            <p>Upload a second GPX file to compare your steering line against another outing or cox.</p>
+            <div class="upload-grid">
+                <div>
+                    <label>Comparison GPX File</label>
+                    <input type="file" id="gpx-compare-upload" accept=".gpx">
+                </div>
+            </div>
+            <button id="compare-btn">Compare Routes</button>
+
+            <div id="compare-map-container" class="hidden">
+                <div id="compare-map"></div>
+            </div>
+        </section>
+
     </main>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
