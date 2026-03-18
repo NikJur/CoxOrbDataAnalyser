@@ -319,7 +319,6 @@ input:checked + .slider:before { transform: translateX(20px); }
 #audio-container {
     background-color: var(--panel-bg);
     border: 1px solid #e9ecef;
-    border-left: 6px solid #F08118; /* Bold orange identifier */
     border-radius: 6px;
     padding: 8px 8px;
     margin-top: 0.5rem;
