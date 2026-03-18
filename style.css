@@ -104,7 +104,7 @@ button:hover { background-color: #1C3754; }
     width: 100%;
     resize: both; /* Adds the drag handle to allow vertical and horizontal resizing */
     overflow: hidden; /* CSS requires overflow: hidden (or auto/scroll) for 'resize' to function */
-    margin-bottom: 1rem;
+    margin-bottom: -1.5rem;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.2); /* Subtle shadow to define the draggable edge */
 }
@@ -166,6 +166,7 @@ button:hover { background-color: #1C3754; }
     background: #e9ecef;
     padding: 1rem;
     border-radius: 8px;
+    margin-top: -2rem;
     margin-bottom: 1.5rem;
 }
 
@@ -173,8 +174,9 @@ button:hover { background-color: #1C3754; }
 .stat-box span { color: var(--primary); font-weight: normal; }
 
 .chart-container {
-    height: 400px;
+    height: 300px;
     width: 100%;
+    margin-top: -0.5rem;
 }
 
 /* Container for the secondary comparison map, styled to match the primary map */
@@ -320,7 +322,8 @@ input:checked + .slider:before { transform: translateX(20px); }
     border-left: 6px solid #F08118; /* Bold orange identifier */
     border-radius: 6px;
     padding: 8px 8px;
-    margin-top: 1.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     display: flex;
     flex-direction: row;
@@ -333,7 +336,7 @@ input:checked + .slider:before { transform: translateX(20px); }
 /* Styling the label with html h3 tag */
 #audio-container h3 {
     margin-top: 0;
-    margin-bottom: 10px;
+    margin-bottom: -30px;
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--primary); /* CoxOrb Navy */
