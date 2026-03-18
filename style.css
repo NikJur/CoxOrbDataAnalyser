@@ -319,11 +319,15 @@ input:checked + .slider:before { transform: translateX(20px); }
     border: 1px solid #e9ecef;
     border-left: 6px solid #F08118; /* Bold orange identifier */
     border-radius: 6px;
-    padding: 12px 16px;
+    padding: 8px 8px;
     margin-top: 1.5rem;
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap; 
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
 }
 
 /* Styling the label with html h3 tag */
@@ -339,13 +343,15 @@ input:checked + .slider:before { transform: translateX(20px); }
 
 /* label without h3 tag (fallback) */
 #audio-container:not(:has(h3))::before {
-    content: 'Coxswain Audio';
+    content: 'Coxswain Audio Recording';
+    width: 100%;
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--primary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 10px;
+    margin-bottom: -30px;
+    text-align: center;
 }
 
 /* Base styling for the native player element */
