@@ -310,34 +310,61 @@ input:checked + .slider:before { transform: translateX(20px); }
     color: #A93226;
 }
 
-/* --- Audio Player Theme --- */
+
+/* --- Audio Player & Timeline Theme --- */
+
+/* Styling the container with the CoxOrb look */
 #audio-container {
     background-color: var(--panel-bg);
-    border: 2px solid var(--primary); /* Navy blue border */
-    border-radius: 8px;
-    padding: 15px 20px;
+    border: 1px solid #e9ecef;
+    border-left: 6px solid #F08118; /* Bold orange identifier */
+    border-radius: 6px;
+    padding: 12px 16px;
     margin-top: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
 }
 
+/* Styling the label with html h3 tag */
 #audio-container h3 {
     margin-top: 0;
-    margin-bottom: 12px;
-    color: var(--primary); /* Navy blue text */
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary); /* CoxOrb Navy */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* label without h3 tag (fallback) */
+#audio-container:not(:has(h3))::before {
+    content: 'Coxswain Audio';
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
 }
 
 /* Base styling for the native player element */
-audio {
+audio, #audio-player {
     width: 100%;
     height: 40px;
     outline: none;
 }
 
-/* Chrome/Safari specific overrides to strip the ugly default grey background */
-audio::-webkit-media-controls-panel {
+/* Chrome/Safari specific overrides to strip the default grey background */
+audio::-webkit-media-controls-panel, 
+#audio-player::-webkit-media-controls-panel {
     background-color: #f8f9fa; 
 }
+
+/* Tinting the Chrome/Safari audio timestamps to match the Navy theme */
+audio::-webkit-media-controls-current-time-display,
+audio::-webkit-media-controls-time-remaining-display {
+    color: var(--primary);
+    font-weight: 600;
+}
+/* -------------------Audio Styling END -------------------*/
