@@ -14,6 +14,12 @@ let compareMapInstance = null;
 let compareLayers = [null, null, null, null, null];
 const compareColors = ['#25476D', '#F08118', '#000000', '#C0392B', '#8E44AD'];
 
+// Virtual Timeline state variables for the looped demo audio
+let isVirtualAudioLoop = false;
+let virtualLoopCount = 0;
+let lastPlaybackTime = 0;
+let baseAudioDuration = 0;
+
 // DOM Elements
 const processBtn = document.getElementById('process-btn');
 const replaySection = document.getElementById('replay-section');
@@ -445,7 +451,8 @@ function initChart(data) {
 }
 
 /**
- * Loads user audio and links media playback to the data slider.
+ * Loads user-uploaded audio and resets any virtual loop states.
+ * Prepares the audio container for standard linear playback.
  */
 function setupAudio() {
     const file = audioUpload.files[0];
@@ -453,17 +460,8 @@ function setupAudio() {
         audioContainer.classList.remove('hidden');
         const url = URL.createObjectURL(file);
         audioPlayer.src = url;
-
-        // Sync slider to audio playback
-        audioPlayer.addEventListener('timeupdate', () => {
-            const currentTime = Math.round(audioPlayer.currentTime);
-            // Locate corresponding index in merged data
-            const index = mergedData.findIndex(d => d.seconds_elapsed >= currentTime);
-            if (index !== -1) {
-                timeSlider.value = index;
-                updateUI(index);
-            }
-        });
+        audioPlayer.loop = false; // Ensure manual uploads do not loop
+        isVirtualAudioLoop = false; // Disable virtual timeline math
     }
 }
 
@@ -501,11 +499,28 @@ function updateUI(index) {
 
 /**
  * Event Listener for manual slider dragging.
+ * Updates the UI and forces the audio player to seek to the correct corresponding timestamp.
+ * Integrates mathematical wrapping to handle the looping virtual timeline for the demo.
  */
 timeSlider.addEventListener('input', (e) => {
-    updateUI(e.target.value);
+    const index = e.target.value;
+    updateUI(index);
+    
+    // Ensure data exists and an audio file is loaded before attempting to calculate time
+    if (mergedData.length > 0 && audioPlayer.src) {
+        const targetSeconds = mergedData[index].seconds_elapsed || 0;
+        
+        if (isVirtualAudioLoop && baseAudioDuration > 0) {
+            // Calculate exactly which loop we should be on, and the precise second within that loop
+            virtualLoopCount = Math.floor(targetSeconds / baseAudioDuration);
+            audioPlayer.currentTime = targetSeconds % baseAudioDuration;
+            lastPlaybackTime = audioPlayer.currentTime; // Prevent false loop triggers
+        } else {
+            // Standard linear audio seeking for manual uploads
+            audioPlayer.currentTime = targetSeconds;
+        }
+    }
 });
-
 
 /**
  * Fetches pre-uploaded demo data from the repository and initializes the application.
@@ -560,20 +575,21 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
             console.warn("Could not load comparison demo data.", err);
         }
         
-        // Configure the audio player with the demo recording
+        // Configure the audio player with the looped demo recording
         audioContainer.classList.remove('hidden');
         audioPlayer.src = 'demo_data/example_recording.m4a';
+        audioPlayer.loop = true; // Instructs the browser to seamlessly restart the audio
         
-        // Attach the synchronization event listener specifically for the demo audio
-        audioPlayer.addEventListener('timeupdate', () => {
-            const currentTime = Math.round(audioPlayer.currentTime);
-            const index = mergedData.findIndex(d => d.seconds_elapsed >= currentTime);
-            if (index !== -1) {
-                timeSlider.value = index;
-                updateUI(index);
-            }
-        });
-
+        // Reset virtual timeline trackers
+        isVirtualAudioLoop = true;
+        virtualLoopCount = 0;
+        lastPlaybackTime = 0;
+        
+        // Capture the exact duration of the track once the browser loads the file metadata
+        audioPlayer.onloadedmetadata = () => {
+            baseAudioDuration = audioPlayer.duration;
+        };
+        
         timeSlider.max = mergedData.length - 1;
 
         // --- MULTI-ROUTE COMPARISON DEMO SETUP ---
@@ -743,6 +759,11 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
     mergedData = [];
     currentSliderIndex = 0;
 
+    // Reset the virtual audio loop state to prevent math errors on future uploads
+    isVirtualAudioLoop = false;
+    virtualLoopCount = 0;
+    lastPlaybackTime = 0;
+
     // Reset the physical file input fields
     document.getElementById('gpx-upload').value = '';
     document.getElementById('csv-upload').value = '';
@@ -765,6 +786,8 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
     // Stop audio playback and reset the source
     audioPlayer.pause();
     audioPlayer.src = '';
+    audioPlayer.loop = false; // Ensure loop is turned off
+    document.getElementById('play-pause-btn').innerText = "▶"; // Resets icon
 
     // Reset Dashboard text metrics back to default state
     document.getElementById('val-time').innerText = '--';
@@ -803,4 +826,56 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
     }
     // Hide the comparison map container again
     document.getElementById('compare-map-container').classList.add('hidden');
+});
+
+/**
+ * Master Event Listener for Audio Playback synchronisation.
+ * Fires continuously as the audio plays, matching the audio clock to the data array.
+ * Translates the short looped demo audio into a continuous virtual timeline.
+ */
+audioPlayer.addEventListener('timeupdate', () => {
+    let currentTargetTime = 0;
+    
+    if (isVirtualAudioLoop && baseAudioDuration > 0) {
+        const currentPlaybackTime = audioPlayer.currentTime;
+        
+        // Detect if the native player has looped back to the beginning naturally
+        if (currentPlaybackTime < lastPlaybackTime - 1) {
+            virtualLoopCount++;
+        }
+        lastPlaybackTime = currentPlaybackTime;
+        
+        // Calculate the total continuous time across all elapsed loops
+        currentTargetTime = Math.round((virtualLoopCount * baseAudioDuration) + currentPlaybackTime);
+    } else {
+        // Standard linear audio playback tracking
+        currentTargetTime = Math.round(audioPlayer.currentTime);
+    }
+    
+    // Find the corresponding data row based on the calculated time and update the dashboard
+    const index = mergedData.findIndex(d => d.seconds_elapsed >= currentTargetTime);
+    if (index !== -1) {
+        timeSlider.value = index;
+        updateUI(index);
+    }
+});
+
+/**
+ * Event Listener for the custom Play/Pause button.
+ * Toggles the playback state of the hidden native audio element.
+ * Updates the button's internal text icon to reflect the current state.
+ */
+const playPauseBtn = document.getElementById('play-pause-btn');
+
+playPauseBtn.addEventListener('click', () => {
+    // Prevent interaction if no audio source is loaded
+    if (!audioPlayer.src) return;
+
+    if (audioPlayer.paused) {
+        audioPlayer.play();
+        playPauseBtn.innerText = "⏸";
+    } else {
+        audioPlayer.pause();
+        playPauseBtn.innerText = "▶";
+    }
 });

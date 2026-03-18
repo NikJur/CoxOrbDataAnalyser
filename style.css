@@ -355,16 +355,29 @@ audio, #audio-player {
     outline: none;
 }
 
-/* Chrome/Safari specific overrides to strip the default grey background */
-audio::-webkit-media-controls-panel, 
-#audio-player::-webkit-media-controls-panel {
-    background-color: #f8f9fa; 
+/**
+ * Custom Play/Pause Button
+ * Circular, high-contrast button to control the hidden audio element.
+ */
+.play-btn {
+    background-color: var(--primary); /* CoxOrb Navy */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: background-color 0.2s;
 }
 
-/* Tinting the Chrome/Safari audio timestamps to match the Navy theme */
-audio::-webkit-media-controls-current-time-display,
-audio::-webkit-media-controls-time-remaining-display {
-    color: var(--primary);
-    font-weight: 600;
+.play-btn:hover {
+    background-color: #1C3754;
 }
+
 /* -------------------Audio Styling END -------------------*/

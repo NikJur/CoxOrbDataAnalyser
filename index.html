@@ -47,9 +47,11 @@
             </div>
 
             <div class="controls">
-                <input type="range" id="time-slider" min="0" max="100" value="0" step="1">
-                <div id="audio-container" class="hidden">
-                    <audio id="audio-player" controls></audio>
+                <div id="audio-container" class="hidden" style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                    <button id="play-pause-btn" class="play-btn">▶</button>
+                    <input type="range" id="time-slider" min="0" max="100" value="0" step="1" style="flex-grow: 1; margin: 0;">
+                    
+                    <audio id="audio-player"></audio> 
                 </div>
             </div>
 
