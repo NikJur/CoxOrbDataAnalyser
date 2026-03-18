@@ -181,7 +181,7 @@ button:hover { background-color: #1C3754; }
 #compare-map-container {
     position: relative;
     height: 500px; 
-    min-height: 250px; 
+    min-height: 100px; 
     width: 100%;
     resize: both; 
     overflow: hidden; 
