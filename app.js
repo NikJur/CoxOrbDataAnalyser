@@ -879,3 +879,33 @@ playPauseBtn.addEventListener('click', () => {
         playPauseBtn.innerText = "▶";
     }
 });
+
+/**
+ * Global Event Listener for Keyboard Shortcuts.
+ * Allows the user to toggle audio/timeline playback using the Spacebar.
+ * Intercepts the default scroll behavior to keep the dashboard in view.
+ * @param {KeyboardEvent} e - The keydown event object.
+ */
+document.addEventListener('keydown', (e) => {
+    // Check if the pressed key is the Spacebar
+    if (e.code === 'Space') {
+        
+        // Prevent the browser from scrolling down the page
+        e.preventDefault();
+        
+        // Ensure an audio source is loaded before attempting playback
+        if (audioPlayer && audioPlayer.src) {
+            
+            const playPauseBtn = document.getElementById('play-pause-btn');
+            
+            // Toggle the playback state and update the button icon
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                if (playPauseBtn) playPauseBtn.innerText = "⏸";
+            } else {
+                audioPlayer.pause();
+                if (playPauseBtn) playPauseBtn.innerText = "▶";
+            }
+        }
+    }
+});
