@@ -47,8 +47,10 @@
             </div>
 
             <div class="controls">
-                <div id="audio-container" class="hidden" style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
-                    <button id="play-pause-btn" class="play-btn">▶</button>
+                <div id="audio-container" class="hidden" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                    <button id="skip-back-btn" class="skip-btn" title="Skip Back 10s">-10 s</button>
+                    <button id="play-pause-btn" class="play-btn" title="Play/Pause">▶</button>
+                    <button id="skip-fwd-btn" class="skip-btn" title="Skip Forward 10s">+10 s</button>
                     <input type="range" id="time-slider" min="0" max="100" value="0" step="1" style="flex-grow: 1; margin: 0;">
                     
                     <audio id="audio-player"></audio> 

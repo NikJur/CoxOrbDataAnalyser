@@ -380,4 +380,25 @@ audio, #audio-player {
     background-color: #1C3754;
 }
 
+/**
+ * Skip Buttons
+ * Compact buttons for skipping backward and forward through the timeline.
+ */
+.skip-btn {
+    background-color: #F08118; /* CoxOrb Orange */
+    color: white;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.skip-btn:hover {
+    background-color: #D27014; /* Darker orange */
+    color: white;
+}
+
 /* -------------------Audio Styling END -------------------*/

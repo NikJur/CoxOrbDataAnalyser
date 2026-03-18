@@ -881,24 +881,67 @@ playPauseBtn.addEventListener('click', () => {
 });
 
 /**
+ * Skips the audio and timeline forward or backward by a specified number of seconds.
+ * Incorporates safety checks to prevent skipping beyond the start or end of the data.
+ * Computes the virtual looping timeline maths if the demo mode is active.
+ * @param {number} offset - The integer number of seconds to skip (positive or negative).
+ */
+function skipTime(offset) {
+    if (!audioPlayer.src || mergedData.length === 0) return;
+
+    let currentAbsoluteTime = 0;
+
+    // Calculate the current absolute timeline position
+    if (isVirtualAudioLoop && baseAudioDuration > 0) {
+        currentAbsoluteTime = (virtualLoopCount * baseAudioDuration) + audioPlayer.currentTime;
+    } else {
+        currentAbsoluteTime = audioPlayer.currentTime;
+    }
+
+    // Determine the target time and restrict it to the bounds of the recorded data
+    let targetTime = currentAbsoluteTime + offset;
+    const maxTime = mergedData[mergedData.length - 1].seconds_elapsed;
+    
+    if (targetTime < 0) targetTime = 0;
+    if (targetTime > maxTime) targetTime = maxTime;
+
+    // Apply the new time back to the audio player correctly
+    if (isVirtualAudioLoop && baseAudioDuration > 0) {
+        virtualLoopCount = Math.floor(targetTime / baseAudioDuration);
+        audioPlayer.currentTime = targetTime % baseAudioDuration;
+        lastPlaybackTime = audioPlayer.currentTime; // Reset tracker to prevent false loop triggers
+    } else {
+        audioPlayer.currentTime = targetTime;
+    }
+
+    // Force an immediate UI update so the map and chart sync instantly while paused
+    const index = mergedData.findIndex(d => d.seconds_elapsed >= targetTime);
+    if (index !== -1) {
+        timeSlider.value = index;
+        updateUI(index);
+    }
+}
+
+// Attach click listeners to the HTML UI skip buttons
+document.getElementById('skip-back-btn').addEventListener('click', () => skipTime(-10));
+document.getElementById('skip-fwd-btn').addEventListener('click', () => skipTime(10));
+
+/**
  * Global Event Listener for Keyboard Shortcuts.
- * Allows the user to toggle audio/timeline playback using the Spacebar.
- * Intercepts the default scroll behavior to keep the dashboard in view.
+ * Enables timeline toggling via Spacebar, and 10-second jumps via Left/Right Arrows.
+ * Intercepts default browser behaviors (scrolling) to keep the dashboard stable.
  * @param {KeyboardEvent} e - The keydown event object.
  */
 document.addEventListener('keydown', (e) => {
-    // Check if the pressed key is the Spacebar
-    if (e.code === 'Space') {
-        
-        // Prevent the browser from scrolling down the page
+    // Prevent the browser from scrolling horizontally or vertically when pressing specific hotkeys
+    if (['Space', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
         e.preventDefault();
-        
-        // Ensure an audio source is loaded before attempting playback
-        if (audioPlayer && audioPlayer.src) {
-            
+    }
+
+    // Process the shortcut only if an audio file is actively loaded
+    if (audioPlayer && audioPlayer.src) {
+        if (e.code === 'Space') {
             const playPauseBtn = document.getElementById('play-pause-btn');
-            
-            // Toggle the playback state and update the button icon
             if (audioPlayer.paused) {
                 audioPlayer.play();
                 if (playPauseBtn) playPauseBtn.innerText = "⏸";
@@ -906,6 +949,10 @@ document.addEventListener('keydown', (e) => {
                 audioPlayer.pause();
                 if (playPauseBtn) playPauseBtn.innerText = "▶";
             }
+        } else if (e.code === 'ArrowLeft') {
+            skipTime(-10);
+        } else if (e.code === 'ArrowRight') {
+            skipTime(10);
         }
     }
 });
