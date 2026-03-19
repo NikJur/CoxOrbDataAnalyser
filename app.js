@@ -10,6 +10,8 @@ let boatMarker = null;
 let chartInstance = null;
 let currentSliderIndex = 0; // Tracks the current stroke for the chart's vertical line
 
+let primaryRouteLayer = null; // Holds the primary map route (solid or segmented)
+
 let compareMapInstance = null;
 let compareLayers = [null, null, null, null, null];
 const compareColors = ['#25476D', '#F08118', '#000000', '#C0392B', '#8E44AD'];
@@ -50,6 +52,7 @@ document.getElementById('process-btn').addEventListener('click', async () => {
 
         const chartContainer = document.querySelector('.chart-container');
         const dashboard = document.getElementById('dashboard');
+        const speedToggleContainer = document.getElementById('speed-toggle-container');
 
         // Did the user upload a CSV?
         if (csvFile) {
@@ -66,14 +69,24 @@ document.getElementById('process-btn').addEventListener('click', async () => {
             // Un-hide the metric elements and render the chart
             chartContainer.style.display = 'block';
             dashboard.style.display = 'flex';
+
+            // Defensively expose the metric elements and the speed toggle
+            if (chartContainer) chartContainer.style.display = 'block';
+            if (dashboard) dashboard.style.display = 'flex';
+            if (speedToggleContainer) {
+                speedToggleContainer.classList.remove('hidden');
+                speedToggleContainer.style.display = 'flex';
+            }
+
             initChart(mergedData);
         } else {
             // If no CSV is present, use the temporal GPX data
             mergedData = gpxData; 
             
-            // Hide the empty chart and dashboard elements to keep the UI clean
-            chartContainer.style.display = 'none';
-            dashboard.style.display = 'none';
+            // Defensively conceal the empty elements and the unsupported speed toggle
+            if (chartContainer) chartContainer.style.display = 'none';
+            if (dashboard) dashboard.style.display = 'none';
+            if (speedToggleContainer) speedToggleContainer.style.display = 'none';
             
             if (chartInstance) {
                 chartInstance.destroy();
@@ -286,6 +299,66 @@ function mergeAsOf(gpx, csv, tolerance) {
 }
 
 /**
+ * Evaluates the velocity magnitude and assigns a corresponding hex color.
+ * Maps velocities to a standard heatmap gradient (Red = Slow, Green = Fast).
+ * Designed around typical rowing shell velocities in meters per second.
+ * @param {number} speed - The recorded speed value in m/s.
+ * @returns {string} The designated hex color string.
+ */
+function getSpeedColor(speed) {
+    if (speed > 4.5) return '#27AE60'; // Fast (Green)
+    if (speed > 3.5) return '#2ECC71'; // Above Average (Light Green)
+    if (speed > 2.5) return '#F1C40F'; // Average (Yellow)
+    if (speed > 1.5) return '#E67E22'; // Slow (Orange)
+    return '#E74C3C';                  // Very Slow/Stationary (Red)
+}
+
+/**
+ * Constructs the primary path on the Leaflet map.
+ * Destroyed and rebuilt the path array depending on the requested visualization state.
+ * @param {boolean} useSpeedColors - Flag defining whether to use the heatmap gradient.
+ */
+function drawPrimaryRoute(useSpeedColors) {
+    // Terminate early if the map is not initialized or data is missing
+    if (!mapInstance || mergedData.length === 0) return;
+
+    // Purge the existing route layer to prevent rendering duplicate lines
+    if (primaryRouteLayer) {
+        mapInstance.removeLayer(primaryRouteLayer);
+    }
+
+    // Initialize a new group to hold our polyline elements
+    primaryRouteLayer = L.featureGroup();
+
+    if (!useSpeedColors) {
+        // Construct a standard, single-color line for default viewing
+        const latlngs = mergedData.map(pt => [pt.lat, pt.lon]);
+        L.polyline(latlngs, { color: 'blue', weight: 3 }).addTo(primaryRouteLayer);
+    } else {
+        // Iterate through the temporal dataset to draw colored micro-segments
+        for (let i = 0; i < mergedData.length - 1; i++) {
+            const pt1 = mergedData[i];
+            const pt2 = mergedData[i + 1];
+            
+            // Extract velocity, defaulting to zero if the data point dropped
+            const speed = pt1['Speed (m/s)'] || 0;
+            const segmentColor = getSpeedColor(speed);
+            
+            L.polyline([[pt1.lat, pt1.lon], [pt2.lat, pt2.lon]], { 
+                color: segmentColor, 
+                weight: 3 
+            }).addTo(primaryRouteLayer);
+        }
+    }
+
+    // Push the compiled route layer to the visible map canvas
+    primaryRouteLayer.addTo(mapInstance);
+    
+    // Command the boat marker to the highest visual index so it is not obscured by the new lines
+    if (boatMarker) boatMarker.bringToFront();
+}
+
+/**
  * Initializes the Leaflet map, draws the polyline path, and adds the boat marker.
  * Implements a ResizeObserver to automatically redraw the map canvas when the user 
  * manually drags the bottom-right corner to change the container size.
@@ -301,12 +374,15 @@ function initMap(data) {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(mapInstance);
-
-    const latlngs = data.map(pt => [pt.lat, pt.lon]);
-    L.polyline(latlngs, { color: 'blue', weight: 3 }).addTo(mapInstance);
+    
+    // Render the initial solid blue route using the new dynamic function
+    drawPrimaryRoute(false);
 
     // Initialise the draggable boat marker
     boatMarker = L.circleMarker(startLoc, { color: 'red', radius: 6, fillOpacity: 1 }).addTo(mapInstance);
+    
+    // Ensure bounds are calculated using the full coordinate array
+    const latlngs = data.map(pt => [pt.lat, pt.lon]);
     mapInstance.fitBounds(L.polyline(latlngs).getBounds());
 
     // Watch the #map-container for dimension changes triggered by the CSS resize handle
@@ -562,6 +638,13 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
         initMap(mergedData);
         initChart(mergedData);
 
+        // Expose the speed toggle specifically for the demo data
+        const speedToggleContainer = document.getElementById('speed-toggle-container');
+        if (speedToggleContainer) {
+            speedToggleContainer.classList.remove('hidden');
+            speedToggleContainer.style.display = 'flex';
+        }
+
         // Fetch and render the comparison GPX automatically for the demo
         try {
             const compareResponse = await fetch('demo_data/example_comparison.gpx');
@@ -799,6 +882,10 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
     timeSlider.value = 0;
     timeSlider.max = 0;
 
+    // Reset the speed colour toggle to default
+    const speedToggleInput = document.getElementById('toggle-speed-color');
+    if (speedToggleInput) speedToggleInput.checked = false;
+
     // Hide the visualization containers again
     replaySection.classList.add('hidden');
     audioContainer.classList.add('hidden');
@@ -956,3 +1043,14 @@ document.addEventListener('keydown', (e) => {
         }
     }
 });
+
+/**
+ * Event Listener for the "Color Route by Speed" toggle.
+ * Triggers a complete redraw of the primary Leaflet map path.
+ */
+const speedToggle = document.getElementById('toggle-speed-color');
+if (speedToggle) {
+    speedToggle.addEventListener('change', (e) => {
+        drawPrimaryRoute(e.target.checked);
+    });
+}
