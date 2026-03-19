@@ -410,3 +410,25 @@ audio, #audio-player {
 }
 
 /* -------------------Audio Styling END -------------------*/
+
+/**
+ * Secondary Utility Button (speed-colouring reset)
+ * A compact, less prominent button for resetting background variables 
+ * without distracting from primary dashboard actions.
+ */
+.secondary-btn {
+    background-color: #e9ecef; /* Neutral grey background */
+    color: var(--primary); /* CoxOrb Navy text */
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.secondary-btn:hover {
+    background-color: #dee2e6;
+    color: #1C3754;
+}

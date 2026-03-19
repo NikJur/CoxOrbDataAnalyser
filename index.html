@@ -43,22 +43,29 @@
 
         <section class="panel hidden" id="replay-section">
             
-            <div id="speed-toggle-container" class="hidden" style="display: flex; justify-content: flex-end; align-items: center; gap: 15px; margin-bottom: 0.5rem; flex-wrap: wrap;">
-                
-                <div id="speed-thresholds" class="hidden" style="display: flex; gap: 10px; align-items: center;">
+            <div id="speed-toggle-container" class="hidden" style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px; margin-bottom: 0.5rem;">
+
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="text-align: right; display: flex; flex-direction: column;">
+                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Colour Route by Speed</span>
+                        <span style="font-size: 0.7rem; color: #6c757d; max-width: 280px;">Visualises velocity via a red-green gradient, using statistical percentile bounds as defaults.</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-speed-color">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div id="speed-thresholds" class="hidden" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                     <label style="font-size: 0.8rem; color: var(--primary); font-weight: 600;">Min (m/s): 
                         <input type="number" id="min-speed-input" step="0.1" style="width: 60px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
                     </label>
                     <label style="font-size: 0.8rem; color: var(--primary); font-weight: 600;">Max (m/s): 
                         <input type="number" id="max-speed-input" step="0.1" style="width: 60px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
                     </label>
+                    
+                    <button id="default-thresholds-btn" class="secondary-btn" title="Reset to 5th and 95th Percentiles">Defaults</button>
                 </div>
-
-                <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Colour Route by Speed</span>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="toggle-speed-color">
-                    <span class="slider round"></span>
-                </label>
             </div>
 
             <div id="map-container">

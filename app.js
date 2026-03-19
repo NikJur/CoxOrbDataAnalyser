@@ -1178,3 +1178,24 @@ document.getElementById('max-speed-input').addEventListener('input', () => {
     const toggle = document.getElementById('toggle-speed-color');
     if (toggle && toggle.checked) drawPrimaryRoute(true);
 });
+
+/**
+ * Event Listener for the "Defaults" threshold button for speed-colouring reset.
+ * Executes the smart threshold calculation to extract the 5th and 95th percentiles.
+ * Forces an immediate visual redraw of the Leaflet map to reflect the statistical baseline.
+ */
+const defaultThresholdsBtn = document.getElementById('default-thresholds-btn');
+
+if (defaultThresholdsBtn) {
+    defaultThresholdsBtn.addEventListener('click', () => {
+        // Recalculate and inject the optimum statistical bounds into the inputs
+        calculateSmartThresholds();
+        
+        // Verify if the gradient toggle is currently active
+        const toggle = document.getElementById('toggle-speed-color');
+        if (toggle && toggle.checked) {
+            // Command the map renderer to update using the new input values
+            drawPrimaryRoute(true);
+        }
+    });
+}
