@@ -78,6 +78,9 @@ document.getElementById('process-btn').addEventListener('click', async () => {
                 speedToggleContainer.style.display = 'flex';
             }
 
+            // Safely expose the metric elements and the speed toggle
+            toggleAnalyticalUI(true);
+
             initChart(mergedData);
         } else {
             // If no CSV is present, use the temporal GPX data
@@ -92,6 +95,12 @@ document.getElementById('process-btn').addEventListener('click', async () => {
                 chartInstance.destroy();
                 chartInstance = null;
             }
+
+            // Safely conceal the empty elements and the unsupported speed toggle
+            toggleAnalyticalUI(false);
+            // Update the map without chart dependencies
+            initMap(mergedData);
+
         }
 
         // Expose replay section
@@ -599,6 +608,34 @@ timeSlider.addEventListener('input', (e) => {
 });
 
 /**
+ * Safely manages the visibility of the secondary analytical interfaces.
+ * Queries the DOM explicitly using precise class and ID selectors to prevent null reference errors.
+ * @param {boolean} isVisible - Flag determining whether the elements should be rendered or concealed.
+ */
+function toggleAnalyticalUI(isVisible) {
+    // Query the DOM using the explicit class (.) and ID (#) selectors matching index.html
+    const chartView = document.querySelector('.chart-container');
+    const dashboardView = document.querySelector('.dashboard');
+    const speedToggleView = document.getElementById('speed-toggle-container');
+
+    // Defensively apply styles only if the node successfully exists in the DOM
+    if (chartView) {
+        chartView.style.display = isVisible ? 'block' : 'none';
+        if (isVisible) chartView.classList.remove('hidden');
+    }
+    
+    if (dashboardView) {
+        dashboardView.style.display = isVisible ? 'flex' : 'none';
+        if (isVisible) dashboardView.classList.remove('hidden');
+    }
+    
+    if (speedToggleView) {
+        speedToggleView.style.display = isVisible ? 'flex' : 'none';
+        if (isVisible) speedToggleView.classList.remove('hidden');
+    }
+}
+
+/**
  * Fetches pre-uploaded demo data from the repository and initializes the application.
  * Uses the native Fetch API to retrieve files directly from the demo_data directory.
  * @param {Event} e - The click event object to prevent default page jumping.
@@ -638,12 +675,8 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
         initMap(mergedData);
         initChart(mergedData);
 
-        // Expose the speed toggle specifically for the demo data
-        const speedToggleContainer = document.getElementById('speed-toggle-container');
-        if (speedToggleContainer) {
-            speedToggleContainer.classList.remove('hidden');
-            speedToggleContainer.style.display = 'flex';
-        }
+        // Safely expose all analytical UI elements including the speed toggle
+        toggleAnalyticalUI(true);
 
         // Fetch and render the comparison GPX automatically for the demo
         try {
