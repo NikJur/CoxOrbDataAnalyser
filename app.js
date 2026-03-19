@@ -81,6 +81,8 @@ document.getElementById('process-btn').addEventListener('click', async () => {
             // Safely expose the metric elements and the speed toggle
             toggleAnalyticalUI(true);
 
+            calculateSmartThresholds();
+
             initChart(mergedData);
         } else {
             // If no CSV is present, use the temporal GPX data
@@ -349,34 +351,39 @@ function getSpeedColor(speed) {
 
 /**
  * Constructs the primary path on the Leaflet map.
- * Destroyed and rebuilt the path array depending on the requested visualization state.
+ * Reads user-defined minimum and maximum speed thresholds to paint a dynamic gradient.
  * @param {boolean} useSpeedColors - Flag defining whether to use the heatmap gradient.
  */
 function drawPrimaryRoute(useSpeedColors) {
-    // Terminate early if the map is not initialized or data is missing
     if (!mapInstance || mergedData.length === 0) return;
 
-    // Purge the existing route layer to prevent rendering duplicate lines
     if (primaryRouteLayer) {
         mapInstance.removeLayer(primaryRouteLayer);
     }
 
-    // Initialize a new group to hold our polyline elements
     primaryRouteLayer = L.featureGroup();
+    const thresholdUI = document.getElementById('speed-thresholds');
 
     if (!useSpeedColors) {
-        // Construct a standard, single-color line for default viewing
+        // Standard blue line mode
+        if (thresholdUI) thresholdUI.classList.add('hidden');
+        
         const latlngs = mergedData.map(pt => [pt.lat, pt.lon]);
         L.polyline(latlngs, { color: 'blue', weight: 3 }).addTo(primaryRouteLayer);
     } else {
-        // Iterate through the temporal dataset to draw colored micro-segments
+        // Dynamic heatmap mode
+        if (thresholdUI) thresholdUI.classList.remove('hidden');
+
+        // Extract the boundaries from the HTML inputs
+        const minSpeed = parseFloat(document.getElementById('min-speed-input').value) || 0;
+        const maxSpeed = parseFloat(document.getElementById('max-speed-input').value) || 5;
+
         for (let i = 0; i < mergedData.length - 1; i++) {
             const pt1 = mergedData[i];
             const pt2 = mergedData[i + 1];
             
-            // Extract velocity, defaulting to zero if the data point dropped
             const speed = pt1['Speed (m/s)'] || 0;
-            const segmentColor = getSpeedColor(speed);
+            const segmentColor = getDynamicSpeedColor(speed, minSpeed, maxSpeed);
             
             L.polyline([[pt1.lat, pt1.lon], [pt2.lat, pt2.lon]], { 
                 color: segmentColor, 
@@ -385,10 +392,7 @@ function drawPrimaryRoute(useSpeedColors) {
         }
     }
 
-    // Push the compiled route layer to the visible map canvas
     primaryRouteLayer.addTo(mapInstance);
-    
-    // Command the boat marker to the highest visual index so it is not obscured by the new lines
     if (boatMarker) boatMarker.bringToFront();
 }
 
@@ -661,6 +665,52 @@ function toggleAnalyticalUI(isVisible) {
 }
 
 /**
+ * Dynamically calculates a hex/hsl colour on a Red-to-Green gradient based on min/max bounds.
+ * Utilizes the HSL colour space where 0 = Red, 60 = Yellow, 120 = Green.
+ * @param {number} speed - The current speed value to evaluate.
+ * @param {number} minSpeed - The lower boundary (Red).
+ * @param {number} maxSpeed - The upper boundary (Green).
+ * @returns {string} A CSS-compatible HSL colour string.
+ */
+function getDynamicSpeedColor(speed, minSpeed, maxSpeed) {
+    // Prevent mathematical errors if bounds are identical
+    if (maxSpeed <= minSpeed) return 'hsl(120, 100%, 45%)';
+
+    // Clamp the speed so outliers do not break the colour scale
+    const clampedSpeed = Math.max(minSpeed, Math.min(speed, maxSpeed));
+
+    // Calculate the percentage (0.0 to 1.0) between the bounds
+    const percent = (clampedSpeed - minSpeed) / (maxSpeed - minSpeed);
+
+    // Map the percentage to a hue angle (0 to 120 degrees)
+    const hue = percent * 120;
+
+    return `hsl(${hue}, 100%, 45%)`;
+}
+
+/**
+ * Calculates the 5th and 95th percentiles of the dataset's speed array.
+ * Automatically injects these values into the HTML threshold inputs to trim outliers.
+ */
+function calculateSmartThresholds() {
+    // Extract valid speed values and sort them in ascending order
+    const speeds = mergedData.map(pt => pt['Speed (m/s)']).filter(s => s != null && !isNaN(s));
+    if (speeds.length === 0) return;
+
+    speeds.sort((a, b) => a - b);
+
+    // Target the 5% and 95% indices to cleanly drop stationary times and GPS spikes
+    const p5Index = Math.floor(speeds.length * 0.05);
+    const p95Index = Math.floor(speeds.length * 0.95);
+
+    const minInput = document.getElementById('min-speed-input');
+    const maxInput = document.getElementById('max-speed-input');
+
+    if (minInput) minInput.value = speeds[p5Index].toFixed(1);
+    if (maxInput) maxInput.value = speeds[p95Index].toFixed(1);
+}
+
+/**
  * Fetches pre-uploaded demo data from the repository and initializes the application.
  * Uses the native Fetch API to retrieve files directly from the demo_data directory.
  * @param {Event} e - The click event object to prevent default page jumping.
@@ -695,6 +745,8 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
 
         // Expose the replay container to allow Leaflet and Chart.js to calculate dimensions
         replaySection.classList.remove('hidden');
+
+        calculateSmartThresholds();
 
         // Render visualisations
         initMap(mergedData);
@@ -1112,3 +1164,17 @@ if (speedToggle) {
         drawPrimaryRoute(e.target.checked);
     });
 }
+
+/**
+ * Event Listeners for the dynamic speed threshold inputs.
+ * Forces the map to instantaneously redraw the gradient if the user alters the numbers.
+ */
+document.getElementById('min-speed-input').addEventListener('input', () => {
+    const toggle = document.getElementById('toggle-speed-color');
+    if (toggle && toggle.checked) drawPrimaryRoute(true);
+});
+
+document.getElementById('max-speed-input').addEventListener('input', () => {
+    const toggle = document.getElementById('toggle-speed-color');
+    if (toggle && toggle.checked) drawPrimaryRoute(true);
+});

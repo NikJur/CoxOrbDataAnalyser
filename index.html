@@ -43,7 +43,17 @@
 
         <section class="panel hidden" id="replay-section">
             
-            <div id="speed-toggle-container" class="hidden" style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-bottom: 0.5rem;">
+            <div id="speed-toggle-container" class="hidden" style="display: flex; justify-content: flex-end; align-items: center; gap: 15px; margin-bottom: 0.5rem; flex-wrap: wrap;">
+                
+                <div id="speed-thresholds" class="hidden" style="display: flex; gap: 10px; align-items: center;">
+                    <label style="font-size: 0.8rem; color: var(--primary); font-weight: 600;">Min (m/s): 
+                        <input type="number" id="min-speed-input" step="0.1" style="width: 60px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
+                    </label>
+                    <label style="font-size: 0.8rem; color: var(--primary); font-weight: 600;">Max (m/s): 
+                        <input type="number" id="max-speed-input" step="0.1" style="width: 60px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
+                    </label>
+                </div>
+
                 <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Colour Route by Speed</span>
                 <label class="toggle-switch">
                     <input type="checkbox" id="toggle-speed-color">
