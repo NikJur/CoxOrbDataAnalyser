@@ -102,6 +102,31 @@ document.getElementById('process-btn').addEventListener('click', async () => {
             initMap(mergedData);
 
         }
+        /**
+         * Master Timeline Configuration
+         * Exposes the slider and audio controls once the data arrays are populated.
+         * Binds the maximum slider value to the length of the newly processed dataset,
+         * allowing the user to scrub the map and chart even without an audio track.
+         */
+        const audioContainer = document.getElementById('audio-container');
+        const timeSlider = document.getElementById('time-slider');
+        
+        if (mergedData.length > 0) {
+            if (audioContainer) {
+                audioContainer.classList.remove('hidden');
+                audioContainer.style.display = 'flex';
+            }
+            
+            if (timeSlider) {
+                timeSlider.max = mergedData.length - 1;
+                timeSlider.value = 0;
+                
+                // Resets the blue gradient track to zero for the new file
+                if (typeof updateSliderFill === 'function') {
+                    updateSliderFill(); 
+                }
+            }
+        }
 
         // Expose replay section
         replaySection.classList.remove('hidden');
