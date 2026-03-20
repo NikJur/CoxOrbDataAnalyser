@@ -169,5 +169,28 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="app.js"></script>
+
+    <hr style="margin: 3rem 0; border: 0; border-top: 1px solid #e9ecef;">
+    
+    <div id="feedback-section" style="max-width: 500px; margin: 0 auto 3rem auto; text-align: center;">
+        <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Feedback & Support</h3>
+        <p style="font-size: 0.85rem; color: #6c757d; margin-bottom: 1.5rem;">
+            Encountered a bug or have a feature request? Let us know!
+        </p>
+        
+        <form action="https://formspree.io/f/mdawjwbz" method="POST" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 1.5rem;">
+            <input type="email" name="email" placeholder="Your Email Address (optional but recommended)" style="padding: 10px 12px; border: 1px solid #ced4da; border-radius: 4px; font-family: inherit; font-size: 0.9rem; outline: none;">
+            
+            <textarea name="message" rows="4" placeholder="Describe the issue or suggestion..." required style="padding: 10px 12px; border: 1px solid #ced4da; border-radius: 4px; font-family: inherit; font-size: 0.9rem; outline: none; resize: vertical;"></textarea>
+            
+            <button type="submit" class="skip-btn" style="width: 100%; padding: 10px; font-size: 0.95rem;">Submit Feedback</button>
+        </form>
+
+        <p style="font-size: 0.8rem; color: #6c757d; margin-bottom: 10px;">Alternatively, GitHub users can log issues directly:</p>
+        
+        <a href="https://github.com/NikJur/CoxOrbDataAnalyser/issues/new" target="_blank" class="secondary-btn" style="text-decoration: none; display: inline-block;">
+            Open a GitHub Issue
+        </a>
+    </div>
 </body>
 </html>
