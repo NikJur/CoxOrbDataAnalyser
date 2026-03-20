@@ -432,3 +432,24 @@ audio, #audio-player {
     background-color: #dee2e6;
     color: #1C3754;
 }
+
+/**
+ * GitHub Button
+ * Styled button for linking to the GitHub repository.
+ */
+.GitHub-btn {
+    background-color: var(--primary); /* CoxOrb blue */
+    color: white;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.GitHub-btn:hover {
+    background-color: #1C3754; /* Darker blue */
+    color: white;
+}
