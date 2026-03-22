@@ -937,6 +937,17 @@ document.getElementById('compare-btn').addEventListener('click', async () => {
             }
         }
     }
+    
+    // Fetches the boundaries (if not already loaded) and overlayed them on the comparison map
+    // Checked the physical state of the new toggle before overlaying the boundaries
+    const isFairwayChecked = document.getElementById('toggle-compare-fairway').checked;
+    if (isFairwayChecked) {
+        loadFairwayLimits().then(() => {
+            if (compareMapInstance) {
+                compareFairwayLayer.addTo(compareMapInstance);
+            }
+        });
+    }
 
     // Zoom the map out just enough to see all drawn lines
     if (bounds.isValid()) {
@@ -1018,6 +1029,9 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
     const speedToggleInput = document.getElementById('toggle-speed-color');
     if (speedToggleInput) speedToggleInput.checked = false;
 
+    // Reset the independent fairway toggle
+    document.getElementById('toggle-fairway-limits').checked = false;
+
     // Hide the visualization containers again
     replaySection.classList.add('hidden');
     audioContainer.classList.add('hidden');
@@ -1043,6 +1057,15 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
         // Reset the toggle switch back to its default checked state
         document.getElementById(`toggle-compare-${i+1}`).checked = true;
     }
+
+    // Explicitly tell Leaflet to remove the fairway layer
+    if (compareMapInstance && compareFairwayLayer) {
+        compareMapInstance.removeLayer(compareFairwayLayer);
+    }
+
+    // Reset the independent fairway toggle
+    document.getElementById('toggle-compare-fairway').checked = false;
+
     // Hide the comparison map container again
     document.getElementById('compare-map-container').classList.add('hidden');
 });
@@ -1225,6 +1248,8 @@ if (defaultThresholdsBtn) {
 
 // Initialize a dedicated layer group for the fairway boundaries
 let fairwayLayer = L.featureGroup();
+let compareFairwayLayer = L.featureGroup();
+let fairwayLimitsLoaded = false; // Tracks if the network request was already completed
 
 /**
  * Fetches and parses the static KML file containing the Tideway fairway boundaries.
@@ -1233,6 +1258,9 @@ let fairwayLayer = L.featureGroup();
  * * Assigns a red stroke to the port limit and a green stroke to the starboard limit.
  */
 async function loadFairwayLimits() {
+    // Aborted the execution if the XML was already parsed into memory
+    if (fairwayLimitsLoaded) return;
+
     try {
         // Fetch the file from the designated directory in the GitHub repository
         const response = await fetch('London_limits_and_buoys/fairwaylimits.kml');
@@ -1263,22 +1291,21 @@ async function loadFairwayLimits() {
                 
                 // Determine the stroke colour based on the <name> tag
                 const lineColor = name.includes("port") ? "#C0392B" : "#27AE60"; // Red for port, Green for starboard
-                
-                // Draw the boundary and add it to the dedicated layer group
-                L.polyline(points, {
-                    color: lineColor,
-                    weight: 2,
-                    opacity: 0.8,
-                    dashArray: '5, 5' // Applies a dashed aesthetic to distinguish limits from the GPS route
-                }).addTo(fairwayLayer);
+        
+                const lineStyle = { color: lineColor, weight: 2, opacity: 0.8, dashArray: '5, 5' };
+
+                // Generated distinct line objects for each independent map engine instance
+                L.polyline(points, lineStyle).addTo(fairwayLayer);
+                L.polyline(points, lineStyle).addTo(compareFairwayLayer);
             }
         }
+        fairwayLimitsLoaded = true; // Set the flag to prevent future redundant network requests
     } catch (error) {
         console.error("Fairway Limits Parsing Error:", error);
     }
 }
 
-/**
+/** Interactive Map Overlay Toggle for Fairway Limits
  * Event Listener for the Fairway Limits toggle switch.
  * Injects the parsed KML boundaries into the active Leaflet instance.
  */
@@ -1299,6 +1326,25 @@ if (toggleFairwayLimits) {
         } else {
             // Remove the overlay without destroying the parsed data in memory
             mapInstance.removeLayer(fairwayLayer);
+        }
+    });
+}
+
+/** Comparison Map Fairway Toggle
+ * Event Listener for the secondary Comparison Map Fairway toggle.
+ * Operated entirely independently of the primary map state.
+ */
+const toggleCompareFairway = document.getElementById('toggle-compare-fairway');
+if (toggleCompareFairway) {
+    toggleCompareFairway.addEventListener('change', (e) => {
+        if (!compareMapInstance) return;
+        
+        if (e.target.checked) {
+            loadFairwayLimits().then(() => {
+                compareFairwayLayer.addTo(compareMapInstance);
+            });
+        } else {
+            compareMapInstance.removeLayer(compareFairwayLayer);
         }
     });
 }
