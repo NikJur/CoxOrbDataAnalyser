@@ -662,7 +662,8 @@ function toggleAnalyticalUI(isVisible) {
     const chartView = document.querySelector('.chart-container');
     const dashboardView = document.querySelector('.dashboard');
     const speedToggleView = document.getElementById('speed-toggle-container');
-    const fairwayToggleView = document.getElementById('fairway-toggle-container'); // Queried the new KML toggle
+    const fairwayToggleView = document.getElementById('fairway-toggle-container'); // Queries the KML toggle
+    const buoysToggleView = document.getElementById('buoys-toggle-container'); // Queries the buoys toggle
 
     // Defensively apply styles only if the node successfully exists in the DOM
     if (chartView) {
@@ -684,6 +685,13 @@ function toggleAnalyticalUI(isVisible) {
         fairwayToggleView.style.display = isVisible ? 'flex' : 'none';
         if (isVisible) fairwayToggleView.classList.remove('hidden');
     }
+
+    // Applies the visibility state to the buoys container
+    if (buoysToggleView) {
+        buoysToggleView.style.display = isVisible ? 'flex' : 'none';
+        if (isVisible) buoysToggleView.classList.remove('hidden');
+    }
+
 }
 
 /**
@@ -949,6 +957,16 @@ document.getElementById('compare-btn').addEventListener('click', async () => {
         });
     }
 
+    // Checks the physical state of the buoys toggle before overlaying
+    const isBuoysChecked = document.getElementById('toggle-compare-buoys').checked;
+    if (isBuoysChecked) {
+        loadBuoys().then(() => {
+            if (compareMapInstance) {
+                compareBuoyLayer.addTo(compareMapInstance);
+            }
+        });
+    }
+
     // Zoom the map out just enough to see all drawn lines
     if (bounds.isValid()) {
         compareMapInstance.fitBounds(bounds);
@@ -1058,13 +1076,19 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
         document.getElementById(`toggle-compare-${i+1}`).checked = true;
     }
 
-    // Explicitly tell Leaflet to remove the fairway layer
+    // Explicitly command Leaflet to remove the KML layers (fairway and buoys) if they exist, without relying on the toggle state
     if (compareMapInstance && compareFairwayLayer) {
         compareMapInstance.removeLayer(compareFairwayLayer);
+    }
+    if (compareMapInstance && compareBuoyLayer) {
+        compareMapInstance.removeLayer(compareBuoyLayer);
     }
 
     // Reset the independent fairway toggle
     document.getElementById('toggle-compare-fairway').checked = false;
+
+    // Reset the independent buoys toggle
+    document.getElementById('toggle-compare-buoys').checked = false;
 
     // Hide the comparison map container again
     document.getElementById('compare-map-container').classList.add('hidden');
@@ -1345,6 +1369,114 @@ if (toggleCompareFairway) {
             });
         } else {
             compareMapInstance.removeLayer(compareFairwayLayer);
+        }
+    });
+}
+
+
+/**
+ * Dedicated layer groups for the navigational buoys.
+ */
+let buoyLayer = L.featureGroup();
+let compareBuoyLayer = L.featureGroup();
+let buoysLoaded = false; 
+
+/**
+ * Fetches and parses the KML file containing the navigational buoys.
+ * Extracts the coordinate strings from the <Point> tags and generates 
+ * circle markers for both the primary and comparison layer groups.
+ * Binds hover tooltips to display the buoy names.
+ */
+async function loadBuoys() {
+    // Aborts the execution if the XML was already parsed into memory
+    if (buoysLoaded) return;
+
+    try {
+        const response = await fetch('London_limits_and_buoys/buoys.kml');
+        if (!response.ok) throw new Error("Could not retrieve the buoys KML file.");
+        
+        const kmlText = await response.text();
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(kmlText, "text/xml");
+        const placemarks = xmlDoc.getElementsByTagName("Placemark");
+        
+        for (let i = 0; i < placemarks.length; i++) {
+            const nameNode = placemarks[i].getElementsByTagName("name")[0];
+            const name = nameNode ? nameNode.textContent : "Unknown Buoy";
+            
+            // Buoys use <Point> not <LineString> as did fairway boundaries
+            const pointNode = placemarks[i].getElementsByTagName("Point")[0];
+            if (pointNode) {
+                const coordsNode = pointNode.getElementsByTagName("coordinates")[0];
+                const coordsText = coordsNode ? coordsNode.textContent : null;
+
+                if (coordsText) {
+                    const parts = coordsText.trim().split(',');
+                    if (parts.length >= 2) {
+                        const lon = parseFloat(parts[0]);
+                        const lat = parseFloat(parts[1]);
+
+                        // Configures a yellow dot with a black border
+                        const markerStyle = {
+                            radius: 5,
+                            fillColor: "#F1C40F", 
+                            color: "#000000",        
+                            weight: 1,
+                            opacity: 1,
+                            fillOpacity: 0.9
+                        };
+
+                        // Generates the marker for the interactive map
+                        const buoy1 = L.circleMarker([lat, lon], markerStyle);
+                        buoy1.bindTooltip(name, { direction: 'top', offset: [0, -5] });
+                        buoy1.addTo(buoyLayer);
+
+                        // Generates the marker for the comparison map
+                        const buoy2 = L.circleMarker([lat, lon], markerStyle);
+                        buoy2.bindTooltip(name, { direction: 'top', offset: [0, -5] });
+                        buoy2.addTo(compareBuoyLayer);
+                    }
+                }
+            }
+        }
+        buoysLoaded = true;
+    } catch (error) {
+        console.error("Buoys Parsing Error:", error);
+    }
+}
+
+/**
+ * Event Listener for the primary Interactive Map Buoys toggle.
+ */
+const toggleBuoys = document.getElementById('toggle-buoys');
+if (toggleBuoys) {
+    toggleBuoys.addEventListener('change', (e) => {
+        if (!mapInstance) return;
+        
+        if (e.target.checked) {
+            loadBuoys().then(() => {
+                buoyLayer.addTo(mapInstance);
+            });
+        } else {
+            mapInstance.removeLayer(buoyLayer);
+        }
+    });
+}
+
+/**
+ * Event Listener for the secondary Comparison Map Buoys toggle.
+ */
+const toggleCompareBuoys = document.getElementById('toggle-compare-buoys');
+if (toggleCompareBuoys) {
+    toggleCompareBuoys.addEventListener('change', (e) => {
+        if (!compareMapInstance) return;
+        
+        if (e.target.checked) {
+            loadBuoys().then(() => {
+                compareBuoyLayer.addTo(compareMapInstance);
+            });
+        } else {
+            compareMapInstance.removeLayer(compareBuoyLayer);
         }
     });
 }

@@ -81,6 +81,19 @@
                 </div>
             </div>
 
+            <div id="buoys-toggle-container" class="hidden" style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="text-align: right; display: flex; flex-direction: column;">
+                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Show Navigation Buoys</span>
+                        <span style="font-size: 0.7rem; color: #6c757d; max-width: 280px;">Plots named navigational buoys along the course. (Thanks to PLA and Thames RC)</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-buoys">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
             <div id="map-container">
                 <div id="map"></div>
             </div>
@@ -175,6 +188,19 @@
                     </div>
                     <label class="toggle-switch">
                         <input type="checkbox" id="toggle-compare-fairway">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="compare-buoys-toggle-container" style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="text-align: right; display: flex; flex-direction: column;">
+                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Show Navigation Buoys</span>
+                        <span style="font-size: 0.7rem; color: #6c757d; max-width: 280px;">Plots named navigational buoys along the course. (Thanks to PLA and Thames RC)</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-compare-buoys">
                         <span class="slider round"></span>
                     </label>
                 </div>
