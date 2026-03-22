@@ -662,6 +662,7 @@ function toggleAnalyticalUI(isVisible) {
     const chartView = document.querySelector('.chart-container');
     const dashboardView = document.querySelector('.dashboard');
     const speedToggleView = document.getElementById('speed-toggle-container');
+    const fairwayToggleView = document.getElementById('fairway-toggle-container'); // Queried the new KML toggle
 
     // Defensively apply styles only if the node successfully exists in the DOM
     if (chartView) {
@@ -677,6 +678,11 @@ function toggleAnalyticalUI(isVisible) {
     if (speedToggleView) {
         speedToggleView.style.display = isVisible ? 'flex' : 'none';
         if (isVisible) speedToggleView.classList.remove('hidden');
+    }
+
+    if (fairwayToggleView) {
+        fairwayToggleView.style.display = isVisible ? 'flex' : 'none';
+        if (isVisible) fairwayToggleView.classList.remove('hidden');
     }
 }
 
@@ -1215,6 +1221,88 @@ if (defaultThresholdsBtn) {
         }
     });
 }
+
+
+// Initialize a dedicated layer group for the fairway boundaries
+let fairwayLayer = L.featureGroup();
+
+/**
+ * Fetches and parses the static KML file containing the Tideway fairway boundaries.
+ * Extracts the raw coordinate strings from the XML structure and converts them 
+ * into Leaflet-compatible [latitude, longitude] arrays.
+ * * Assigns a red stroke to the port limit and a green stroke to the starboard limit.
+ */
+async function loadFairwayLimits() {
+    try {
+        // Fetch the file from the designated directory in the GitHub repository
+        const response = await fetch('London_limits_and_buoys/fairwaylimits.kml');
+        if (!response.ok) throw new Error("Could not retrieve the KML file.");
+        
+        const kmlText = await response.text();
+        
+        // Parse the raw text into an XML Document Object Model
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(kmlText, "text/xml");
+        const placemarks = xmlDoc.getElementsByTagName("Placemark");
+        
+        // Iterate through each Placemark (Port and Starboard lines)
+        for (let i = 0; i < placemarks.length; i++) {
+            const nameNode = placemarks[i].getElementsByTagName("name")[0];
+            const name = nameNode ? nameNode.textContent.toLowerCase() : "";
+            
+            const coordsNode = placemarks[i].getElementsByTagName("coordinates")[0];
+            const coordsText = coordsNode ? coordsNode.textContent : null;
+            
+            if (coordsText) {
+                // KML coordinates are formatted as "lon,lat,alt lon,lat,alt ..."
+                // Split by whitespace to isolate individual points, then map to Leaflet's [lat, lon] requirement
+                const points = coordsText.trim().split(/\s+/).map(coord => {
+                    const parts = coord.split(',');
+                    return [parseFloat(parts[1]), parseFloat(parts[0])]; 
+                });
+                
+                // Determine the stroke colour based on the <name> tag
+                const lineColor = name.includes("port") ? "#C0392B" : "#27AE60"; // Red for port, Green for starboard
+                
+                // Draw the boundary and add it to the dedicated layer group
+                L.polyline(points, {
+                    color: lineColor,
+                    weight: 2,
+                    opacity: 0.8,
+                    dashArray: '5, 5' // Applies a dashed aesthetic to distinguish limits from the GPS route
+                }).addTo(fairwayLayer);
+            }
+        }
+    } catch (error) {
+        console.error("Fairway Limits Parsing Error:", error);
+    }
+}
+
+/**
+ * Event Listener for the Fairway Limits toggle switch.
+ * Injects the parsed KML boundaries into the active Leaflet instance.
+ */
+const toggleFairwayLimits = document.getElementById('toggle-fairway-limits');
+if (toggleFairwayLimits) {
+    toggleFairwayLimits.addEventListener('change', (e) => {
+        if (!mapInstance) return;
+        
+        if (e.target.checked) {
+            // Only execute the network fetch if the layer is currently empty
+            if (fairwayLayer.getLayers().length === 0) {
+                loadFairwayLimits().then(() => {
+                    fairwayLayer.addTo(mapInstance);
+                });
+            } else {
+                fairwayLayer.addTo(mapInstance);
+            }
+        } else {
+            // Remove the overlay without destroying the parsed data in memory
+            mapInstance.removeLayer(fairwayLayer);
+        }
+    });
+}
+
 
 /**
  * Event Listener for the PDF Export button.
