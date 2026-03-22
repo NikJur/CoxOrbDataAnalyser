@@ -476,6 +476,10 @@ function initChart(data) {
             responsive: true,
             maintainAspectRatio: false,
             animation: false, // Disabling animation ensures real-time slider sync is seamless
+            interaction: {
+                mode: 'index',
+                intersect: false, // Forces the tooltip to appear when hovering anywhere in the vertical column
+            },
             elements: {
                 point: {
                     radius: 0, // Disables drawing hundreds of individual dots
@@ -488,6 +492,14 @@ function initChart(data) {
             },
             plugins: {
                 tooltip: {
+                    // CoxOrb style tooltip with custom colors and formatting to match the app's theme
+                    backgroundColor: '#25476D',
+                    titleColor: '#ffffff',
+                    bodyColor: '#ffffff',
+                    borderColor: '#F08118',
+                    borderWidth: 2,
+                    padding: 12,
+                    displayColors: true,
                     callbacks: {
                         // Formats the tooltip text when you hover over the chart
                         label: function(context) {
@@ -496,7 +508,7 @@ function initChart(data) {
                                 label += ': ';
                             }
                             
-                            // If we are hovering over the split line, format the number
+                            // If we are hovering over the split line, format the number into m:ss.t
                             if (context.dataset.yAxisID === 'y1') {
                                 const val = context.parsed.y;
                                 const m = Math.floor(val / 60);
@@ -511,6 +523,10 @@ function initChart(data) {
                 }
             },
             scales: {
+                x: {
+                    display: true,
+                    title: { display: true, text: 'Time / Distance' }
+                },
                 y: { 
                     type: 'linear', 
                     display: true, 
@@ -1199,3 +1215,53 @@ if (defaultThresholdsBtn) {
         }
     });
 }
+
+/**
+ * Event Listener for the PDF Export button.
+ * Triggers the browser's native print engine, relying on @media print CSS 
+ * to strip the UI and format the canvas elements correctly.
+ */
+const printReportBtn = document.getElementById('print-report-btn');
+if (printReportBtn) {
+    printReportBtn.addEventListener('click', () => {
+        // Standard browsers automatically prompt the "Save as PDF" dialog
+        window.print();
+    });
+}
+
+/**
+ * Browser Print Event Interceptors
+ * Resolves Leaflet rendering failures during PDF export.
+ * Forces the map engine to recalculate its physical container dimensions and 
+ * to frame the GPS data right before the browser captures the layout.
+ */
+
+let prePrintCenter = null;
+let prePrintZoom = null;
+
+window.addEventListener('beforeprint', () => {
+    if (typeof mapInstance !== 'undefined' && mapInstance !== null) {
+
+        // Captured the exact view the user was actively analysing
+        prePrintCenter = mapInstance.getCenter();
+        prePrintZoom = mapInstance.getZoom();
+
+        // Command Leaflet to update its internal size cache to match the CSS @media print rules
+        mapInstance.invalidateSize();
+        
+        // Snapp the camera back to the user's focal point without animation delays
+        mapInstance.setView(prePrintCenter, prePrintZoom, { animate: false });
+    }
+});
+
+window.addEventListener('afterprint', () => {
+    if (typeof mapInstance !== 'undefined' && mapInstance !== null) {
+        // Restore the standard web layout dimensions once the print dialog closes
+        mapInstance.invalidateSize();
+
+        // Restore same view so the workflow remains intact
+        if (prePrintCenter && prePrintZoom) {
+            mapInstance.setView(prePrintCenter, prePrintZoom, { animate: false });
+        }
+    }
+});

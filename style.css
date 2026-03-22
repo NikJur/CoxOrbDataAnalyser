@@ -160,14 +160,29 @@ button:hover { background-color: #1C3754; }
 
 #time-slider { width: 100%; }
 
+/**
+ * Metrics Dashboard Banner
+ * Displays real-time rowing statistics.
+ */
 .dashboard {
     display: flex;
-    justify-content: space-between;
-    background: #e9ecef;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-top: -2rem;
-    margin-bottom: 1.5rem;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap; 
+    background-color: #f8f9fa; 
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 10px 15px;
+    
+    /* Increased margins to restore physical separation from the map */
+    margin-top: 1.5rem; 
+    margin-bottom: 1rem; 
+    
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    position: relative;
+    z-index: 10; 
+    width: 100%;
+    box-sizing: border-box; 
 }
 
 .stat-box { font-weight: bold; font-size: 1.1rem; }
@@ -452,4 +467,80 @@ audio, #audio-player {
 .GitHub-btn:hover {
     background-color: #1C3754; /* Darker blue */
     color: white;
+}
+
+/**
+ * Print Formatting Rules
+ * Strips all interactive UI elements, margins, and flexible heights
+ * to ensure the analytical report fits onto a single PDF page without blank overflows.
+ * Enforced maximum widths to prevent the canvas and map from bleeding off the paper.
+ */
+@media print {
+    /* Defines physical paper margins and resets page geometry */
+    @page {
+        size: landscape;
+        margin: 1cm;
+    }
+
+    html, body {
+        background-color: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important; 
+        overflow: visible !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Erases the interactive UI components */
+    header, 
+    .upload-grid, 
+    .action-buttons, 
+    #compare-inputs,
+    .controls, 
+    #speed-toggle-container,
+    #export-section,
+    #support-section, 
+    #feedback-section,
+    hr {
+        display: none !important;
+    }
+    
+    /* Strips structural padding and forces strict width containment */
+    .panel {
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Forces the remaining analytical elements to stay together and fit the page */
+    #replay-section {
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+    /* Tells the Comparison tool to always start on a new printed page */
+    #compare-section {
+        break-before: page !important;
+        page-break-before: always !important; /* Fallback for older browser rendering engines */
+    }
+
+    .chart-container, 
+    #map-container,
+    .dashboard {
+        page-break-inside: avoid !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Tells the canvas to shrink to the physical paper width */
+    canvas {
+        max-width: 100% !important;
+        height: auto !important;
+    }
 }
