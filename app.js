@@ -1399,10 +1399,56 @@ async function loadBuoys() {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(kmlText, "text/xml");
         const placemarks = xmlDoc.getElementsByTagName("Placemark");
+
+        /**
+         * Helper function that navigates the KML StyleMap hierarchy.
+         * Converts KML's AABBGGRR color format to CSS's #RRGGBB format.
+         * @param {Document} doc - The parsed XML Document Object Model.
+         * @param {string} styleUrl - The reference ID of the style.
+         * @returns {string} Standard CSS hex color string.
+         */
+        const resolveKmlColor = (doc, styleUrl) => {
+            if (!styleUrl) return "#F1C40F"; // Fallback yellow
+            
+            const id = styleUrl.replace('#', '');
+            const node = doc.querySelector(`[id="${id}"]`);
+            if (!node) return "#F1C40F";
+
+            if (node.nodeName === "StyleMap") {
+                const pairs = node.getElementsByTagName("Pair");
+                for (let j = 0; j < pairs.length; j++) {
+                    const keyNode = pairs[j].getElementsByTagName("key")[0];
+                    if (keyNode && keyNode.textContent === "normal") {
+                        const urlNode = pairs[j].getElementsByTagName("styleUrl")[0];
+                        if (urlNode) return resolveKmlColor(doc, urlNode.textContent);
+                    }
+                }
+            } else if (node.nodeName === "Style") {
+                // KML stores colours in IconStyle > color
+                const iconStyle = node.getElementsByTagName("IconStyle")[0];
+                if (iconStyle) {
+                    const colorNode = iconStyle.getElementsByTagName("color")[0];
+                    if (colorNode) {
+                        const c = colorNode.textContent.trim(); 
+                        if (c.length === 8) {
+                            // Reorders the hex pairs to match standard CSS (#RRGGBB)
+                            return `#${c.substring(6,8)}${c.substring(4,6)}${c.substring(2,4)}`;
+                        }
+                    }
+                }
+            }
+            return "#F1C40F"; 
+        };
         
         for (let i = 0; i < placemarks.length; i++) {
             const nameNode = placemarks[i].getElementsByTagName("name")[0];
             const name = nameNode ? nameNode.textContent : "Unknown Buoy";
+
+            const styleUrlNode = placemarks[i].getElementsByTagName("styleUrl")[0];
+            const styleUrl = styleUrlNode ? styleUrlNode.textContent : null;
+            
+            // Executes the colour resolution function
+            const buoyColor = resolveKmlColor(xmlDoc, styleUrl);
             
             // Buoys use <Point> not <LineString> as did fairway boundaries
             const pointNode = placemarks[i].getElementsByTagName("Point")[0];
@@ -1416,10 +1462,9 @@ async function loadBuoys() {
                         const lon = parseFloat(parts[0]);
                         const lat = parseFloat(parts[1]);
 
-                        // Configures a yellow dot with a black border
                         const markerStyle = {
                             radius: 5,
-                            fillColor: "#F1C40F", 
+                            fillColor: buoyColor,
                             color: "#000000",        
                             weight: 1,
                             opacity: 1,
