@@ -697,6 +697,8 @@ function toggleAnalyticalUI(isVisible) {
 /**
  * Dynamically calculates a hex/hsl colour on a Red-to-Green gradient based on min/max bounds.
  * Utilizes the HSL colour space where 0 = Red, 60 = Yellow, 120 = Green.
+ * Interpolated the lightness value to ensure the green upper bound rendered 
+ * darker (30%) than the red lower bound (50%) for optimal map contrast.
  * @param {number} speed - The current speed value to evaluate.
  * @param {number} minSpeed - The lower boundary (Red).
  * @param {number} maxSpeed - The upper boundary (Green).
@@ -704,7 +706,7 @@ function toggleAnalyticalUI(isVisible) {
  */
 function getDynamicSpeedColor(speed, minSpeed, maxSpeed) {
     // Prevent mathematical errors if bounds are identical
-    if (maxSpeed <= minSpeed) return 'hsl(120, 100%, 45%)';
+    if (maxSpeed <= minSpeed) return 'hsl(120, 100%, 30%)';
 
     // Clamp the speed so outliers do not break the colour scale
     const clampedSpeed = Math.max(minSpeed, Math.min(speed, maxSpeed));
@@ -715,7 +717,11 @@ function getDynamicSpeedColor(speed, minSpeed, maxSpeed) {
     // Map the percentage to a hue angle (0 to 120 degrees)
     const hue = percent * 120;
 
-    return `hsl(${hue}, 100%, 45%)`;
+    // Dynamically darken the lightness as the hue shifts towards green
+    // At 0% (Red), Lightness is 50%. At 100% (Green), Lightness is 30%.
+    const lightness = 50 - (percent * 15);
+
+    return `hsl(${hue}, 100%, ${lightness}%)`;
 }
 
 /**
