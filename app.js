@@ -1050,6 +1050,9 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
     // Reset the independent fairway toggle
     document.getElementById('toggle-fairway-limits').checked = false;
 
+    // Reset the independent buoys toggle
+    document.getElementById('toggle-buoys').checked = false;
+
     // Hide the visualization containers again
     replaySection.classList.add('hidden');
     audioContainer.classList.add('hidden');
@@ -1473,12 +1476,20 @@ async function loadBuoys() {
 
                         // Generates the marker for the interactive map
                         const buoy1 = L.circleMarker([lat, lon], markerStyle);
-                        buoy1.bindTooltip(name, { direction: 'top', offset: [0, -5] });
+                        buoy1.bindTooltip(name, { 
+                            direction: 'top', 
+                            offset: [0, -5], 
+                            className: 'coxorb-tooltip' // Assigns the custom stylesheet class
+                        });
                         buoy1.addTo(buoyLayer);
 
                         // Generates the marker for the comparison map
                         const buoy2 = L.circleMarker([lat, lon], markerStyle);
-                        buoy2.bindTooltip(name, { direction: 'top', offset: [0, -5] });
+                        buoy2.bindTooltip(name, { 
+                            direction: 'top', 
+                            offset: [0, -5], 
+                            className: 'coxorb-tooltip' // Assigns the custom stylesheet class
+                        });
                         buoy2.addTo(compareBuoyLayer);
                     }
                 }

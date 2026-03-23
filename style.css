@@ -544,3 +544,24 @@ audio, #audio-player {
         height: auto !important;
     }
 }
+
+/**
+ * Navigational Buoy Tooltip
+ * Applies the CoxOrb colour palette (Navy  & Orange) to the Leaflet tooltip.
+ * Stripps the default Leaflet formatting.
+ */
+.coxorb-tooltip {
+    background-color: #25476D;
+    color: #ffffff;
+    border: 2px solid #F08118;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Removed the default triangle pointer styling to maintain a clean rectangular badge */
+.leaflet-tooltip.coxorb-tooltip::before {
+    display: none;
+}
