@@ -12,6 +12,8 @@ let currentSliderIndex = 0; // Tracks the current stroke for the chart's vertica
 
 let primaryRouteLayer = null; // Holds the primary map route (solid or segmented)
 
+let isColorBlindMode = false; // Tracks whether the accessible colour palette is active
+
 let compareMapInstance = null;
 let compareLayers = [null, null, null, null, null];
 const compareColors = ['#25476D', '#F08118', '#000000', '#C0392B', '#8E44AD'];
@@ -699,14 +701,18 @@ function toggleAnalyticalUI(isVisible) {
  * Utilizes the HSL colour space where 0 = Red, 60 = Yellow, 120 = Green.
  * Interpolated the lightness value to ensure the green upper bound rendered 
  * darker (30%) than the red lower bound (50%) for optimal map contrast.
+ * Evaluates the global isColorBlindMode flag to swap between a standard Red-to-Green palette
+ * and an accessible Blue-to-Yellow palette, ensuring data remained legible for all users.
  * @param {number} speed - The current speed value to evaluate.
  * @param {number} minSpeed - The lower boundary (Red).
  * @param {number} maxSpeed - The upper boundary (Green).
  * @returns {string} A CSS-compatible HSL colour string.
  */
 function getDynamicSpeedColor(speed, minSpeed, maxSpeed) {
-    // Prevent mathematical errors if bounds are identical
-    if (maxSpeed <= minSpeed) return 'hsl(120, 100%, 30%)';
+    // Prevented mathematical errors if bounds were identical
+    if (maxSpeed <= minSpeed) {
+        return isColorBlindMode ? 'hsl(60, 100%, 50%)' : 'hsl(120, 100%, 30%)';
+    }
 
     // Clamp the speed so outliers do not break the colour scale
     const clampedSpeed = Math.max(minSpeed, Math.min(speed, maxSpeed));
@@ -714,14 +720,19 @@ function getDynamicSpeedColor(speed, minSpeed, maxSpeed) {
     // Calculate the percentage (0.0 to 1.0) between the bounds
     const percent = (clampedSpeed - minSpeed) / (maxSpeed - minSpeed);
 
-    // Map the percentage to a hue angle (0 to 120 degrees)
-    const hue = percent * 120;
-
-    // Dynamically darken the lightness as the hue shifts towards green
-    // At 0% (Red), Lightness is 50%. At 100% (Green), Lightness is 30%.
-    const lightness = 50 - (percent * 15);
-
-    return `hsl(${hue}, 100%, ${lightness}%)`;
+    if (isColorBlindMode) {
+        // Mapps slower speeds to Blue (Hue 240) and faster speeds to Yellow (Hue 60)
+        const hue = 240 - (percent * 180);
+        
+        // Shifts lightness slightly as speed increases to keep the yellow bright and legible
+        const lightness = 50 + (percent * 10); 
+        return `hsl(${hue}, 100%, ${lightness}%)`;
+    } else {
+        // Mapps slower speeds to Red (Hue 0) and faster speeds to Dark Green (Hue 120)
+        const hue = percent * 120;
+        const lightness = 50 - (percent * 15); // Faster speeds are darker for better map contrast
+        return `hsl(${hue}, 100%, ${lightness}%)`;
+    }
 }
 
 /**
@@ -1273,6 +1284,29 @@ if (defaultThresholdsBtn) {
         const toggle = document.getElementById('toggle-speed-color');
         if (toggle && toggle.checked) {
             // Command the map renderer to update using the new input values
+            drawPrimaryRoute(true);
+        }
+    });
+}
+
+/**
+ * Event Listener for the Colour Blind Mode toggle button.
+ * Inverts the global state flag, updates the button text to reflect the current state,
+ * and forces an immediate map redraw if the speed gradient was currently active.
+ */
+const colorBlindBtn = document.getElementById('color-blind-btn');
+
+if (colorBlindBtn) {
+    colorBlindBtn.addEventListener('click', () => {
+        // Inverts the active state
+        isColorBlindMode = !isColorBlindMode;
+        
+        // Alters the button text to indicate the current mode to the user
+        colorBlindBtn.innerText = isColorBlindMode ? "Standard Colours" : "Color Blind Mode";
+
+        // Verifies if the gradient map was actually switched on before spending resources drawing
+        const toggle = document.getElementById('toggle-speed-color');
+        if (toggle && toggle.checked) {
             drawPrimaryRoute(true);
         }
     });
