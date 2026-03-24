@@ -520,6 +520,16 @@ function initChart(data) {
     const rateData = data.map(d => parseFloat(d['Rate']) || null);
     const splitData = data.map(d => d.split_seconds || null);
 
+    // Calculates dynamic min and max for the split axis to ignore stationary outliers
+    const validSplits = splitData.filter(s => s !== null && s > 0 && s < 300);
+    let splitMin = 60; // Fallback fast bound
+    let splitMax = 300; // Fallback slow bound (anything slower than 5min for 500m is assumed stationary (sorry!))
+    if (validSplits.length > 0) {
+        // Adds a 5-second visual padding buffer to the absolute fastest and slowest values
+        splitMin = Math.max(0, Math.min(...validSplits) - 5);
+        splitMax = Math.max(...validSplits) + 5;
+    }
+
     chartInstance = new Chart(ctx, {
         type: 'line',
         data: {
@@ -607,7 +617,8 @@ function initChart(data) {
                     display: true, 
                     position: 'right', 
                     reverse: true, // Inverted scale for splits (faster is higher on graph)
-                    max: 300, // Culls any splits slower than 5:00.0 (300 seconds) - assume this is stationary: sorry!
+                    min: splitMin, // Dynamically sets the top of the graph
+                    max: splitMax, // Dynamically sets the bottom of the graph
                     title: { display: true, text: 'Split (m:ss.t)' },
                     ticks: {
                         // Formats the labels drawn on the actual right-hand y-axis to m:ss.t
@@ -777,7 +788,17 @@ function updateTrimWindow() {
     if (chartInstance) {
         chartInstance.data.labels = mergedData.map(d => d['Elapsed Time'] || d.seconds_elapsed);
         chartInstance.data.datasets[0].data = mergedData.map(d => parseFloat(d['Rate']) || null);
-        chartInstance.data.datasets[1].data = mergedData.map(d => d.split_seconds || null);
+        
+        const newSplitData = mergedData.map(d => d.split_seconds || null);
+        chartInstance.data.datasets[1].data = newSplitData;
+
+        // Dynamically rescales the Splits axis based on the isolated window
+        const validSplits = newSplitData.filter(s => s !== null && s > 0 && s < 300);
+        if (validSplits.length > 0) {
+            chartInstance.options.scales.y1.min = Math.max(0, Math.min(...validSplits) - 5);
+            chartInstance.options.scales.y1.max = Math.max(...validSplits) + 5;
+        }
+
         chartInstance.update('none'); // Prevents animation stuttering during fast dragging
     }
 
