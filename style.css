@@ -43,6 +43,73 @@ header {
     margin: 0 auto 1rem auto; /* Centers the image and adds a little space below it */
 }
 
+/**
+ * Layout: Navigation Menu
+ * Structures fixed top-left positioning with a light glassmorphism effect.
+ * Adjusts the palette to match Navy/Orange.
+ */
+.nav-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 2000;
+}
+
+.menu-toggle {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: inline-block;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 8px 8px 3px 8px; /* Expands the clickable hit-box around the SVG */
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.menu-toggle:hover {
+    /* Simulats a physical lift toward the user */
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.nav-links {
+    list-style: none;
+    margin-top: 10px;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(37, 71, 109, 0.15); /* Subtle Navy border */
+    border-radius: 8px;
+    display: none; 
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.nav-links.active {
+    display: flex;
+}
+
+.nav-links a {
+    color: #25476D;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: block;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.nav-links a:hover {
+    background: rgba(37, 71, 109, 0.08);
+    color: #F08118;
+    /* Nudges the text slightly to indicate selection */
+    transform: translateX(5px);
+}
+
 main {
     max-width: 1400px;
     margin: 2rem auto;
@@ -507,17 +574,22 @@ audio, #audio-player {
     }
 
     /* Erases the interactive UI components */
-    header, 
     .upload-grid, 
     .action-buttons, 
     #compare-inputs,
     .controls, 
     #speed-toggle-container,
+    #fairway-toggle-container,
+    #buoys-toggle-container,
     #export-section,
     #support-section, 
     #feedback-section,
     hr {
         display: none !important;
+    }
+
+    .nav-container { 
+        display: none !important; 
     }
     
     /* Strips structural padding and forces strict width containment */

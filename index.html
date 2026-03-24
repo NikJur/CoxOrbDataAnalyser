@@ -11,6 +11,24 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <nav class="nav-container">
+        <div class="menu-toggle" id="menuToggle">
+            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect y="4" width="30" height="3" rx="1.5" fill="#25476D"/>
+                <rect y="13" width="30" height="3" rx="1.5" fill="#25476D"/>
+                <rect y="22" width="30" height="3" rx="1.5" fill="#25476D"/>
+            </svg>            
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#interactive-section">A: Interactive Analysis</a></li>
+            <li><a href="#compare-section">B: Compare Routes</a></li>
+            <li><a href="#export-section">C: Export Report</a></li>
+            <li><a href="#support-section">D: Support</a></li>
+            <li><a href="#feedback-section">E: Feedback</a></li>
+        </ul>
+    </nav>
+
     <header>
         <img src="logo.png" alt="CoxOrb Data Visualiser Logo" class="banner-logo">
         <p>This tool processes and visualises CoxOrb rowing data.
@@ -18,7 +36,7 @@
             It aligns GPS data with stroke-by-stroke performance metrics and audio recordings for synchronised spatial analysis, allowing users to evaluate individual outings or compare multiple steering lines against established Tideway boundaries.</p>
     </header>
     <main>
-        <section class="panel">
+        <section class="panel" id="interactive-section">
             <h2>A: Interactive Analysis</h2>
             <div class="upload-grid">
                 <div>

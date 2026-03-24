@@ -32,6 +32,40 @@ const audioUpload = document.getElementById('audio-upload');
 const audioPlayer = document.getElementById('audio-player');
 const audioContainer = document.getElementById('audio-container');
 
+
+/**
+ * Logic: Navigation Menu Interaction
+ * Manages the expansion of the menu and smooth scrolling to section anchors.
+ * Calculates a precise pixel offset to ensure the section headers were not 
+ * obscured by the viewport edge after the scroll completes.
+ */
+const menuToggle = document.getElementById('menuToggle');
+const navLinks = document.getElementById('navLinks');
+
+if (menuToggle && navLinks) {
+    menuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+    });
+
+    // Closes the menu when a link was clicked and triggered the viewport shift
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 20, // Adjusts offset for a clean top margin
+                    behavior: 'smooth'
+                });
+            }
+            navLinks.classList.remove('active');
+        });
+    });
+}
+
+
 /**
  * Event Listener for the main processing button.
  * Triggers the parsing of uploaded files.
