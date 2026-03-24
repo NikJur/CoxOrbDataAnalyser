@@ -629,6 +629,26 @@ audio, #audio-player {
         max-width: 100% !important;
         height: auto !important;
     }
+
+    /**
+     * Renders the attribution text at the very bottom of the generated PDF.
+     */
+    .print-only {
+        display: block !important;
+        text-align: center;
+        margin-top: 40px;
+        padding-top: 15px;
+        border-top: 1px solid #cccccc;
+        font-size: 0.85rem;
+        color: #666666;
+        width: 100%;
+    }
+    
+    .print-only a {
+        color: #25476D; /* CoxOrb Navy */
+        text-decoration: none;
+    }
+    
 }
 
 /**
@@ -649,5 +669,14 @@ audio, #audio-player {
 
 /* Removed the default triangle pointer styling to maintain a clean rectangular badge */
 .leaflet-tooltip.coxorb-tooltip::before {
+    display: none;
+}
+
+
+/**
+ * Layout: Print Footer
+ * Hides the attribution text during standard interactive screen viewing.
+ */
+.print-only {
     display: none;
 }
