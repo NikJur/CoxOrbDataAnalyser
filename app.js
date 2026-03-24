@@ -1627,3 +1627,14 @@ window.addEventListener('afterprint', () => {
         }
     }
 });
+
+/**
+ * Scroll-Linked Background Animation
+ * Shifts the SVG wave pattern horizontally as the user scrolls down the page.
+ * Created a subtle maritime parallax effect without impacting map rendering performance.
+ */
+window.addEventListener('scroll', () => {
+    // Calculates the horizontal shift at half the speed of the vertical scroll
+    const waveOffset = -(window.scrollY * 0.5);
+    document.body.style.backgroundPosition = `${waveOffset}px 0px`;
+});

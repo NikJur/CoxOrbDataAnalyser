@@ -1,22 +1,36 @@
 :root {
     --primary: #25476D;
-    --bg-color: #f8f9fa;
-    --panel-bg: #ffffff;
+    --bg-color: #e1eefc;
+    --panel-bg: #ffffffe7;
     --text-main: #333333;
 }
 
+/**
+ * Global Body Styling
+ * Includes a repeating SVG wave pattern encoded directly into the CSS.
+ * The background is fixed to the viewport, allowing JavaScript to control the horizontal drift.
+ */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--bg-color);
+
+    /* URL-encoded SVG wave pattern */
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60' viewBox='0 0 120 60'%3E%3Cpath d='M0,30 Q30,60 60,30 T120,30' fill='none' stroke='%2325476D' stroke-width='2' opacity='0.15'/%3E%3C/svg%3E");
+    background-attachment: fixed; /* Locks the waves in place vertically */
+    background-size: 120px 60px;
+
     color: var(--text-main);
     margin: 0;
-    padding: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 header {
     text-align: center;
     padding: 2rem 1rem;
-    background-color: var(--panel-bg);
+    background-color: #ffffff;
     border-bottom: 1px solid #ddd;
 }
 
