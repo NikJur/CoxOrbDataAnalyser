@@ -141,6 +141,18 @@
             <div class="chart-container">
                 <canvas id="metricsChart"></canvas>
             </div>
+
+            <div id="trim-slider-container" class="hidden" style="margin-top: 15px; margin-bottom: 5px; padding: 10px; background: rgba(0,0,0,0.02); border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--primary); font-weight: 600; margin-bottom: 5px;">
+                    <span>Start Trim</span>
+                    <span>End Trim</span>
+                </div>
+                <div class="dual-slider-wrapper">
+                    <div class="dual-slider-track"></div>
+                    <input type="range" id="trim-slider-min" min="0" max="100" value="0">
+                    <input type="range" id="trim-slider-max" min="0" max="100" value="100">
+                </div>
+            </div>
         </section>
 
         <section class="panel" id="compare-section">

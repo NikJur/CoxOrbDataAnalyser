@@ -231,6 +231,18 @@ button:hover { background-color: #1C3754; }
     z-index: 1;
 }
 
+/**
+ * Component: Boat Marker
+ * Renders a red dot using standard DOM elements instead of SVG.
+ * Enables strict z-index control to float above the trim markers.
+ */
+.boat-marker-icon {
+    background-color: red;
+    border: 2px solid white;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
 
 .controls {
     margin: 1.5rem 0;
@@ -274,6 +286,70 @@ button:hover { background-color: #1C3754; }
     width: 100%;
     margin-top: -0.5rem;
 }
+
+/**
+ * Component: Dual Range Slider
+ * Structured two native HTML range inputs absolutely positioned over each other.
+ * Removes default styling and enabled pointer events only on the thumb handles 
+ * to allow independent dragging.
+ */
+.dual-slider-wrapper {
+    position: relative;
+    width: 100%;
+    height: 32px;
+}
+
+.dual-slider-track {
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    top: 13px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    z-index: 1;
+}
+
+.dual-slider-wrapper input[type="range"] {
+    position: absolute;
+    width: 100%;
+    height: 32px;
+    top: 0;
+    margin: 0;
+    -webkit-appearance: none;
+    background: transparent;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.dual-slider-wrapper input[type="range"]::-webkit-slider-thumb {
+    pointer-events: all;
+    width: 8px;
+    height: 32px;
+    appearance: none;
+    -webkit-appearance: none;
+    background: #F08118; /* CoxOrb Orange */
+    border: 2px solid #25476D; /* CoxOrb Navy */
+    border-radius: 4px;
+    cursor: ew-resize;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/**
+ * Component: Map Boundary Markers
+ * Renders vertical bars to clearly indicate the chopped start and end points
+ * on the Leaflet map trajectory.
+ */
+.trim-marker-bar {
+    background-color: #F08118;
+    border: 2px solid #25476D;
+    width: 8px;
+    height: 30px;
+    border-radius: 4px;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    margin-top: -15px; /* Centres the vertical bar on the coordinate */
+    margin-left: -4px;
+}
+
 
 /* Container for the secondary comparison map, styled to match the primary map */
 #compare-map-container {

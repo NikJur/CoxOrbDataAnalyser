@@ -24,6 +24,11 @@ let virtualLoopCount = 0;
 let lastPlaybackTime = 0;
 let baseAudioDuration = 0;
 
+// Trim slider
+let masterMergedData = []; 
+let trimStartMarker = null;
+let trimEndMarker = null;
+
 // DOM Elements
 const processBtn = document.getElementById('process-btn');
 const replaySection = document.getElementById('replay-section');
@@ -97,7 +102,19 @@ document.getElementById('process-btn').addEventListener('click', async () => {
             csvData = parseCSV(csvText);
 
             // Merge datasets based on timestamp
-            mergedData = mergeAsOf(gpxData, csvData, 5);
+            mergedData = mergeAsOf(gpxData, csvData, 5);            
+            masterMergedData = [...mergedData]; // Captures the backup master copy
+
+            // Configure the trimming sliders to match the array length
+            const trimMin = document.getElementById('trim-slider-min');
+            const trimMax = document.getElementById('trim-slider-max');
+            if (trimMin && trimMax) {
+                trimMin.max = masterMergedData.length - 1;
+                trimMax.max = masterMergedData.length - 1;
+                trimMin.value = 0;
+                trimMax.value = masterMergedData.length - 1;
+                document.getElementById('trim-slider-container').classList.remove('hidden');
+            }
 
             if (mergedData.length === 0) {
                 throw new Error("Could not align GPX and CSV timestamps.");
@@ -430,7 +447,6 @@ function drawPrimaryRoute(useSpeedColors) {
     }
 
     primaryRouteLayer.addTo(mapInstance);
-    if (boatMarker) boatMarker.bringToFront();
 }
 
 /**
@@ -453,8 +469,24 @@ function initMap(data) {
     // Render the initial solid blue route using the new dynamic function
     drawPrimaryRoute(false);
 
-    // Initialise the draggable boat marker
-    boatMarker = L.circleMarker(startLoc, { color: 'red', radius: 6, fillOpacity: 1 }).addTo(mapInstance);
+    // Constructs a custom HTML icon for the boat to allow z-index layering
+    const boatIcon = L.divIcon({ 
+        className: 'boat-marker-icon', 
+        iconSize: [14, 14] 
+    });
+
+    // Initializes the draggable boat marker with a high z-index to sit above the trim bars
+    boatMarker = L.marker(startLoc, { 
+        icon: boatIcon, 
+        zIndexOffset: 1000 
+    }).addTo(mapInstance);
+
+    // Vertical boundary markers using a custom CSS divIcon
+    const barIcon = L.divIcon({ className: 'trim-marker-bar', iconSize: [8, 30] });
+    
+    // Places the markers at the absolute start and end of the loaded trajectory
+    trimStartMarker = L.marker([data[0].lat, data[0].lon], { icon: barIcon }).addTo(mapInstance);
+    trimEndMarker = L.marker([data[data.length - 1].lat, data[data.length - 1].lon], { icon: barIcon }).addTo(mapInstance);
     
     // Ensure bounds are calculated using the full coordinate array
     const latlngs = data.map(pt => [pt.lat, pt.lon]);
@@ -689,6 +721,84 @@ timeSlider.addEventListener('input', (e) => {
     }
 });
 
+
+/**
+ * Logic: Dual Slider Trimming Interaction
+ * Intercepes movement on either slider thumb and executes an immediate redraw.
+ * Enforces mathematical bounds to prevent the start marker from crossing the end marker.
+ */
+const trimMinSlider = document.getElementById('trim-slider-min');
+const trimMaxSlider = document.getElementById('trim-slider-max');
+
+/**
+ * Function: updateTrimWindow
+ * Description: Extracts the slider values, slices the immutable master array,
+ * and tells the map and chart engines to redraw using the isolated window.
+ */
+function updateTrimWindow() {
+    if (masterMergedData.length === 0) return;
+
+    let startIdx = parseInt(trimMinSlider.value);
+    let endIdx = parseInt(trimMaxSlider.value);
+
+    // Prevents the handles from overlapping or crossing
+    if (startIdx >= endIdx) {
+        startIdx = endIdx - 1;
+        trimMinSlider.value = startIdx;
+    }
+
+    // Isolats the active racing block
+    mergedData = masterMergedData.slice(startIdx, endIdx + 1);
+
+    // Synchronises the main playback slider to the new temporal window
+    const timeSlider = document.getElementById('time-slider');
+    if (timeSlider) {
+        timeSlider.max = mergedData.length - 1;
+        timeSlider.value = 0;
+    }
+
+    // Synchronises the audio player to the precise start time of the new trimmed window
+        if (audioPlayer && audioPlayer.src && mergedData.length > 0) {
+            const targetSeconds = mergedData[0].seconds_elapsed || 0;
+            if (isVirtualAudioLoop && baseAudioDuration > 0) {
+                virtualLoopCount = Math.floor(targetSeconds / baseAudioDuration);
+                audioPlayer.currentTime = targetSeconds % baseAudioDuration;
+                lastPlaybackTime = audioPlayer.currentTime;
+            } else {
+                audioPlayer.currentTime = targetSeconds;
+            }
+        }
+
+    // Redraws the map polyline to remove the chopped sections
+    const toggle = document.getElementById('toggle-speed-color');
+    if (toggle) drawPrimaryRoute(toggle.checked);
+
+    // Updates the chart labels and datasets directly for a seamless redraw
+    if (chartInstance) {
+        chartInstance.data.labels = mergedData.map(d => d['Elapsed Time'] || d.seconds_elapsed);
+        chartInstance.data.datasets[0].data = mergedData.map(d => parseFloat(d['Rate']) || null);
+        chartInstance.data.datasets[1].data = mergedData.map(d => d.split_seconds || null);
+        chartInstance.update('none'); // Prevents animation stuttering during fast dragging
+    }
+
+    // Relocates the vertical boundary bars on the map
+    if (trimStartMarker && masterMergedData[startIdx]) {
+        trimStartMarker.setLatLng([masterMergedData[startIdx].lat, masterMergedData[startIdx].lon]);
+    }
+    if (trimEndMarker && masterMergedData[endIdx]) {
+        trimEndMarker.setLatLng([masterMergedData[endIdx].lat, masterMergedData[endIdx].lon]);
+    }
+
+    // Resets the dashboard numbers to the new starting point
+    updateUI(0);
+}
+
+if (trimMinSlider && trimMaxSlider) {
+    trimMinSlider.addEventListener('input', updateTrimWindow);
+    trimMaxSlider.addEventListener('input', updateTrimWindow);
+}
+
+
 /**
  * Safely manages the visibility of the secondary analytical interfaces.
  * Queries the DOM explicitly using precise class and ID selectors to prevent null reference errors.
@@ -820,6 +930,18 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
 
         // Merge temporal datasets
         mergedData = mergeAsOf(gpxData, csvData, 5);
+        masterMergedData = [...mergedData]; // Captures the master copy
+
+            // Configure the trimming sliders to match the array length
+            const trimMin = document.getElementById('trim-slider-min');
+            const trimMax = document.getElementById('trim-slider-max');
+            if (trimMin && trimMax) {
+                trimMin.max = masterMergedData.length - 1;
+                trimMax.max = masterMergedData.length - 1;
+                trimMin.value = 0;
+                trimMax.value = masterMergedData.length - 1;
+                document.getElementById('trim-slider-container').classList.remove('hidden');
+            }
 
         if (mergedData.length === 0) {
             throw new Error("Could not align GPX and CSV timestamps.");
@@ -1153,27 +1275,40 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
  * Master Event Listener for Audio Playback synchronisation.
  * Fires continuously as the audio plays, matching the audio clock to the data array.
  * Translates the short looped demo audio into a continuous virtual timeline.
+ * Enforces playback boundaries so the audio automatically pauses when reaching the end of the trimmed window.
  */
 audioPlayer.addEventListener('timeupdate', () => {
+    if (mergedData.length === 0) return;
+
     let currentTargetTime = 0;
     
     if (isVirtualAudioLoop && baseAudioDuration > 0) {
         const currentPlaybackTime = audioPlayer.currentTime;
         
-        // Detect if the native player has looped back to the beginning naturally
+        // Detects if the native player loops back to the beginning naturally
         if (currentPlaybackTime < lastPlaybackTime - 1) {
             virtualLoopCount++;
         }
         lastPlaybackTime = currentPlaybackTime;
         
-        // Calculate the total continuous time across all elapsed loops
+        // Calculates the total continuous time across all elapsed loops
         currentTargetTime = Math.round((virtualLoopCount * baseAudioDuration) + currentPlaybackTime);
     } else {
-        // Standard linear audio playback tracking
+        // Tracks standard linear audio playback
         currentTargetTime = Math.round(audioPlayer.currentTime);
     }
     
-    // Find the corresponding data row based on the calculated time and update the dashboard
+    const endTime = mergedData[mergedData.length - 1].seconds_elapsed;
+
+    // Halts playback and resets the button icon if the audio exceeds the trimmed bounding box
+    if (currentTargetTime > endTime) {
+        audioPlayer.pause();
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        if (playPauseBtn) playPauseBtn.innerText = "▶";
+        return;
+    }
+
+    // Finds the corresponding data row based on the calculated time and updates the dashboard
     const index = mergedData.findIndex(d => d.seconds_elapsed >= currentTargetTime);
     if (index !== -1) {
         timeSlider.value = index;
@@ -1185,12 +1320,28 @@ audioPlayer.addEventListener('timeupdate', () => {
  * Event Listener for the custom Play/Pause button.
  * Toggles the playback state of the hidden native audio element.
  * Updates the button's internal text icon to reflect the current state.
+ * Automatically restarts from the beginning of the trimmed window if engaged at the absolute end.
  */
 const playPauseBtn = document.getElementById('play-pause-btn');
 
 playPauseBtn.addEventListener('click', () => {
-    // Prevent interaction if no audio source is loaded
-    if (!audioPlayer.src) return;
+    // Prevents interaction if no audio source is loaded or data is empty
+    if (!audioPlayer.src || mergedData.length === 0) return;
+
+    let currentAbsoluteTime = isVirtualAudioLoop ? (virtualLoopCount * baseAudioDuration) + audioPlayer.currentTime : audioPlayer.currentTime;
+    const endTime = mergedData[mergedData.length - 1].seconds_elapsed;
+
+    // Forces a reset to the start of the trimmed window if the user hits play at the limit
+    if (currentAbsoluteTime >= endTime) {
+        const startTime = mergedData[0].seconds_elapsed;
+        if (isVirtualAudioLoop && baseAudioDuration > 0) {
+            virtualLoopCount = Math.floor(startTime / baseAudioDuration);
+            audioPlayer.currentTime = startTime % baseAudioDuration;
+            lastPlaybackTime = audioPlayer.currentTime;
+        } else {
+            audioPlayer.currentTime = startTime;
+        }
+    }
 
     if (audioPlayer.paused) {
         audioPlayer.play();
@@ -1205,6 +1356,7 @@ playPauseBtn.addEventListener('click', () => {
  * Skips the audio and timeline forward or backward by a specified number of seconds.
  * Incorporates safety checks to prevent skipping beyond the start or end of the data.
  * Computes the virtual looping timeline maths if the demo mode is active.
+ * Incorporates safety checks to restrict skipping strictly within the trimmed data bounds.
  * @param {number} offset - The integer number of seconds to skip (positive or negative).
  */
 function skipTime(offset) {
@@ -1221,21 +1373,24 @@ function skipTime(offset) {
 
     // Determine the target time and restrict it to the bounds of the recorded data
     let targetTime = currentAbsoluteTime + offset;
+    
+    // Restricts the skip boundaries to the dynamically trimmed data array
+    const minTime = mergedData[0].seconds_elapsed;
     const maxTime = mergedData[mergedData.length - 1].seconds_elapsed;
     
-    if (targetTime < 0) targetTime = 0;
+    if (targetTime < minTime) targetTime = minTime;
     if (targetTime > maxTime) targetTime = maxTime;
 
     // Apply the new time back to the audio player correctly
     if (isVirtualAudioLoop && baseAudioDuration > 0) {
         virtualLoopCount = Math.floor(targetTime / baseAudioDuration);
         audioPlayer.currentTime = targetTime % baseAudioDuration;
-        lastPlaybackTime = audioPlayer.currentTime; // Reset tracker to prevent false loop triggers
+        lastPlaybackTime = audioPlayer.currentTime; 
     } else {
         audioPlayer.currentTime = targetTime;
     }
 
-    // Force an immediate UI update so the map and chart sync instantly while paused
+    // Forces an immediate UI update so the map and chart sync instantly while paused
     const index = mergedData.findIndex(d => d.seconds_elapsed >= targetTime);
     if (index !== -1) {
         timeSlider.value = index;
