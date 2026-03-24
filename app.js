@@ -55,8 +55,9 @@ if (menuToggle && navLinks) {
             const targetElement = document.querySelector(targetId);
 
             if (targetElement) {
+                // Uses Math.max to prevent scrolling above the 0-pixel mark at the top of the page
                 window.scrollTo({
-                    top: targetElement.offsetTop - 20, // Adjusts offset for a clean top margin
+                    top: Math.max(0, targetElement.offsetTop - 20), // Adjusts offset for a clean top margin
                     behavior: 'smooth'
                 });
             }
