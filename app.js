@@ -1635,6 +1635,6 @@ window.addEventListener('afterprint', () => {
  */
 window.addEventListener('scroll', () => {
     // Calculates the horizontal shift at half the speed of the vertical scroll
-    const waveOffset = -(window.scrollY * 0.5);
+    const waveOffset = (window.scrollY * 0.5);
     document.body.style.backgroundPosition = `${waveOffset}px 0px`;
 });
