@@ -126,6 +126,11 @@
                     <button id="play-pause-btn" class="play-btn" title="Play/Pause">▶</button>
                     <button id="skip-fwd-btn" class="skip-btn" title="Skip Forward 10s">+10 s</button>
                     <input type="range" id="time-slider" min="0" max="100" value="0" step="1" style="width: 50%; margin: 0;">
+
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <span id="mute-toggle" style="cursor: pointer; font-size: 1.2rem; user-select: none;" title="Mute/Unmute">🔊</span>
+                        <input type="range" id="volume-slider" min="0" max="1" value="1" step="0.05" style="width: 70px; margin: 0;">
+                    </div>
                     
                     <audio id="audio-player"></audio> 
                 </div>

@@ -1506,6 +1506,52 @@ document.addEventListener('keydown', (e) => {
 });
 
 /**
+ * Logic: Audio Volume Control
+ * Manages the playback volume and implements a mute toggle functionality.
+ * Updates the speaker icon visually based on the current volume state.
+ */
+const volumeSlider = document.getElementById('volume-slider');
+const muteToggle = document.getElementById('mute-toggle');
+let previousVolume = 1;
+
+if (volumeSlider && muteToggle) {
+    // Adjusts the audio output in real-time as the user drags the slider
+    volumeSlider.addEventListener('input', (e) => {
+        const currentVol = parseFloat(e.target.value);
+        audioPlayer.volume = currentVol;
+        audioPlayer.muted = currentVol === 0;
+        
+        // Swaps the emoji character to reflect the intensity
+        if (currentVol === 0) {
+            muteToggle.innerText = "🔇";
+        } else if (currentVol < 0.5) {
+            muteToggle.innerText = "🔉";
+        } else {
+            muteToggle.innerText = "🔊";
+        }
+    });
+
+    // Toggles the mute state when the speaker icon is clicked
+    muteToggle.addEventListener('click', () => {
+        if (audioPlayer.muted || audioPlayer.volume === 0) {
+            // Restores the previous volume level
+            audioPlayer.muted = false;
+            audioPlayer.volume = previousVolume > 0 ? previousVolume : 1;
+            volumeSlider.value = audioPlayer.volume;
+            muteToggle.innerText = audioPlayer.volume < 0.5 ? "🔉" : "🔊";
+        } else {
+            // Stores the current level and mutes the track
+            previousVolume = audioPlayer.volume;
+            audioPlayer.muted = true;
+            audioPlayer.volume = 0;
+            volumeSlider.value = 0;
+            muteToggle.innerText = "🔇";
+        }
+    });
+}
+
+
+/**
  * Event Listener for the "Color Route by Speed" toggle.
  * Triggers a complete redraw of the primary Leaflet map path.
  */
