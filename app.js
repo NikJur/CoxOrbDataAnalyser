@@ -481,12 +481,13 @@ function initMap(data) {
         zIndexOffset: 1000 
     }).addTo(mapInstance);
 
-    // Vertical boundary markers using a custom CSS divIcon
-    const barIcon = L.divIcon({ className: 'trim-marker-bar', iconSize: [8, 30] });
+    // Constructs the perpendicular boundary markers using dynamic rotation calculations
+    const startAngle = getPerpendicularRotation(0, data);
+    const endAngle = getPerpendicularRotation(data.length - 1, data);
     
     // Places the markers at the absolute start and end of the loaded trajectory
-    trimStartMarker = L.marker([data[0].lat, data[0].lon], { icon: barIcon }).addTo(mapInstance);
-    trimEndMarker = L.marker([data[data.length - 1].lat, data[data.length - 1].lon], { icon: barIcon }).addTo(mapInstance);
+    trimStartMarker = L.marker([data[0].lat, data[0].lon], { icon: createRotatedMarkerIcon(startAngle) }).addTo(mapInstance);
+    trimEndMarker = L.marker([data[data.length - 1].lat, data[data.length - 1].lon], { icon: createRotatedMarkerIcon(endAngle) }).addTo(mapInstance);
     
     // Ensure bounds are calculated using the full coordinate array
     const latlngs = data.map(pt => [pt.lat, pt.lon]);
@@ -734,6 +735,52 @@ timeSlider.addEventListener('input', (e) => {
 
 
 /**
+ * Helper: Calculates Perpendicular Marker Rotation
+ * Determines the heading of the boat at a specific index and calculates 
+ * the CSS rotation required to turn a vertical bar perpendicular to the path.
+ * @param {number} index - The current index in the dataset.
+ * @param {Array<Object>} data - The full dataset array.
+ * @returns {number} The rotation angle in degrees.
+ */
+function getPerpendicularRotation(index, data) {
+    if (!data || data.length < 2) return 0;
+
+    // Determines the two points needed to calculate the trajectory vector
+    let pt1, pt2;
+    if (index < data.length - 1) {
+        pt1 = data[index];
+        pt2 = data[index + 1];
+    } else {
+        pt1 = data[index - 1];
+        pt2 = data[index];
+    }
+
+    // Calculates the heading using a Euclidean approximation (highly accurate for short GPS intervals)
+    const dy = pt2.lat - pt1.lat;
+    const dx = (pt2.lon - pt1.lon) * Math.cos(pt1.lat * (Math.PI / 180));
+    
+    // Math.atan2 returns the angle from true North (Y-axis) clockwise
+    const heading = Math.atan2(dx, dy) * (180 / Math.PI);
+
+    // Subtracts 90 degrees to turn a vertically-drawn bar perpendicular to the heading
+    return heading - 90;
+}
+
+/**
+ * Helper: Generates Rotated Map Icon
+ * Injects the calculated inline CSS rotation directly into the marker's HTML structure.
+ * @param {number} angle - The calculated rotation angle.
+ */
+function createRotatedMarkerIcon(angle) {
+    return L.divIcon({
+        className: 'custom-trim-wrapper', 
+        html: `<div class="trim-marker-bar" style="transform: rotate(${angle}deg);"></div>`,
+        iconSize: [8, 30],
+        iconAnchor: [4, 15] // Instructs Leaflet to center the 8x30 box exactly over the GPS coordinate
+    });
+}
+
+/**
  * Logic: Dual Slider Trimming Interaction
  * Intercepes movement on either slider thumb and executes an immediate redraw.
  * Enforces mathematical bounds to prevent the start marker from crossing the end marker.
@@ -802,12 +849,16 @@ function updateTrimWindow() {
         chartInstance.update('none'); // Prevents animation stuttering during fast dragging
     }
 
-    // Relocates the vertical boundary bars on the map
+    // Relocates and rotates the vertical boundary bars dynamically on the map
     if (trimStartMarker && masterMergedData[startIdx]) {
+        const angleStart = getPerpendicularRotation(startIdx, masterMergedData);
         trimStartMarker.setLatLng([masterMergedData[startIdx].lat, masterMergedData[startIdx].lon]);
+        trimStartMarker.setIcon(createRotatedMarkerIcon(angleStart));
     }
     if (trimEndMarker && masterMergedData[endIdx]) {
+        const angleEnd = getPerpendicularRotation(endIdx, masterMergedData);
         trimEndMarker.setLatLng([masterMergedData[endIdx].lat, masterMergedData[endIdx].lon]);
+        trimEndMarker.setIcon(createRotatedMarkerIcon(angleEnd));
     }
 
     // Resets the dashboard numbers to the new starting point

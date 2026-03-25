@@ -335,9 +335,14 @@ button:hover { background-color: #1C3754; }
 
 /**
  * Component: Map Boundary Markers
- * Renders vertical bars to clearly indicate the chopped start and end points
- * on the Leaflet map trajectory.
+ * Renders vertical bars to clearly indicate the chopped start and end points.
+ * Centering is handled natively by Leaflet's iconAnchor.
  */
+.custom-trim-wrapper {
+    background: transparent;
+    border: none;
+}
+
 .trim-marker-bar {
     background-color: #F08118;
     border: 2px solid #25476D;
@@ -345,8 +350,7 @@ button:hover { background-color: #1C3754; }
     height: 30px;
     border-radius: 4px;
     box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    margin-top: -15px; /* Centres the vertical bar on the coordinate */
-    margin-left: -4px;
+    transform-origin: center center; /* Ensures the rotation pivots around the middle */
 }
 
 
