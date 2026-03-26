@@ -305,6 +305,7 @@ function parseCSV(csvText) {
         const rateKey = keys.find(k => k.replace(/[^a-zA-Z]/g, '').toUpperCase().includes("RATE"));
         const speedKey = keys.find(k => k.toUpperCase().includes("M/S"));
         const distKey = keys.find(k => k.replace(/[^a-zA-Z]/g, '').toUpperCase().includes("DISTANCE"));
+        const checkKey = keys.find(k => k.replace(/[^a-zA-Z]/g, '').toUpperCase().includes("CHECK"));
 
         // If the row has an elapsed time, process it
         if (timeKey && row[timeKey] && row[timeKey].trim() !== "") {
@@ -314,6 +315,7 @@ function parseCSV(csvText) {
             cleanRow['Elapsed Time'] = row[timeKey].trim();
             cleanRow['Rate'] = rateKey ? parseFloat(row[rateKey]) : null;
             cleanRow['Distance/Stroke'] = distKey ? parseFloat(row[distKey]) : null;
+            cleanRow['Check'] = checkKey ? parseFloat(row[checkKey]) : null;
             
             const speed = speedKey ? parseFloat(row[speedKey]) : 0;
             cleanRow['Speed (m/s)'] = speed;
@@ -521,6 +523,12 @@ function initChart(data) {
     const rateData = data.map(d => parseFloat(d['Rate']) || null);
     const splitData = data.map(d => d.split_seconds || null);
 
+    // Extracts the Check metric using a flexible key search to bypass CSV whitespace errors
+    const checkData = data.map(d => {
+        const key = Object.keys(d).find(k => k.trim().toLowerCase() === 'check');
+        return key ? parseFloat(d[key]) : null;
+    });
+
     // Calculates dynamic min and max for the split axis to ignore stationary outliers
     const validSplits = splitData.filter(s => s !== null && s > 0 && s < 300);
     let splitMin = 60; // Fallback fast bound
@@ -553,6 +561,16 @@ function initChart(data) {
                     order: 1,         // Pushes the green line to the foreground layer
                     yAxisID: 'y1',
                     normalized: true // Speeds up rendering workload
+                },
+                {
+                    label: 'Check',
+                    data: checkData,
+                    borderColor: 'purple',
+                    borderWidth: 1.5,
+                    hidden: true,     // Instructs Chart.js to load the metric unselected/hidden
+                    order: 3,         // Pushes the purple line to the deepest background layer
+                    yAxisID: 'y2',     // New Check axis on the left to prevent scale distortion of the main metrics
+                    normalized: true 
                 }
             ]
         },
@@ -633,6 +651,11 @@ function initChart(data) {
                             return `${m}:${s}`;
                         }
                     }
+                },
+                y2: {
+                    type: 'linear',
+                    display: false, // Hides the axis numbering to keep the UI clean, but allows independent scaling behind the scenes
+                    position: 'left'
                 }
             }
         },
@@ -842,6 +865,12 @@ function updateTrimWindow() {
         
         const newSplitData = mergedData.map(d => d.split_seconds || null);
         chartInstance.data.datasets[1].data = newSplitData;
+
+        // Slices the Check data dynamically using the flexible whitespace-agnostic key search
+        chartInstance.data.datasets[2].data = mergedData.map(d => {
+            const key = Object.keys(d).find(k => k.trim().toLowerCase() === 'check');
+            return key ? parseFloat(d[key]) : null;
+        });
 
         // Dynamically rescales the Splits axis based on the isolated window
         const validSplits = newSplitData.filter(s => s !== null && s > 0 && s < 300);
