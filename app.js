@@ -540,6 +540,8 @@ function initChart(data) {
                     label: 'Stroke Rate',
                     data: rateData,
                     borderColor: 'blue',
+                    borderWidth: 1.5, // Reduces line thickness to prevent visual clutter
+                    order: 2,         // Pushes the blue line to the background layer
                     yAxisID: 'y',
                     normalized: true // Tells Chart.js data is sorted, skipping expensive parsing
                 },
@@ -547,6 +549,8 @@ function initChart(data) {
                     label: 'Split',
                     data: splitData,
                     borderColor: 'green',
+                    borderWidth: 1.5, // Reduces line thickness to prevent visual clutter
+                    order: 1,         // Pushes the green line to the foreground layer
                     yAxisID: 'y1',
                     normalized: true // Speeds up rendering workload
                 }
