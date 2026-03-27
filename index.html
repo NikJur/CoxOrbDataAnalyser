@@ -147,16 +147,25 @@
                 <canvas id="metricsChart"></canvas>
             </div>
 
-            <div id="trim-slider-container" class="hidden" style="margin-top: 15px; margin-bottom: 5px; padding: 10px; background: rgba(0,0,0,0.02); border-radius: 8px;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--primary); font-weight: 600; margin-bottom: 5px;">
-                    <span>Start Trim</span>
-                    <span>End Trim</span>
+            <div id="trim-slider-container" class="hidden" style="margin-top: 15px; margin-bottom: 5px; padding: 10px; background: rgba(0,0,0,0.02); border-radius: 8px; display: flex; gap: 20px; align-items: flex-end;">
+                
+                <div style="flex-grow: 1;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--primary); font-weight: 600; margin-bottom: 5px;">
+                        <span>Start Trim</span>
+                        <span>End Trim</span>
+                    </div>
+                    <div class="dual-slider-wrapper">
+                        <div class="dual-slider-track"></div>
+                        <input type="range" id="trim-slider-min" min="0" max="100" value="0">
+                        <input type="range" id="trim-slider-max" min="0" max="100" value="100">
+                    </div>
                 </div>
-                <div class="dual-slider-wrapper">
-                    <div class="dual-slider-track"></div>
-                    <input type="range" id="trim-slider-min" min="0" max="100" value="0">
-                    <input type="range" id="trim-slider-max" min="0" max="100" value="100">
+
+                <div style="display: flex; flex-direction: column; width: 90px; flex-shrink: 0;">
+                    <label for="trim-distance-input" style="font-size: 0.8rem; color: var(--primary); font-weight: 600; margin-bottom: 5px; white-space: nowrap;">Distance (m)</label>
+                    <input type="number" id="trim-distance-input" placeholder="e.g. 2000" style="height: 32px; padding: 0 8px; border: 1px solid #ccc; border-radius: 4px; outline: none; font-family: inherit;">
                 </div>
+
             </div>
         </section>
 

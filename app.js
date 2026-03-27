@@ -870,6 +870,17 @@ function updateTrimWindow() {
     // Isolats the active racing block
     mergedData = masterMergedData.slice(startIdx, endIdx + 1);
 
+    // Automatically calculates the distance of the trimmed section and updates the input field
+    const distInput = document.getElementById('trim-distance-input');
+    if (distInput && masterMergedData[startIdx] && masterMergedData[endIdx]) {
+        const startDist = masterMergedData[startIdx]['Distance'] || 0;
+        const endDist = masterMergedData[endIdx]['Distance'] || 0;
+        const calculatedDist = endDist - startDist;
+        
+        // Formats the distance to a clean integer, ensuring it never reads as a negative number
+        distInput.value = Math.max(0, Math.round(calculatedDist));
+    }
+
     // Synchronises the main playback slider to the new temporal window
     const timeSlider = document.getElementById('time-slider');
     if (timeSlider) {
@@ -942,6 +953,44 @@ function updateTrimWindow() {
 if (trimMinSlider && trimMaxSlider) {
     trimMinSlider.addEventListener('input', updateTrimWindow);
     trimMaxSlider.addEventListener('input', updateTrimWindow);
+}
+
+// Allows the user to type a distance (e.g., 2000) to automatically snap the end marker from the beginning marker
+const distInput = document.getElementById('trim-distance-input');
+if (distInput && trimMinSlider && trimMaxSlider) {
+    distInput.addEventListener('change', (e) => {
+        if (masterMergedData.length === 0) return;
+
+        const targetPieceDistance = parseFloat(e.target.value);
+        if (isNaN(targetPieceDistance) || targetPieceDistance <= 0) return;
+
+        const startIdx = parseInt(trimMinSlider.value);
+        const startDist = masterMergedData[startIdx]['Distance'] || 0;
+        const targetTotalDist = startDist + targetPieceDistance;
+
+        // Scans the array forward from the start marker to find the closest physical coordinate
+        let closestIdx = startIdx;
+        let minDiff = Infinity;
+
+        for (let i = startIdx; i < masterMergedData.length; i++) {
+            const currentDist = masterMergedData[i]['Distance'] || 0;
+            const diff = Math.abs(currentDist - targetTotalDist);
+            
+            if (diff < minDiff) {
+                minDiff = diff;
+                closestIdx = i;
+            }
+            
+            // Optimisation: Stops looping if the search overshoots the target by more than 50 meters
+            if (currentDist > targetTotalDist + 50) break;
+        }
+
+        // Snaps the end slider to the discovered index
+        trimMaxSlider.value = closestIdx;
+
+        // Triggers the master function to redraw the map and chart using the newly found boundaries
+        updateTrimWindow();
+    });
 }
 
 
