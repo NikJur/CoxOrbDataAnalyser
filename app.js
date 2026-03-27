@@ -304,8 +304,10 @@ function parseCSV(csvText) {
         const timeKey = keys.find(k => k.replace(/[^a-zA-Z]/g, '').toUpperCase().includes("ELAPSEDTIME"));
         const rateKey = keys.find(k => k.replace(/[^a-zA-Z]/g, '').toUpperCase().includes("RATE"));
         const speedKey = keys.find(k => k.toUpperCase().includes("M/S"));
-        const distKey = keys.find(k => k.replace(/[^a-zA-Z]/g, '').toUpperCase().includes("DISTANCE"));
+        const distKey = keys.find(k => k.trim().toUpperCase() === "DISTANCE");
         const checkKey = keys.find(k => k.replace(/[^a-zA-Z]/g, '').toUpperCase().includes("CHECK"));
+        // Requires BOTH words to be present to lock onto the correct column
+        const distStrokeKey = keys.find(k => k.toUpperCase().includes("DISTANCE") && k.toUpperCase().includes("STROKE"));
 
         // If the row has an elapsed time, process it
         if (timeKey && row[timeKey] && row[timeKey].trim() !== "") {
@@ -314,7 +316,8 @@ function parseCSV(csvText) {
             
             cleanRow['Elapsed Time'] = row[timeKey].trim();
             cleanRow['Rate'] = rateKey ? parseFloat(row[rateKey]) : null;
-            cleanRow['Distance/Stroke'] = distKey ? parseFloat(row[distKey]) : null;
+            cleanRow['Distance'] = distKey ? parseFloat(row[distKey]) : null;
+            cleanRow['Distance/Stroke'] = distStrokeKey ? parseFloat(row[distStrokeKey]) : null;
             cleanRow['Check'] = checkKey ? parseFloat(row[checkKey]) : null;
             
             const speed = speedKey ? parseFloat(row[speedKey]) : 0;
@@ -529,6 +532,12 @@ function initChart(data) {
         return key ? parseFloat(d[key]) : null;
     });
 
+    // Extracts the Distance/Stroke metric safely
+    const distData = data.map(d => {
+        const key = Object.keys(d).find(k => k.toLowerCase().includes('distance') && k.toLowerCase().includes('stroke'));
+        return key ? parseFloat(d[key]) : null;
+    });
+
     // Calculates dynamic min and max for the split axis to ignore stationary outliers
     const validSplits = splitData.filter(s => s !== null && s > 0 && s < 300);
     let splitMin = 60; // Fallback fast bound
@@ -570,6 +579,16 @@ function initChart(data) {
                     hidden: true,     // Instructs Chart.js to load the metric unselected/hidden
                     order: 3,         // Pushes the purple line to the deepest background layer
                     yAxisID: 'y2',     // New Check axis on the left to prevent scale distortion of the main metrics
+                    normalized: true 
+                },
+                {
+                    label: 'Distance/Stroke',
+                    data: distData,
+                    borderColor: 'orange',
+                    borderWidth: 1.5,
+                    hidden: true,     // Loads unselected to keep the initial view clean
+                    order: 4,         // Pushes to the deepest background layer
+                    yAxisID: 'y3',    // Assigns to a new independent axis
                     normalized: true 
                 }
             ]
@@ -616,6 +635,10 @@ function initChart(data) {
                                 const m = Math.floor(val / 60);
                                 const s = (val % 60).toFixed(1).padStart(4, '0');
                                 label += `${m}:${s}`;
+                            } else if (context.dataset.yAxisID === 'y2') {
+                                label += context.parsed.y.toFixed(2);
+                            } else if (context.dataset.yAxisID === 'y3') {
+                                label += context.parsed.y.toFixed(2) + ' m'; // Adds meters to the tooltip
                             } else {
                                 label += context.parsed.y;
                             }
@@ -656,6 +679,11 @@ function initChart(data) {
                     type: 'linear',
                     display: false, // Hides the axis numbering to keep the UI clean, but allows independent scaling behind the scenes
                     position: 'left'
+                },
+                y3: {
+                    type: 'linear',
+                    display: false, // Hides the axis numbering to keep UI clean
+                    position: 'right'
                 }
             }
         },
@@ -708,16 +736,23 @@ function setupAudio() {
  * @param {number} index - The current index of the mergedData array.
  */
 function updateUI(index) {
+    // GUARD CLAUSE: Instantly exits if the array is missing, empty, or the index is out of bounds.
+    // Prevents fatal 'undefined' errors from crashing the visual engines.
+    if (!mergedData || mergedData.length === 0 || !mergedData[index]) return;
+
     const pt = mergedData[index];
-    if (!pt) return;
 
     // Update Map Marker
-    boatMarker.setLatLng([pt.lat, pt.lon]);
+    // Relocates the Leaflet marker to the active GPS coordinate
+    if (boatMarker) {
+        boatMarker.setLatLng([pt.lat, pt.lon]);
+    }
 
     // Update Dashboard Values
+    // Injects the active metrics into the HTML DOM. Uses '|| "--"' as a fallback if data is missing.
     document.getElementById('val-time').innerText = pt['Elapsed Time'] || pt.seconds_elapsed;
     document.getElementById('val-rate').innerText = pt['Rate'] || "--";
-    document.getElementById('val-dist').innerText = pt['Distance/Stroke'] || "--";
+    document.getElementById('val-dist').innerText = pt['Distance'] ? Math.round(pt['Distance']) : "--"; // rounded to the nearest whole meter
 
     // Format split for dashboard
     if (pt.split_seconds) {
@@ -869,6 +904,12 @@ function updateTrimWindow() {
         // Slices the Check data dynamically using the flexible whitespace-agnostic key search
         chartInstance.data.datasets[2].data = mergedData.map(d => {
             const key = Object.keys(d).find(k => k.trim().toLowerCase() === 'check');
+            return key ? parseFloat(d[key]) : null;
+        });
+
+        // Slices the Distance/Stroke data dynamically
+        chartInstance.data.datasets[3].data = mergedData.map(d => {
+            const key = Object.keys(d).find(k => k.toLowerCase().includes('distance') && k.toLowerCase().includes('stroke'));
             return key ? parseFloat(d[key]) : null;
         });
 
