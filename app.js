@@ -870,6 +870,17 @@ function updateTrimWindow() {
     // Isolats the active racing block
     mergedData = masterMergedData.slice(startIdx, endIdx + 1);
 
+    // Automatically calculates the distance of the trimmed section and updates the input field
+    const distInput = document.getElementById('trim-distance-input');
+    if (distInput && masterMergedData[startIdx] && masterMergedData[endIdx]) {
+        const startDist = masterMergedData[startIdx]['Distance'] || 0;
+        const endDist = masterMergedData[endIdx]['Distance'] || 0;
+        const calculatedDist = endDist - startDist;
+        
+        // Formats the distance to a clean integer, ensuring it never reads as a negative number
+        distInput.value = Math.max(0, Math.round(calculatedDist));
+    }
+
     // Synchronises the main playback slider to the new temporal window
     const timeSlider = document.getElementById('time-slider');
     if (timeSlider) {
