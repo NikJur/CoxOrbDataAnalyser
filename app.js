@@ -875,10 +875,48 @@ function updateTrimWindow() {
     if (distInput && masterMergedData[startIdx] && masterMergedData[endIdx]) {
         const startDist = masterMergedData[startIdx]['Distance'] || 0;
         const endDist = masterMergedData[endIdx]['Distance'] || 0;
-        const calculatedDist = endDist - startDist;
+        pieceDist = Math.max(0, endDist - startDist);
+        distInput.value = Math.round(pieceDist);
         
-        // Formats the distance to a clean integer, ensuring it never reads as a negative number
-        distInput.value = Math.max(0, Math.round(calculatedDist));
+        const startTime = masterMergedData[startIdx].seconds_elapsed || 0;
+        const endTime = masterMergedData[endIdx].seconds_elapsed || 0;
+        pieceTime = Math.max(0, endTime - startTime);
+    }
+
+    /**
+     * Calculates and injects the summary statistics for the isolated data block.
+     * Computes the true average split using total piece distance and elapsed time.
+     * Computes the average stroke rate by iterating through the active coordinates.
+     */
+    const avgSplitEl = document.getElementById('trim-avg-split');
+    const avgRateEl = document.getElementById('trim-avg-rate');
+
+    if (avgSplitEl && avgRateEl && mergedData.length > 1) {
+        // Calculate True Average Split
+        if (pieceTime > 0 && pieceDist > 0) {
+            const avgSpeed = pieceDist / pieceTime; // m/s
+            const avgSplitSecs = 500 / avgSpeed;
+            
+            const m = Math.floor(avgSplitSecs / 60);
+            const s = (avgSplitSecs % 60).toFixed(1).padStart(4, '0');
+            avgSplitEl.innerText = `${m}:${s}`;
+        } else {
+            avgSplitEl.innerText = "--:--";
+        }
+
+        // Calculate Average Stroke Rate
+        let totalRate = 0;
+        let rateCount = 0;
+        mergedData.forEach(pt => {
+            const r = parseFloat(pt['Rate']);
+            if (r > 0) { // Ignores stationary/zero values to prevent dragging the average down
+                totalRate += r;
+                rateCount++;
+            }
+        });
+        
+        const avgRate = rateCount > 0 ? (totalRate / rateCount) : 0;
+        avgRateEl.innerText = avgRate > 0 ? avgRate.toFixed(1) : "--.-";
     }
 
     // Synchronises the main playback slider to the new temporal window
