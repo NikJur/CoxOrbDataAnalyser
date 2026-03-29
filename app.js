@@ -2107,3 +2107,393 @@ window.addEventListener('scroll', () => {
     const waveOffset = (window.scrollY * 0.5);
     document.body.style.backgroundPosition = `${waveOffset}px 0px`;
 });
+
+
+// ==========================================
+// SECTION C: ROUTE COMPARISON ENGINE
+// ==========================================
+
+// Global State Variables for Section C
+let mergedDataC1 = [];
+let mergedDataC2 = [];
+let mapInstanceC = null;
+let chartInstanceC = null;
+let boatMarkerC1 = null;
+let boatMarkerC2 = null;
+let polylineC1 = null; // Stores the Boat 1 route layer
+let polylineC2 = null; // Stores the Boat 2 route layer
+let currentSliderIndexC = 0;
+
+/**
+ * Function: readTextFileAsync
+ * Description: Wraps the native FileReader API in a Promise.
+ * @param {File} file - The selected file from the HTML input.
+ * @returns {Promise<string>} The extracted text data.
+ */
+function readTextFileAsync(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target.result);
+        reader.onerror = e => reject(e);
+        reader.readAsText(file);
+    });
+}
+
+/**
+ * Function: initMapC
+ * Completely destroys any broken map instances, recreates the canvas from scratch,
+ * and forces a delayed repaint to guarantee the tiles load.
+ * @param {Array<Object>} data1 - Merged dataset for Boat 1.
+ * @param {Array<Object>} data2 - Merged dataset for Boat 2.
+ */
+function initMapC(data1, data2) {
+    // Destroy the old instance and clear the variable
+    if (mapInstanceC) {
+        mapInstanceC.remove();
+        mapInstanceC = null;
+    }
+
+    // Extract starting location securely
+    const startLoc = (data1 && data1.length > 0) ? [data1[0].lat, data1[0].lon] : [51.474, -0.271];
+
+    // Create a brand new map instance
+    mapInstanceC = L.map('map-c').setView(startLoc, 14);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(mapInstanceC);
+
+    const bounds = L.latLngBounds([]);
+
+    // Draw Boat 1 Trajectory (Orange)
+    if (data1 && data1.length > 0) {
+        const latlngs1 = data1.map(pt => [pt.lat, pt.lon]);
+        polylineC1 = L.polyline(latlngs1, { color: '#F08118', weight: 4, opacity: 0.8 });
+        polylineC1.addTo(mapInstanceC);
+        bounds.extend(polylineC1.getBounds());
+
+        // Applies the dedicated CSS class directly to the marker to prevent inheritance bugs
+        const icon1 = L.divIcon({ className: 'boat-marker-orange', iconSize: [14, 14] });
+        boatMarkerC1 = L.marker(latlngs1[0], { icon: icon1, zIndexOffset: 1000 }).addTo(mapInstanceC);
+    }
+
+    // Draw Boat 2 Trajectory (Blue)
+    if (data2 && data2.length > 0) {
+        const latlngs2 = data2.map(pt => [pt.lat, pt.lon]);
+        polylineC2 = L.polyline(latlngs2, { color: '#25476D', weight: 4, opacity: 0.8 });
+        polylineC2.addTo(mapInstanceC);
+        bounds.extend(polylineC2.getBounds());
+
+        // Applies the dedicated CSS class directly to the marker
+        const icon2 = L.divIcon({ className: 'boat-marker-blue', iconSize: [14, 14] });
+        boatMarkerC2 = L.marker(latlngs2[0], { icon: icon2, zIndexOffset: 1000 }).addTo(mapInstanceC);
+    }
+
+    if (bounds.isValid()) {
+        mapInstanceC.fitBounds(bounds, { padding: [20, 20] });
+    }
+
+    // Force Leaflet to recalculate exactly 200ms after drawing
+    setTimeout(() => {
+        if (mapInstanceC) mapInstanceC.invalidateSize();
+    }, 200);
+
+    // Bind the ResizeObserver to handle any window dragging by the user
+    const container = document.getElementById('map-container-c');
+    if (container) {
+        const resizeObserver = new ResizeObserver(() => {
+            if (mapInstanceC) mapInstanceC.invalidateSize();
+        });
+        resizeObserver.observe(container);
+    }
+}
+
+/**
+ * Function: initChartC
+ * Description: Initialise the comparative Chart.js grid. Mapps Boat 1 and Boat 2 
+ * splits to the primary Y-axis, while plotting stroke rates natively to the secondary axis.
+ * @param {Array<Object>} data1 - Merges dataset for Boat 1.
+ * @param {Array<Object>} data2 - Merges dataset for Boat 2.
+ */
+function initChartC(data1, data2) {
+    if (chartInstanceC) chartInstanceC.destroy();
+
+    const ctx = document.getElementById('metricsChartC').getContext('2d');
+    
+    // Aligns the temporal X-axis using whichever dataset is longer
+    const maxLength = Math.max(data1.length, data2.length);
+    const labels = Array.from({ length: maxLength }, (_, i) => {
+        const d = data1[i] || data2[i];
+        return d ? (d['Elapsed Time'] || d.seconds_elapsed) : "";
+    });
+
+    // Isolate metric arrays
+    const split1 = data1.map(d => d.split_seconds || null);
+    const split2 = data2.map(d => d.split_seconds || null);
+    const rate1 = data1.map(d => parseFloat(d['Rate']) || null);
+    const rate2 = data2.map(d => parseFloat(d['Rate']) || null);
+
+    // Determines the visual boundaries for the split axis to ignore stationary data
+    const validSplits = [...split1, ...split2].filter(s => s !== null && s > 0 && s < 300);
+    const splitMin = validSplits.length > 0 ? Math.max(0, Math.min(...validSplits) - 5) : 60;
+    const splitMax = validSplits.length > 0 ? Math.max(...validSplits) + 5 : 300;
+
+    chartInstanceC = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                { label: 'Boat 1 Split', data: split1, borderColor: '#F08118', borderWidth: 2, yAxisID: 'y1', order: 1, normalized: true },
+                { label: 'Boat 2 Split', data: split2, borderColor: '#25476D', borderWidth: 2, yAxisID: 'y1', order: 2, normalized: true },
+                { label: 'Boat 1 Rate', data: rate1, borderColor: 'rgba(240, 129, 24, 0.4)', borderWidth: 1.5, yAxisID: 'y', order: 3, normalized: true },
+                { label: 'Boat 2 Rate', data: rate2, borderColor: 'rgba(37, 71, 109, 0.4)', borderWidth: 1.5, yAxisID: 'y', order: 4, normalized: true }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            interaction: { mode: 'index', intersect: false },
+            elements: { point: { radius: 0, hitRadius: 10 }, line: { tension: 0 } },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) label += ': ';
+                            if (context.dataset.yAxisID === 'y1') {
+                                const val = context.parsed.y;
+                                const m = Math.floor(val / 60);
+                                const s = (val % 60).toFixed(1).padStart(4, '0');
+                                label += `${m}:${s}`;
+                            } else {
+                                label += context.parsed.y;
+                            }
+                            return label;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: { display: true },
+                y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'Stroke Rate' } },
+                y1: { 
+                    type: 'linear', display: true, position: 'right', reverse: true, min: splitMin, max: splitMax,
+                    title: { display: true, text: 'Split' },
+                    ticks: {
+                        callback: function(value) {
+                            const m = Math.floor(value / 60);
+                            const s = (value % 60).toFixed(1).padStart(4, '0');
+                            return `${m}:${s}`;
+                        }
+                    }
+                }
+            }
+        },
+        plugins: [{
+            id: 'verticalLinePluginC',
+            afterDraw: (chart) => {
+                if (typeof currentSliderIndexC === 'undefined' || currentSliderIndexC === null) return;
+                const meta = chart.getDatasetMeta(0);
+                const dataPoint = meta.data[currentSliderIndexC];
+                if (!dataPoint) return;
+
+                const context = chart.ctx;
+                context.save();
+                context.beginPath();
+                context.moveTo(dataPoint.x, chart.chartArea.top);
+                context.lineTo(dataPoint.x, chart.chartArea.bottom);
+                context.lineWidth = 2;
+                context.strokeStyle = 'red';
+                context.stroke();
+                context.restore();
+            }
+        }]
+    });
+}
+
+/**
+ * Function: updateUIC
+ * Description: The master synchronisation mechanism for the comparative dashboard. 
+ * Formats split strings, repainted map coordinates, and managed timeline redraws.
+ * @param {number} index - The shared temporal location mapped from the slider.
+ */
+function updateUIC(index) {
+    const pt1 = mergedDataC1[index];
+    const pt2 = mergedDataC2[index];
+
+    // Determine the master elapsed time string safely
+    const timeStr = pt1 ? (pt1['Elapsed Time'] || pt1.seconds_elapsed) : (pt2 ? (pt2['Elapsed Time'] || pt2.seconds_elapsed) : "0:00:00");
+    document.getElementById('val-time-c').innerText = timeStr;
+
+    // Evaluate Boat 1 dashboard metrics
+    if (pt1) {
+        document.getElementById('val-rate1-c').innerText = pt1['Rate'] ? parseFloat(pt1['Rate']).toFixed(1) : "--.-";
+        if (pt1.split_seconds && pt1.split_seconds > 0 && pt1.split_seconds < 300) {
+            const m = Math.floor(pt1.split_seconds / 60);
+            const s = (pt1.split_seconds % 60).toFixed(1).padStart(4, '0');
+            document.getElementById('val-split1-c').innerText = `${m}:${s}`;
+        } else {
+            document.getElementById('val-split1-c').innerText = "--:--";
+        }
+        if (boatMarkerC1) boatMarkerC1.setLatLng([pt1.lat, pt1.lon]);
+    }
+
+    // Evaluate Boat 2 dashboard metrics
+    if (pt2) {
+        document.getElementById('val-rate2-c').innerText = pt2['Rate'] ? parseFloat(pt2['Rate']).toFixed(1) : "--.-";
+        if (pt2.split_seconds && pt2.split_seconds > 0 && pt2.split_seconds < 300) {
+            const m = Math.floor(pt2.split_seconds / 60);
+            const s = (pt2.split_seconds % 60).toFixed(1).padStart(4, '0');
+            document.getElementById('val-split2-c').innerText = `${m}:${s}`;
+        } else {
+            document.getElementById('val-split2-c').innerText = "--:--";
+        }
+        if (boatMarkerC2) boatMarkerC2.setLatLng([pt2.lat, pt2.lon]);
+    }
+
+    // Command the chart to refresh the vertical tracker
+    currentSliderIndexC = index;
+    if (chartInstanceC) {
+        chartInstanceC.update('none');
+    }
+}
+
+// Bind timeline slider to the comparative UI engine
+document.getElementById('time-slider-c')?.addEventListener('input', (e) => {
+    updateUIC(parseInt(e.target.value));
+});
+
+// Master Event Listener for the Comparison Execution (Manual Uploads)
+document.getElementById('process-btn-c')?.addEventListener('click', async (e) => {
+    e.preventDefault(); // Prevents the button from accidentally refreshing the page
+    const btn = document.getElementById('process-btn-c');
+
+    const fileGpx1 = document.getElementById('gpx-file-1').files[0];
+    const fileCsv1 = document.getElementById('csv-file-1').files[0];
+    const fileGpx2 = document.getElementById('gpx-file-2').files[0];
+    const fileCsv2 = document.getElementById('csv-file-2').files[0];
+
+    // Requires all four files to run the full metric comparison.
+    if (!fileGpx1 || !fileCsv1 || !fileGpx2 || !fileCsv2) {
+        alert("Please upload all four files (2 GPX, 2 CSV) to generate the full comparison.");
+        return;
+    }
+
+    // Provides immediate visual feedback that the script is running
+    btn.innerText = "Processing...";
+
+    try {
+        // Reads all four files simultaneously from the disk to save processing time
+        const [txtGpx1, txtCsv1, txtGpx2, txtCsv2] = await Promise.all([
+            readTextFileAsync(fileGpx1),
+            readTextFileAsync(fileCsv1),
+            readTextFileAsync(fileGpx2),
+            readTextFileAsync(fileCsv2)
+        ]);
+
+        // Parses GPX spatial data
+        const gpxData1 = parseGPX(txtGpx1);
+        const gpxData2 = parseGPX(txtGpx2);
+
+        // Parses CSV metric data using the custom regex parser to ensure clean timestamps
+        const parsedCsv1 = parseCSV(txtCsv1);
+        const parsedCsv2 = parseCSV(txtCsv2);
+
+        // Merges spatial and metric datasets based on the closest chronological second
+        mergedDataC1 = mergeAsOf(gpxData1, parsedCsv1, 5);
+        mergedDataC2 = mergeAsOf(gpxData2, parsedCsv2, 5);
+
+        // Unhide the comparative UI elements so they occupy physical screen space
+        document.getElementById('dashboard-c').classList.remove('hidden');
+        document.getElementById('map-container-c').classList.remove('hidden');
+        document.getElementById('controls-c').classList.remove('hidden');
+        document.getElementById('chart-wrap-c').classList.remove('hidden');
+
+        // Configure the master timeline slider mapping to the longest session length
+        const maxFrames = Math.max(mergedDataC1.length, mergedDataC2.length);
+        const slider = document.getElementById('time-slider-c');
+        if (slider) {
+            slider.max = maxFrames > 0 ? maxFrames - 1 : 0;
+            slider.value = 0;
+        }
+
+        // Executes a delayed initialisation sequence to guarantee map rendering
+        setTimeout(() => {
+            initMapC(mergedDataC1, mergedDataC2);
+            initChartC(mergedDataC1, mergedDataC2);
+            updateUIC(0);
+
+            // Forces Leaflet to confirm its grid size now that it is safely on screen
+            if (mapInstanceC) {
+                mapInstanceC.invalidateSize();
+            }
+        }, 150);
+
+        // Resets the button text upon completion
+        btn.innerText = "Compare Routes & Metrics";
+
+    } catch (error) {
+        console.error("Comparison execution failed:", error);
+        alert("An error occurred while parsing the comparison files. Please check the console.");
+        btn.innerText = "Compare Routes & Metrics";
+    }
+});
+
+document.getElementById('demo-btn-c')?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('demo-btn-c');
+    btn.innerText = "Loading Demo...";
+
+    try {
+        // Fetches the existing demo files from the demo folder
+        const resGpx1 = await fetch('demo_data/example.GPX');
+        const resGpx2 = await fetch('demo_data/example_comparison.gpx');
+        const resCsv = await fetch('demo_data/example_GRAPH.CSV');
+
+        if (!resGpx1.ok || !resGpx2.ok || !resCsv.ok) {
+            throw new Error("Could not locate demo files on the server.");
+        }
+
+        const txtGpx1 = await resGpx1.text();
+        const txtGpx2 = await resGpx2.text();
+        const txtCsv = await resCsv.text();
+
+        // Parses the data
+        const gpxData1 = parseGPX(txtGpx1);
+        const gpxData2 = parseGPX(txtGpx2);
+        
+        const parsedCsv = parseCSV(txtCsv);
+
+        mergedDataC1 = mergeAsOf(gpxData1, parsedCsv, 5);
+        mergedDataC2 = mergeAsOf(gpxData2, parsedCsv, 5);
+
+        // Unhide the comparative UI elements
+        document.getElementById('dashboard-c').classList.remove('hidden');
+        document.getElementById('map-container-c').classList.remove('hidden');
+        document.getElementById('controls-c').classList.remove('hidden');
+        document.getElementById('chart-wrap-c').classList.remove('hidden');
+
+        // Configure the master timeline slider mapping to the longest session length
+        const maxFrames = Math.max(mergedDataC1.length, mergedDataC2.length);
+        const slider = document.getElementById('time-slider-c');
+        if (slider) {
+            slider.max = maxFrames > 0 ? maxFrames - 1 : 0;
+            slider.value = 0;
+        }
+
+        // Delayed execution ensures the containers physically exist on screen
+        setTimeout(() => {
+            initMapC(mergedDataC1, mergedDataC2);
+            initChartC(mergedDataC1, mergedDataC2);
+            updateUIC(0);
+        }, 150); 
+
+        btn.innerText = "Load Comparison Demo";
+
+    } catch (error) {
+        console.error("Comparison Demo failed:", error);
+        alert("An error occurred while loading the comparison demo. Check the console.");
+        btn.innerText = "Load Comparison Demo";
+    }
+});

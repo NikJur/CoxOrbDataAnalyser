@@ -178,7 +178,7 @@ button:hover { background-color: #1C3754; }
 }
 
 /* Container holding the map and enabling the bottom-right resize handle */
-#map-container {
+#map-container, #map-container-c {
     position: relative; /* anchors resize emblem.to the box */
     height: 40vh; /* Dynamically sizes to 40% of the active browser window height */
     min-height: 100px; /* Prevents the user from crushing the map out of existence */
@@ -771,4 +771,27 @@ audio, #audio-player {
  */
 .print-only {
     display: none;
+}
+
+/* Section C: Comparison Boat Markers */
+.boat-marker-orange {
+    background-color: #F08118;
+    border: 2px solid white;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+.boat-marker-blue {
+    background-color: #25476D;
+    border: 2px solid white;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+/*
+ * Section C Dashboard Spacing
+ * Overrides the general tight dashboard margin to ensure it clears the comparison action buttons safely.
+ */
+#dashboard-c {
+    margin-top: 1.0rem;
 }
