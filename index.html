@@ -333,6 +333,62 @@
                 <canvas id="metricsChartC"></canvas>
             </div>
             
+            <div id="trim-sliders-container-c" class="hidden" style="margin-top: 15px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 15px;">
+                
+                <div style="padding: 10px; background: rgba(240, 129, 24, 0.05); border-radius: 8px; border: 1px solid rgba(240, 129, 24, 0.2); display: flex; gap: 20px; align-items: flex-end;">
+                    <div style="flex-grow: 1;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #F08118; font-weight: 600; margin-bottom: 5px;">
+                            <span>Boat 1 Start</span>
+                            <span>Boat 1 End</span>
+                        </div>
+                        <div class="dual-slider-wrapper">
+                            <div class="dual-slider-track" style="background: rgba(240, 129, 24, 0.3);"></div>
+                            <input type="range" id="trim-slider-min-c1" min="0" max="100" value="0">
+                            <input type="range" id="trim-slider-max-c1" min="0" max="100" value="100">
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; width: 90px; flex-shrink: 0;">
+                        <label for="trim-dist-c1" style="font-size: 0.8rem; color: #F08118; font-weight: 600; margin-bottom: 5px;">Dist (m)</label>
+                        <input type="number" id="trim-dist-c1" placeholder="Distance" style="height: 32px; padding: 0 8px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
+                    </div>
+                    <div style="display: flex; flex-direction: column; width: 70px; flex-shrink: 0; border-left: 1px solid rgba(240, 129, 24, 0.3); padding-left: 15px;">
+                        <label style="font-size: 0.8rem; color: #F08118; font-weight: 600; margin-bottom: 5px;">Avg Split</label>
+                        <span id="trim-split-c1" style="font-family: monospace; font-size: 1.1rem; color: #333; font-weight: 600;">--:--</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; width: 60px; flex-shrink: 0;">
+                        <label style="font-size: 0.8rem; color: #F08118; font-weight: 600; margin-bottom: 5px;">Avg Rate</label>
+                        <span id="trim-rate-c1" style="font-family: monospace; font-size: 1.1rem; color: #333; font-weight: 600;">--.-</span>
+                    </div>
+                </div>
+
+                <div style="padding: 10px; background: rgba(37, 71, 109, 0.05); border-radius: 8px; border: 1px solid rgba(37, 71, 109, 0.2); display: flex; gap: 20px; align-items: flex-end;">
+                    <div style="flex-grow: 1;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #25476D; font-weight: 600; margin-bottom: 5px;">
+                            <span>Boat 2 Start</span>
+                            <span>Boat 2 End</span>
+                        </div>
+                        <div class="dual-slider-wrapper">
+                            <div class="dual-slider-track" style="background: rgba(37, 71, 109, 0.3);"></div>
+                            <input type="range" id="trim-slider-min-c2" min="0" max="100" value="0">
+                            <input type="range" id="trim-slider-max-c2" min="0" max="100" value="100">
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; width: 90px; flex-shrink: 0;">
+                        <label for="trim-dist-c2" style="font-size: 0.8rem; color: #25476D; font-weight: 600; margin-bottom: 5px;">Dist (m)</label>
+                        <input type="number" id="trim-dist-c2" placeholder="Distance" style="height: 32px; padding: 0 8px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
+                    </div>
+                    <div style="display: flex; flex-direction: column; width: 70px; flex-shrink: 0; border-left: 1px solid rgba(37, 71, 109, 0.3); padding-left: 15px;">
+                        <label style="font-size: 0.8rem; color: #25476D; font-weight: 600; margin-bottom: 5px;">Avg Split</label>
+                        <span id="trim-split-c2" style="font-family: monospace; font-size: 1.1rem; color: #333; font-weight: 600;">--:--</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; width: 60px; flex-shrink: 0;">
+                        <label style="font-size: 0.8rem; color: #25476D; font-weight: 600; margin-bottom: 5px;">Avg Rate</label>
+                        <span id="trim-rate-c2" style="font-family: monospace; font-size: 1.1rem; color: #333; font-weight: 600;">--.-</span>
+                    </div>
+                </div>
+
+            </div>
+
         </section>
 
         <section class="panel" id="export-section">
