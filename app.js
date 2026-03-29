@@ -2218,55 +2218,46 @@ function initMapC(data1, data2) {
 }
 
 /**
- * Function: initChartC
- * Description: Initialise the comparative Chart.js grid. Mapps Boat 1 and Boat 2 
- * splits to the primary Y-axis, while plotting stroke rates natively to the secondary axis.
- * @param {Array<Object>} data1 - Merges dataset for Boat 1.
- * @param {Array<Object>} data2 - Merges dataset for Boat 2.
+ * Initialises the comparative Chart.js grid using Relative Distance for the X-axis.
+ * Maps Boat 1 and Boat 2 metrics to a shared 0-meter starting line.
  */
 function initChartC(data1, data2) {
     if (chartInstanceC) chartInstanceC.destroy();
-
     const ctx = document.getElementById('metricsChartC').getContext('2d');
-    
-    // Aligns the temporal X-axis using whichever dataset is longer
-    const maxLength = Math.max(data1.length, data2.length);
-    const labels = Array.from({ length: maxLength }, (_, i) => {
-        const d = data1[i] || data2[i];
-        return d ? (d['Elapsed Time'] || d.seconds_elapsed) : "";
-    });
 
-    // Isolate metric arrays
-    const split1 = data1.map(d => d.split_seconds || null);
-    const split2 = data2.map(d => d.split_seconds || null);
-    const rate1 = data1.map(d => parseFloat(d['Rate']) || null);
-    const rate2 = data2.map(d => parseFloat(d['Rate']) || null);
+    // Helper to calculate distance relative to the start of the trimmed piece
+    const getRelDist = (data, idx) => (data[idx]['Distance'] || 0) - (data[0]['Distance'] || 0);
 
-    // Determines the visual boundaries for the split axis to ignore stationary data
-    const validSplits = [...split1, ...split2].filter(s => s !== null && s > 0 && s < 300);
-    const splitMin = validSplits.length > 0 ? Math.max(0, Math.min(...validSplits) - 5) : 60;
-    const splitMax = validSplits.length > 0 ? Math.max(...validSplits) + 5 : 300;
+    // Generate {x, y} coordinate datasets using relative distance
+    const split1 = data1.map((d, i) => ({ x: getRelDist(data1, i), y: d.split_seconds || null }));
+    const split2 = data2.map((d, i) => ({ x: getRelDist(data2, i), y: d.split_seconds || null }));
+    const rate1 = data1.map((d, i) => ({ x: getRelDist(data1, i), y: parseFloat(d['Rate']) || null }));
+    const rate2 = data2.map((d, i) => ({ x: getRelDist(data2, i), y: parseFloat(d['Rate']) || null }));
+
+    // Determine boundaries for the split axis to ignore stationary data
+    const validSplits = [...split1, ...split2].filter(s => s.y !== null && s.y > 0 && s.y < 300);
+    const splitMin = validSplits.length > 0 ? Math.max(0, Math.min(...validSplits.map(v => v.y)) - 5) : 60;
+    const splitMax = validSplits.length > 0 ? Math.max(...validSplits.map(v => v.y)) + 5 : 300;
 
     chartInstanceC = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: labels,
             datasets: [
-                { label: 'Boat 1 Split', data: split1, borderColor: '#F08118', borderWidth: 2, yAxisID: 'y1', order: 1, normalized: true },
-                { label: 'Boat 2 Split', data: split2, borderColor: '#25476D', borderWidth: 2, yAxisID: 'y1', order: 2, normalized: true },
-                { label: 'Boat 1 Rate', data: rate1, borderColor: 'rgba(240, 129, 24, 0.4)', borderWidth: 1.5, yAxisID: 'y', order: 3, normalized: true },
-                { label: 'Boat 2 Rate', data: rate2, borderColor: 'rgba(37, 71, 109, 0.4)', borderWidth: 1.5, yAxisID: 'y', order: 4, normalized: true }
+                { label: 'Boat 1 Split', data: split1, borderColor: '#F08118', borderWidth: 2, yAxisID: 'y1', order: 1 },
+                { label: 'Boat 2 Split', data: split2, borderColor: '#25476D', borderWidth: 2, yAxisID: 'y1', order: 2 },
+                { label: 'Boat 1 Rate', data: rate1, borderColor: 'rgba(240, 129, 24, 0.4)', borderWidth: 1.5, yAxisID: 'y', order: 3 },
+                { label: 'Boat 2 Rate', data: rate2, borderColor: 'rgba(37, 71, 109, 0.4)', borderWidth: 1.5, yAxisID: 'y', order: 4 }
             ]
         },
         options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            animation: false,
+            responsive: true, maintainAspectRatio: false, animation: false,
             interaction: { mode: 'index', intersect: false },
             elements: { point: { radius: 0, hitRadius: 10 }, line: { tension: 0 } },
             plugins: {
                 tooltip: {
                     callbacks: {
+                        // Format the hover title to display meters instead of index
+                        title: (items) => items.length ? `Distance: ${Math.round(items[0].parsed.x)} m` : '',
                         label: function(context) {
                             let label = context.dataset.label || '';
                             if (label) label += ': ';
@@ -2284,34 +2275,30 @@ function initChartC(data1, data2) {
                 }
             },
             scales: {
-                x: { display: true },
+                x: { type: 'linear', display: true, title: { display: true, text: 'Relative Distance (m)' } },
                 y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'Stroke Rate' } },
                 y1: { 
                     type: 'linear', display: true, position: 'right', reverse: true, min: splitMin, max: splitMax,
                     title: { display: true, text: 'Split' },
-                    ticks: {
-                        callback: function(value) {
-                            const m = Math.floor(value / 60);
-                            const s = (value % 60).toFixed(1).padStart(4, '0');
-                            return `${m}:${s}`;
-                        }
-                    }
+                    ticks: { callback: function(value) { const m = Math.floor(value / 60); const s = (value % 60).toFixed(1).padStart(4, '0'); return `${m}:${s}`; } }
                 }
             }
         },
         plugins: [{
             id: 'verticalLinePluginC',
             afterDraw: (chart) => {
-                if (typeof currentSliderIndexC === 'undefined' || currentSliderIndexC === null) return;
-                const meta = chart.getDatasetMeta(0);
-                const dataPoint = meta.data[currentSliderIndexC];
-                if (!dataPoint) return;
-
+                if (typeof currentSliderDistanceC === 'undefined' || currentSliderDistanceC === null) return;
+                const xAxis = chart.scales.x;
+                const xPixel = xAxis.getPixelForValue(currentSliderDistanceC);
+                
+                // Ensure the line only draws if it is within the visible chart bounds
+                if (xPixel < xAxis.left || xPixel > xAxis.right) return;
+                
                 const context = chart.ctx;
                 context.save();
                 context.beginPath();
-                context.moveTo(dataPoint.x, chart.chartArea.top);
-                context.lineTo(dataPoint.x, chart.chartArea.bottom);
+                context.moveTo(xPixel, chart.chartArea.top);
+                context.lineTo(xPixel, chart.chartArea.bottom);
                 context.lineWidth = 2;
                 context.strokeStyle = 'red';
                 context.stroke();
@@ -2322,55 +2309,88 @@ function initChartC(data1, data2) {
 }
 
 /**
- * Function: updateUIC
- * Description: The master synchronisation mechanism for the comparative dashboard. 
- * Formats split strings, repainted map coordinates, and managed timeline redraws.
- * @param {number} index - The shared temporal location mapped from the slider.
+ * Helper: Scans an array to find the index closest to the target relative distance.
  */
-function updateUIC(index) {
-    const pt1 = mergedDataC1[index];
-    const pt2 = mergedDataC2[index];
+function findClosestIndexByRelDist(data, targetDist) {
+    if (!data || data.length === 0) return -1;
+    const startDist = data[0]['Distance'] || 0;
+    let closestIdx = 0;
+    let minDiff = Infinity;
+    
+    for (let i = 0; i < data.length; i++) {
+        const relDist = (data[i]['Distance'] || 0) - startDist;
+        const diff = Math.abs(relDist - targetDist);
+        if (diff < minDiff) {
+            minDiff = diff;
+            closestIdx = i;
+        }
+        if (relDist > targetDist + 50) break; // Optimisation: stop searching if we overshoot heavily
+    }
+    return closestIdx;
+}
 
-    // Determine the master elapsed time string safely
-    const timeStr = pt1 ? (pt1['Elapsed Time'] || pt1.seconds_elapsed) : (pt2 ? (pt2['Elapsed Time'] || pt2.seconds_elapsed) : "0:00:00");
-    document.getElementById('val-time-c').innerText = timeStr;
+/**
+ * The master synchronisation mechanism. Aligns data by physical distance
+ * and computes the live Time Gap.
+ */
+function updateUIC(targetDistance) {
+    currentSliderDistanceC = targetDistance;
+    
+    const idx1 = findClosestIndexByRelDist(mergedDataC1, targetDistance);
+    const idx2 = findClosestIndexByRelDist(mergedDataC2, targetDistance);
 
-    // Evaluate Boat 1 dashboard metrics
+    const pt1 = idx1 !== -1 ? mergedDataC1[idx1] : null;
+    const pt2 = idx2 !== -1 ? mergedDataC2[idx2] : null;
+
+    document.getElementById('val-time-c').innerText = `${Math.round(targetDistance)} m`;
+
+    // Time Gap Calculation
+    const gapEl = document.getElementById('val-gap-c');
+    if (gapEl && pt1 && pt2) {
+        const relTime1 = (pt1.seconds_elapsed || 0) - (mergedDataC1[0].seconds_elapsed || 0);
+        const relTime2 = (pt2.seconds_elapsed || 0) - (mergedDataC2[0].seconds_elapsed || 0);
+        const diff = relTime1 - relTime2;
+
+        if (Math.abs(diff) < 0.1) {
+            gapEl.innerText = "Level";
+            gapEl.style.color = "#333";
+        } else if (diff < 0) {
+            // Boat 1 completed the distance in LESS time
+            gapEl.innerText = `B1 Ahead by ${Math.abs(diff).toFixed(1)}s`;
+            gapEl.style.color = "#F08118";
+        } else {
+            // Boat 2 completed the distance in LESS time
+            gapEl.innerText = `B2 Ahead by ${Math.abs(diff).toFixed(1)}s`;
+            gapEl.style.color = "#25476D";
+        }
+    }
+
     if (pt1) {
         document.getElementById('val-rate1-c').innerText = pt1['Rate'] ? parseFloat(pt1['Rate']).toFixed(1) : "--.-";
         if (pt1.split_seconds && pt1.split_seconds > 0 && pt1.split_seconds < 300) {
             const m = Math.floor(pt1.split_seconds / 60);
             const s = (pt1.split_seconds % 60).toFixed(1).padStart(4, '0');
             document.getElementById('val-split1-c').innerText = `${m}:${s}`;
-        } else {
-            document.getElementById('val-split1-c').innerText = "--:--";
         }
         if (boatMarkerC1) boatMarkerC1.setLatLng([pt1.lat, pt1.lon]);
     }
 
-    // Evaluate Boat 2 dashboard metrics
     if (pt2) {
         document.getElementById('val-rate2-c').innerText = pt2['Rate'] ? parseFloat(pt2['Rate']).toFixed(1) : "--.-";
         if (pt2.split_seconds && pt2.split_seconds > 0 && pt2.split_seconds < 300) {
             const m = Math.floor(pt2.split_seconds / 60);
             const s = (pt2.split_seconds % 60).toFixed(1).padStart(4, '0');
             document.getElementById('val-split2-c').innerText = `${m}:${s}`;
-        } else {
-            document.getElementById('val-split2-c').innerText = "--:--";
         }
         if (boatMarkerC2) boatMarkerC2.setLatLng([pt2.lat, pt2.lon]);
     }
 
-    // Command the chart to refresh the vertical tracker
-    currentSliderIndexC = index;
-    if (chartInstanceC) {
-        chartInstanceC.update('none');
-    }
+    if (chartInstanceC) chartInstanceC.update('none');
 }
 
-// Bind timeline slider to the comparative UI engine
+// Binds the timeline slider to the spatial UI engine
 document.getElementById('time-slider-c')?.addEventListener('input', (e) => {
-    updateUIC(parseInt(e.target.value));
+    updateUIC(parseFloat(e.target.value));
 });
 
 // Master Event Listener for the Comparison Execution (Manual Uploads)
@@ -2446,11 +2466,13 @@ document.getElementById('process-btn-c')?.addEventListener('click', async (e) =>
         document.getElementById('controls-c').classList.remove('hidden');
         document.getElementById('chart-wrap-c').classList.remove('hidden');
 
-        // Configure the master timeline slider mapping to the longest session length
-        const maxFrames = Math.max(mergedDataC1.length, mergedDataC2.length);
+        // Configure the master timeline slider to track total physical distance
+        const maxDistC1 = mergedDataC1.length > 0 ? (mergedDataC1[mergedDataC1.length - 1]['Distance'] || 0) - (mergedDataC1[0]['Distance'] || 0) : 0;
+        const maxDistC2 = mergedDataC2.length > 0 ? (mergedDataC2[mergedDataC2.length - 1]['Distance'] || 0) - (mergedDataC2[0]['Distance'] || 0) : 0;
+        
         const slider = document.getElementById('time-slider-c');
         if (slider) {
-            slider.max = maxFrames > 0 ? maxFrames - 1 : 0;
+            slider.max = Math.ceil(Math.max(maxDistC1, maxDistC2));
             slider.value = 0;
         }
 
@@ -2537,11 +2559,13 @@ document.getElementById('demo-btn-c')?.addEventListener('click', async (e) => {
         document.getElementById('controls-c').classList.remove('hidden');
         document.getElementById('chart-wrap-c').classList.remove('hidden');
 
-        // Configure the master timeline slider mapping to the longest session length
-        const maxFrames = Math.max(mergedDataC1.length, mergedDataC2.length);
+        // Configure the master timeline slider to track total physical distance
+        const maxDistC1 = mergedDataC1.length > 0 ? (mergedDataC1[mergedDataC1.length - 1]['Distance'] || 0) - (mergedDataC1[0]['Distance'] || 0) : 0;
+        const maxDistC2 = mergedDataC2.length > 0 ? (mergedDataC2[mergedDataC2.length - 1]['Distance'] || 0) - (mergedDataC2[0]['Distance'] || 0) : 0;
+        
         const slider = document.getElementById('time-slider-c');
         if (slider) {
-            slider.max = maxFrames > 0 ? maxFrames - 1 : 0;
+            slider.max = Math.ceil(Math.max(maxDistC1, maxDistC2));
             slider.value = 0;
         }
 
@@ -2598,8 +2622,9 @@ function updateTrimWindowsC() {
     // Update the master playback timeline length to match the longest remaining slice
     const timeSliderC = document.getElementById('time-slider-c');
     if (timeSliderC) {
-        const maxLen = Math.max(mergedDataC1.length, mergedDataC2.length);
-        timeSliderC.max = maxLen > 0 ? maxLen - 1 : 0;
+        const maxDistC1 = mergedDataC1.length > 0 ? (mergedDataC1[mergedDataC1.length - 1]['Distance'] || 0) - (mergedDataC1[0]['Distance'] || 0) : 0;
+        const maxDistC2 = mergedDataC2.length > 0 ? (mergedDataC2[mergedDataC2.length - 1]['Distance'] || 0) - (mergedDataC2[0]['Distance'] || 0) : 0;
+        timeSliderC.max = Math.ceil(Math.max(maxDistC1, maxDistC2));
         timeSliderC.value = 0;
     }
 
@@ -2621,27 +2646,26 @@ function updateTrimWindowsC() {
         }
     }
 
-    // Redraw the chart with the new aligned slices
+    // Redraw the chart with the new aligned spatial slices
     if (chartInstanceC) {
-        const maxLength = Math.max(mergedDataC1.length, mergedDataC2.length);
-        chartInstanceC.data.labels = Array.from({ length: maxLength }, (_, i) => {
-            const d = mergedDataC1[i] || mergedDataC2[i];
-            return d ? (d['Elapsed Time'] || d.seconds_elapsed) : "";
-        });
+        const getRelDist = (data, idx) => (data[idx]['Distance'] || 0) - (data[0]['Distance'] || 0);
 
-        const split1 = mergedDataC1.map(d => d.split_seconds || null);
-        const split2 = mergedDataC2.map(d => d.split_seconds || null);
+        // Map the trimmed arrays into the strict {x, y} coordinate format Chart.js now requires
+        const split1 = mergedDataC1.map((d, i) => ({ x: getRelDist(mergedDataC1, i), y: d.split_seconds || null }));
+        const split2 = mergedDataC2.map((d, i) => ({ x: getRelDist(mergedDataC2, i), y: d.split_seconds || null }));
+        const rate1 = mergedDataC1.map((d, i) => ({ x: getRelDist(mergedDataC1, i), y: parseFloat(d['Rate']) || null }));
+        const rate2 = mergedDataC2.map((d, i) => ({ x: getRelDist(mergedDataC2, i), y: parseFloat(d['Rate']) || null }));
 
         chartInstanceC.data.datasets[0].data = split1;
         chartInstanceC.data.datasets[1].data = split2;
-        chartInstanceC.data.datasets[2].data = mergedDataC1.map(d => parseFloat(d['Rate']) || null);
-        chartInstanceC.data.datasets[3].data = mergedDataC2.map(d => parseFloat(d['Rate']) || null);
+        chartInstanceC.data.datasets[2].data = rate1;
+        chartInstanceC.data.datasets[3].data = rate2;
 
-        // Dynamically rescale the axes to the new fastest/slowest splits
-        const validSplits = [...split1, ...split2].filter(s => s !== null && s > 0 && s < 300);
+        // Dynamically rescale the axes to the new fastest/slowest splits in the trimmed window
+        const validSplits = [...split1, ...split2].filter(s => s.y !== null && s.y > 0 && s.y < 300);
         if (validSplits.length > 0) {
-            chartInstanceC.options.scales.y1.min = Math.max(0, Math.min(...validSplits) - 5);
-            chartInstanceC.options.scales.y1.max = Math.max(...validSplits) + 5;
+            chartInstanceC.options.scales.y1.min = Math.max(0, Math.min(...validSplits.map(v => v.y)) - 5);
+            chartInstanceC.options.scales.y1.max = Math.max(...validSplits.map(v => v.y)) + 5;
         }
 
         chartInstanceC.update('none');
@@ -2693,3 +2717,51 @@ document.getElementById('trim-slider-min-c1')?.addEventListener('input', updateT
 document.getElementById('trim-slider-max-c1')?.addEventListener('input', updateTrimWindowsC);
 document.getElementById('trim-slider-min-c2')?.addEventListener('input', updateTrimWindowsC);
 document.getElementById('trim-slider-max-c2')?.addEventListener('input', updateTrimWindowsC);
+
+
+/**
+ * Logic: Distance Input Trimming (Section C)
+ * Allows the user to type a specific distance (e.g., 2000) into the input box to automatically 
+ * snap the end marker to that exact physical distance from the start marker.
+ */
+function applyTrimDistanceC(prefix, masterData) {
+    const distInput = document.getElementById(`trim-dist-${prefix}`);
+    const minSlider = document.getElementById(`trim-slider-min-${prefix}`);
+    const maxSlider = document.getElementById(`trim-slider-max-${prefix}`);
+
+    if (!distInput || !minSlider || !maxSlider || masterData.length === 0) return;
+
+    const targetPieceDistance = parseFloat(distInput.value);
+    if (isNaN(targetPieceDistance) || targetPieceDistance <= 0) return;
+
+    const startIdx = parseInt(minSlider.value);
+    const startDist = masterData[startIdx]['Distance'] || 0;
+    const targetTotalDist = startDist + targetPieceDistance;
+
+    // Scan the array forward from the start marker to find the closest physical coordinate
+    let closestIdx = startIdx;
+    let minDiff = Infinity;
+
+    for (let i = startIdx; i < masterData.length; i++) {
+        const currentDist = masterData[i]['Distance'] || 0;
+        const diff = Math.abs(currentDist - targetTotalDist);
+        
+        if (diff < minDiff) {
+            minDiff = diff;
+            closestIdx = i;
+        }
+        
+        // Optimisation: Stop searching if the loop overshoots the target by more than 50 meters
+        if (currentDist > targetTotalDist + 50) break;
+    }
+
+    // Snap the end slider to the mathematically discovered index
+    maxSlider.value = closestIdx;
+
+    // Trigger the master function to redraw the map and chart using the new boundaries
+    updateTrimWindowsC();
+}
+
+// Bind the change events to the Boat 1 and Boat 2 distance input boxes
+document.getElementById('trim-dist-c1')?.addEventListener('change', () => applyTrimDistanceC('c1', masterMergedDataC1));
+document.getElementById('trim-dist-c2')?.addEventListener('change', () => applyTrimDistanceC('c2', masterMergedDataC2));
