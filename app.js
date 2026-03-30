@@ -2335,57 +2335,66 @@ function findClosestIndexByRelDist(data, targetDist) {
 }
 
 /**
- * The master synchronisation mechanism. Aligns data by physical distance
- * and computes the live Time Gap.
+ * The Hybrid Synchronisation Engine. 
+ * Visually maps the UI via percentage, calculating individual physical distances covered.
  */
-function updateUIC(targetDistance) {
-    currentSliderDistanceC = targetDistance;
+function updateUIC(targetPercentage) {
+    currentSliderPercentageC = targetPercentage;
     
-    const idx1 = findClosestIndexByRelDist(mergedDataC1, targetDistance);
-    const idx2 = findClosestIndexByRelDist(mergedDataC2, targetDistance);
+    const totalDist1 = mergedDataC1.length > 0 ? (mergedDataC1[mergedDataC1.length - 1]['Distance'] || 0) - (mergedDataC1[0]['Distance'] || 0) : 0;
+    const totalDist2 = mergedDataC2.length > 0 ? (mergedDataC2[mergedDataC2.length - 1]['Distance'] || 0) - (mergedDataC2[0]['Distance'] || 0) : 0;
+
+    // Convert the percentage back into physical targets for map/chart locations
+    const targetDist1 = (targetPercentage / 100) * totalDist1;
+    const targetDist2 = (targetPercentage / 100) * totalDist2;
+
+    const idx1 = findClosestIndexByRelDist(mergedDataC1, targetDist1);
+    const idx2 = findClosestIndexByRelDist(mergedDataC2, targetDist2);
 
     const pt1 = idx1 !== -1 ? mergedDataC1[idx1] : null;
     const pt2 = idx2 !== -1 ? mergedDataC2[idx2] : null;
 
-    document.getElementById('val-time-c').innerText = `${Math.round(targetDistance)} m`;
+    const headerEl = document.getElementById('val-time-c');
+    if (headerEl) headerEl.innerText = `${targetPercentage.toFixed(1)}%`;
 
-    // Time Gap Calculation
-    const gapEl = document.getElementById('val-gap-c');
-    if (gapEl && pt1 && pt2) {
-        const relTime1 = (pt1.seconds_elapsed || 0) - (mergedDataC1[0].seconds_elapsed || 0);
-        const relTime2 = (pt2.seconds_elapsed || 0) - (mergedDataC2[0].seconds_elapsed || 0);
-        const diff = relTime1 - relTime2;
+    // Inject precise physical distances traversed into the dashboard
+    const dist1El = document.getElementById('val-dist1-c');
+    if (dist1El) dist1El.innerText = pt1 ? `${Math.round(targetDist1)} m` : "-- m";
 
-        if (Math.abs(diff) < 0.1) {
-            gapEl.innerText = "Level";
-            gapEl.style.color = "#333";
-        } else if (diff < 0) {
-            // Boat 1 completed the distance in LESS time
-            gapEl.innerText = `B1 Ahead by ${Math.abs(diff).toFixed(1)}s`;
-            gapEl.style.color = "#F08118";
-        } else {
-            // Boat 2 completed the distance in LESS time
-            gapEl.innerText = `B2 Ahead by ${Math.abs(diff).toFixed(1)}s`;
-            gapEl.style.color = "#25476D";
-        }
-    }
+    const dist2El = document.getElementById('val-dist2-c');
+    if (dist2El) dist2El.innerText = pt2 ? `${Math.round(targetDist2)} m` : "-- m";
 
+    // Refresh UI Metrics and Map Markers
     if (pt1) {
-        document.getElementById('val-rate1-c').innerText = pt1['Rate'] ? parseFloat(pt1['Rate']).toFixed(1) : "--.-";
-        if (pt1.split_seconds && pt1.split_seconds > 0 && pt1.split_seconds < 300) {
-            const m = Math.floor(pt1.split_seconds / 60);
-            const s = (pt1.split_seconds % 60).toFixed(1).padStart(4, '0');
-            document.getElementById('val-split1-c').innerText = `${m}:${s}`;
+        const rateEl = document.getElementById('val-rate1-c');
+        if (rateEl) rateEl.innerText = pt1['Rate'] ? parseFloat(pt1['Rate']).toFixed(1) : "--.-";
+        
+        const splitEl = document.getElementById('val-split1-c');
+        if (splitEl) {
+            if (pt1.split_seconds && pt1.split_seconds > 0 && pt1.split_seconds < 300) {
+                const m = Math.floor(pt1.split_seconds / 60);
+                const s = (pt1.split_seconds % 60).toFixed(1).padStart(4, '0');
+                splitEl.innerText = `${m}:${s}`;
+            } else {
+                splitEl.innerText = "--:--";
+            }
         }
         if (boatMarkerC1) boatMarkerC1.setLatLng([pt1.lat, pt1.lon]);
     }
 
     if (pt2) {
-        document.getElementById('val-rate2-c').innerText = pt2['Rate'] ? parseFloat(pt2['Rate']).toFixed(1) : "--.-";
-        if (pt2.split_seconds && pt2.split_seconds > 0 && pt2.split_seconds < 300) {
-            const m = Math.floor(pt2.split_seconds / 60);
-            const s = (pt2.split_seconds % 60).toFixed(1).padStart(4, '0');
-            document.getElementById('val-split2-c').innerText = `${m}:${s}`;
+        const rateEl = document.getElementById('val-rate2-c');
+        if (rateEl) rateEl.innerText = pt2['Rate'] ? parseFloat(pt2['Rate']).toFixed(1) : "--.-";
+        
+        const splitEl = document.getElementById('val-split2-c');
+        if (splitEl) {
+            if (pt2.split_seconds && pt2.split_seconds > 0 && pt2.split_seconds < 300) {
+                const m = Math.floor(pt2.split_seconds / 60);
+                const s = (pt2.split_seconds % 60).toFixed(1).padStart(4, '0');
+                splitEl.innerText = `${m}:${s}`;
+            } else {
+                splitEl.innerText = "--:--";
+            }
         }
         if (boatMarkerC2) boatMarkerC2.setLatLng([pt2.lat, pt2.lon]);
     }
@@ -2633,7 +2642,7 @@ function updateTrimWindowsC() {
         timeSliderC.value = 0;
     }
 
-    // Redraw map lines and insert the empty boundary rings
+    // Redraw the map lines and insert the empty boundary rings
     if (mapInstanceC) {
         if (polylineC1) mapInstanceC.removeLayer(polylineC1);
         if (polylineC2) mapInstanceC.removeLayer(polylineC2);
