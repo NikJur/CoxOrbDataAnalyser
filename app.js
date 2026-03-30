@@ -2218,23 +2218,30 @@ function initMapC(data1, data2) {
 }
 
 /**
- * Initialises the comparative Chart.js grid using Relative Distance for the X-axis.
- * Maps Boat 1 and Boat 2 metrics to a shared 0-meter starting line.
+ * Initialise the comparative Chart.js grid using Percentage of Piece Completed.
+ * Maps Boat 1 and Boat 2 metrics to a shared 0% to 100% X-axis.
  */
 function initChartC(data1, data2) {
     if (chartInstanceC) chartInstanceC.destroy();
     const ctx = document.getElementById('metricsChartC').getContext('2d');
 
-    // Helper to calculate distance relative to the start of the trimmed piece
+    // Helper functions to calculate relative percentage
     const getRelDist = (data, idx) => (data[idx]['Distance'] || 0) - (data[0]['Distance'] || 0);
+    const getTotalDist = (data) => data.length > 0 ? getRelDist(data, data.length - 1) : 1;
 
-    // Generate {x, y} coordinate datasets using relative distance
-    const split1 = data1.map((d, i) => ({ x: getRelDist(data1, i), y: d.split_seconds || null }));
-    const split2 = data2.map((d, i) => ({ x: getRelDist(data2, i), y: d.split_seconds || null }));
-    const rate1 = data1.map((d, i) => ({ x: getRelDist(data1, i), y: parseFloat(d['Rate']) || null }));
-    const rate2 = data2.map((d, i) => ({ x: getRelDist(data2, i), y: parseFloat(d['Rate']) || null }));
+    const total1 = getTotalDist(data1) || 1; // Fallback to 1 to prevent division by zero
+    const total2 = getTotalDist(data2) || 1;
 
-    // Determine boundaries for the split axis to ignore stationary data
+    const mapToPct = (data, total, key) => data.map((d, i) => ({
+        x: (getRelDist(data, i) / total) * 100,
+        y: key === 'split' ? (d.split_seconds || null) : (parseFloat(d['Rate']) || null)
+    }));
+
+    const split1 = mapToPct(data1, total1, 'split');
+    const split2 = mapToPct(data2, total2, 'split');
+    const rate1 = mapToPct(data1, total1, 'rate');
+    const rate2 = mapToPct(data2, total2, 'rate');
+
     const validSplits = [...split1, ...split2].filter(s => s.y !== null && s.y > 0 && s.y < 300);
     const splitMin = validSplits.length > 0 ? Math.max(0, Math.min(...validSplits.map(v => v.y)) - 5) : 60;
     const splitMax = validSplits.length > 0 ? Math.max(...validSplits.map(v => v.y)) + 5 : 300;
@@ -2256,8 +2263,7 @@ function initChartC(data1, data2) {
             plugins: {
                 tooltip: {
                     callbacks: {
-                        // Format the hover title to display meters instead of index
-                        title: (items) => items.length ? `Distance: ${Math.round(items[0].parsed.x)} m` : '',
+                        title: (items) => items.length ? `Completed: ${items[0].parsed.x.toFixed(1)}%` : '',
                         label: function(context) {
                             let label = context.dataset.label || '';
                             if (label) label += ': ';
@@ -2275,7 +2281,7 @@ function initChartC(data1, data2) {
                 }
             },
             scales: {
-                x: { type: 'linear', display: true, title: { display: true, text: 'Relative Distance (m)' } },
+                x: { type: 'linear', display: true, min: 0, max: 100, title: { display: true, text: 'Percentage of Piece Completed (%)' } },
                 y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'Stroke Rate' } },
                 y1: { 
                     type: 'linear', display: true, position: 'right', reverse: true, min: splitMin, max: splitMax,
@@ -2287,11 +2293,10 @@ function initChartC(data1, data2) {
         plugins: [{
             id: 'verticalLinePluginC',
             afterDraw: (chart) => {
-                if (typeof currentSliderDistanceC === 'undefined' || currentSliderDistanceC === null) return;
+                if (typeof currentSliderPercentageC === 'undefined' || currentSliderPercentageC === null) return;
                 const xAxis = chart.scales.x;
-                const xPixel = xAxis.getPixelForValue(currentSliderDistanceC);
+                const xPixel = xAxis.getPixelForValue(currentSliderPercentageC);
                 
-                // Ensure the line only draws if it is within the visible chart bounds
                 if (xPixel < xAxis.left || xPixel > xAxis.right) return;
                 
                 const context = chart.ctx;
@@ -2470,9 +2475,10 @@ document.getElementById('process-btn-c')?.addEventListener('click', async (e) =>
         const maxDistC1 = mergedDataC1.length > 0 ? (mergedDataC1[mergedDataC1.length - 1]['Distance'] || 0) - (mergedDataC1[0]['Distance'] || 0) : 0;
         const maxDistC2 = mergedDataC2.length > 0 ? (mergedDataC2[mergedDataC2.length - 1]['Distance'] || 0) - (mergedDataC2[0]['Distance'] || 0) : 0;
         
+        // Configure the master timeline slider to a 0.0% to 100.0% scale
         const slider = document.getElementById('time-slider-c');
         if (slider) {
-            slider.max = Math.ceil(Math.max(maxDistC1, maxDistC2));
+            slider.max = 1000; 
             slider.value = 0;
         }
 
@@ -2563,9 +2569,10 @@ document.getElementById('demo-btn-c')?.addEventListener('click', async (e) => {
         const maxDistC1 = mergedDataC1.length > 0 ? (mergedDataC1[mergedDataC1.length - 1]['Distance'] || 0) - (mergedDataC1[0]['Distance'] || 0) : 0;
         const maxDistC2 = mergedDataC2.length > 0 ? (mergedDataC2[mergedDataC2.length - 1]['Distance'] || 0) - (mergedDataC2[0]['Distance'] || 0) : 0;
         
+        // Configure the master timeline slider to a 0.0% to 100.0% scale
         const slider = document.getElementById('time-slider-c');
         if (slider) {
-            slider.max = Math.ceil(Math.max(maxDistC1, maxDistC2));
+            slider.max = 1000; 
             slider.value = 0;
         }
 
@@ -2618,61 +2625,176 @@ function updateTrimWindowsC() {
         calculateTrimStatsC(masterMergedDataC2, startC2, endC2, 'c2');
     }
 
-    // --- SYNCHRONIsE VISUALS ---
-    // Update the master playback timeline length to match the longest remaining slice
+    // --- SYNCHRONISE VISUALS ---
+    // Map the timeline slider to a 0 to 1000 scale (representing 0.0% to 100.0%)
     const timeSliderC = document.getElementById('time-slider-c');
     if (timeSliderC) {
-        const maxDistC1 = mergedDataC1.length > 0 ? (mergedDataC1[mergedDataC1.length - 1]['Distance'] || 0) - (mergedDataC1[0]['Distance'] || 0) : 0;
-        const maxDistC2 = mergedDataC2.length > 0 ? (mergedDataC2[mergedDataC2.length - 1]['Distance'] || 0) - (mergedDataC2[0]['Distance'] || 0) : 0;
-        timeSliderC.max = Math.ceil(Math.max(maxDistC1, maxDistC2));
+        timeSliderC.max = 1000; 
         timeSliderC.value = 0;
     }
 
-    // Redraw the map lines to reflect the trimmed boundaries
+    // Redraw map lines and insert the empty boundary rings
     if (mapInstanceC) {
         if (polylineC1) mapInstanceC.removeLayer(polylineC1);
         if (polylineC2) mapInstanceC.removeLayer(polylineC2);
+        if (trimStartMarkerC1) mapInstanceC.removeLayer(trimStartMarkerC1);
+        if (trimEndMarkerC1) mapInstanceC.removeLayer(trimEndMarkerC1);
+        if (trimStartMarkerC2) mapInstanceC.removeLayer(trimStartMarkerC2);
+        if (trimEndMarkerC2) mapInstanceC.removeLayer(trimEndMarkerC2);
+
+        // Helper to construct an empty alignment ring
+        const createRing = (latlng, color) => L.circleMarker(latlng, { radius: 7, color: color, weight: 3, fillColor: '#ffffff', fillOpacity: 0.2, zIndexOffset: 500 });
 
         if (mergedDataC1.length > 0) {
             const ll1 = mergedDataC1.map(pt => [pt.lat, pt.lon]);
             polylineC1 = L.polyline(ll1, { color: '#F08118', weight: 4, opacity: 0.8 }).addTo(mapInstanceC);
             if (boatMarkerC1) boatMarkerC1.setLatLng(ll1[0]);
+            
+            trimStartMarkerC1 = createRing(ll1[0], '#F08118').addTo(mapInstanceC);
+            trimEndMarkerC1 = createRing(ll1[ll1.length - 1], '#F08118').addTo(mapInstanceC);
         }
         
         if (mergedDataC2.length > 0) {
             const ll2 = mergedDataC2.map(pt => [pt.lat, pt.lon]);
             polylineC2 = L.polyline(ll2, { color: '#25476D', weight: 4, opacity: 0.8 }).addTo(mapInstanceC);
             if (boatMarkerC2) boatMarkerC2.setLatLng(ll2[0]);
+
+            trimStartMarkerC2 = createRing(ll2[0], '#25476D').addTo(mapInstanceC);
+            trimEndMarkerC2 = createRing(ll2[ll2.length - 1], '#25476D').addTo(mapInstanceC);
         }
     }
 
-    // Redraw the chart with the new aligned spatial slices
+    // Command the chart to refresh using the newly trimmed percentages
     if (chartInstanceC) {
-        const getRelDist = (data, idx) => (data[idx]['Distance'] || 0) - (data[0]['Distance'] || 0);
-
-        // Map the trimmed arrays into the strict {x, y} coordinate format Chart.js now requires
-        const split1 = mergedDataC1.map((d, i) => ({ x: getRelDist(mergedDataC1, i), y: d.split_seconds || null }));
-        const split2 = mergedDataC2.map((d, i) => ({ x: getRelDist(mergedDataC2, i), y: d.split_seconds || null }));
-        const rate1 = mergedDataC1.map((d, i) => ({ x: getRelDist(mergedDataC1, i), y: parseFloat(d['Rate']) || null }));
-        const rate2 = mergedDataC2.map((d, i) => ({ x: getRelDist(mergedDataC2, i), y: parseFloat(d['Rate']) || null }));
-
-        chartInstanceC.data.datasets[0].data = split1;
-        chartInstanceC.data.datasets[1].data = split2;
-        chartInstanceC.data.datasets[2].data = rate1;
-        chartInstanceC.data.datasets[3].data = rate2;
-
-        // Dynamically rescale the axes to the new fastest/slowest splits in the trimmed window
-        const validSplits = [...split1, ...split2].filter(s => s.y !== null && s.y > 0 && s.y < 300);
-        if (validSplits.length > 0) {
-            chartInstanceC.options.scales.y1.min = Math.max(0, Math.min(...validSplits.map(v => v.y)) - 5);
-            chartInstanceC.options.scales.y1.max = Math.max(...validSplits.map(v => v.y)) + 5;
-        }
-
-        chartInstanceC.update('none');
+        initChartC(mergedDataC1, mergedDataC2); 
     }
 
     updateUIC(0);
 }
+
+// Global variable to track the active percentage
+let currentSliderPercentageC = 0;
+
+/**
+ * Helper: Scans an array to find the index closest to a target physical distance.
+ */
+function findClosestIndexByRelDist(data, targetDist) {
+    if (!data || data.length === 0) return -1;
+    const startDist = data[0]['Distance'] || 0;
+    let closestIdx = 0;
+    let minDiff = Infinity;
+    
+    for (let i = 0; i < data.length; i++) {
+        const relDist = (data[i]['Distance'] || 0) - startDist;
+        const diff = Math.abs(relDist - targetDist);
+        if (diff < minDiff) {
+            minDiff = diff;
+            closestIdx = i;
+        }
+        if (relDist > targetDist + 50) break; // Optimization
+    }
+    return closestIdx;
+}
+
+/**
+ * The Hybrid Synchronisation Engine. 
+ * Visually maps the UI via percentage, but honestly calculates the Time Gap using physical meters.
+ */
+function updateUIC(targetPercentage) {
+    currentSliderPercentageC = targetPercentage;
+    
+    const totalDist1 = mergedDataC1.length > 0 ? (mergedDataC1[mergedDataC1.length - 1]['Distance'] || 0) - (mergedDataC1[0]['Distance'] || 0) : 0;
+    const totalDist2 = mergedDataC2.length > 0 ? (mergedDataC2[mergedDataC2.length - 1]['Distance'] || 0) - (mergedDataC2[0]['Distance'] || 0) : 0;
+
+    // Convert the percentage back into physical targets for map/chart locations
+    const targetDist1 = (targetPercentage / 100) * totalDist1;
+    const targetDist2 = (targetPercentage / 100) * totalDist2;
+
+    const idx1 = findClosestIndexByRelDist(mergedDataC1, targetDist1);
+    const idx2 = findClosestIndexByRelDist(mergedDataC2, targetDist2);
+
+    const pt1 = idx1 !== -1 ? mergedDataC1[idx1] : null;
+    const pt2 = idx2 !== -1 ? mergedDataC2[idx2] : null;
+
+    const headerEl = document.getElementById('val-time-c');
+    if (headerEl) headerEl.innerText = `${targetPercentage.toFixed(1)}%`;
+
+    // HYBRID TIME GAP CALCULATION (Distance-Based)
+    const gapEl = document.getElementById('val-gap-c');
+    if (gapEl && pt1) {
+        //Anchor the truth to Boat 1's physical location on the river
+        const referenceDistance = targetDist1; 
+        
+        // Find Boat 2's time at Boat 1's exact physical location
+        const idx2_gap = findClosestIndexByRelDist(mergedDataC2, referenceDistance);
+        const pt2_gap = idx2_gap !== -1 ? mergedDataC2[idx2_gap] : null;
+
+        // If Boat 2's piece was physically shorter than Boat 1's current location, we cannot compare them
+        if (!pt2_gap || referenceDistance > totalDist2 + 15) {
+            gapEl.innerText = "B2 Shorter";
+            gapEl.style.color = "#888";
+        } else {
+            const relTime1 = (pt1.seconds_elapsed || 0) - (mergedDataC1[0].seconds_elapsed || 0);
+            const relTime2 = (pt2_gap.seconds_elapsed || 0) - (mergedDataC2[0].seconds_elapsed || 0);
+            const diff = relTime1 - relTime2;
+
+            if (Math.abs(diff) < 0.1) {
+                gapEl.innerText = "Level";
+                gapEl.style.color = "#333";
+            } else if (diff < 0) {
+                gapEl.innerText = `B1 Ahead by ${Math.abs(diff).toFixed(1)}s`;
+                gapEl.style.color = "#F08118";
+            } else {
+                gapEl.innerText = `B2 Ahead by ${Math.abs(diff).toFixed(1)}s`;
+                gapEl.style.color = "#25476D";
+            }
+        }
+    } else if (gapEl) {
+        gapEl.innerText = "--";
+    }
+
+    // Refresh UI Metrics and Map Markers
+    if (pt1) {
+        const rateEl = document.getElementById('val-rate1-c');
+        if (rateEl) rateEl.innerText = pt1['Rate'] ? parseFloat(pt1['Rate']).toFixed(1) : "--.-";
+        
+        const splitEl = document.getElementById('val-split1-c');
+        if (splitEl) {
+            if (pt1.split_seconds && pt1.split_seconds > 0 && pt1.split_seconds < 300) {
+                const m = Math.floor(pt1.split_seconds / 60);
+                const s = (pt1.split_seconds % 60).toFixed(1).padStart(4, '0');
+                splitEl.innerText = `${m}:${s}`;
+            } else {
+                splitEl.innerText = "--:--";
+            }
+        }
+        if (boatMarkerC1) boatMarkerC1.setLatLng([pt1.lat, pt1.lon]);
+    }
+
+    if (pt2) {
+        const rateEl = document.getElementById('val-rate2-c');
+        if (rateEl) rateEl.innerText = pt2['Rate'] ? parseFloat(pt2['Rate']).toFixed(1) : "--.-";
+        
+        const splitEl = document.getElementById('val-split2-c');
+        if (splitEl) {
+            if (pt2.split_seconds && pt2.split_seconds > 0 && pt2.split_seconds < 300) {
+                const m = Math.floor(pt2.split_seconds / 60);
+                const s = (pt2.split_seconds % 60).toFixed(1).padStart(4, '0');
+                splitEl.innerText = `${m}:${s}`;
+            } else {
+                splitEl.innerText = "--:--";
+            }
+        }
+        if (boatMarkerC2) boatMarkerC2.setLatLng([pt2.lat, pt2.lon]);
+    }
+
+    if (chartInstanceC) chartInstanceC.update('none');
+}
+
+// Binds timeline slider to the percentage UI engine (dividing by 10 to extract 0.1% increments)
+document.getElementById('time-slider-c')?.addEventListener('input', (e) => {
+    updateUIC(parseFloat(e.target.value) / 10);
+});
 
 /**
  * Calculates the exact mathematical averages for the isolated data blocks.
