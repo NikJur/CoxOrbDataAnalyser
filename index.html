@@ -24,9 +24,10 @@
             <li><a href="#page-top">Top</a></li>
             <li><a href="#interactive-section">A: Interactive Analysis</a></li>
             <li><a href="#compare-section">B: Compare Routes</a></li>
-            <li><a href="#export-section">C: Export Report</a></li>
-            <li><a href="#support-section">D: Support</a></li>
-            <li><a href="#feedback-section">E: Feedback</a></li>
+            <li><a href="#metric-compare-section">C: Compare Sessions</a></li>
+            <li><a href="#export-section">D: Export Report</a></li>
+            <li><a href="#support-section">E: Support</a></li>
+            <li><a href="#feedback-section">F: Feedback</a></li>
         </ul>
     </nav>
 
@@ -274,8 +275,126 @@
             </div>
         </section>
 
+        <section class="panel" id="metric-compare-section">
+            <h2>C: Compare Sessions</h2>
+            <p>Upload a GPX and CSV file for two separate boats or sessions to compare their steering lines, stroke rates, and split times side-by-side.</p>
+
+            <div class="upload-grid" style="grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+                
+                <div style="background: rgba(240, 129, 24, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(240, 129, 24, 0.3);">
+                    <h3 style="margin-top: 0; color: #F08118;">Boat 1 (Orange)</h3>
+                    <div style="margin-bottom: 10px;">
+                        <label for="gpx-file-1" style="display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 4px;">GPX File:</label>
+                        <input type="file" id="gpx-file-1" accept=".gpx">
+                    </div>
+                    <div>
+                        <label for="csv-file-1" style="display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 4px;">CSV File:</label>
+                        <input type="file" id="csv-file-1" accept=".csv">
+                    </div>
+                </div>
+
+                <div style="background: rgba(37, 71, 109, 0.1); padding: 15px; border-radius: 8px; border: 1px solid rgba(37, 71, 109, 0.3);">
+                    <h3 style="margin-top: 0; color: #25476D;">Boat 2 (Blue)</h3>
+                    <div style="margin-bottom: 10px;">
+                        <label for="gpx-file-2" style="display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 4px;">GPX File:</label>
+                        <input type="file" id="gpx-file-2" accept=".gpx">
+                    </div>
+                    <div>
+                        <label for="csv-file-2" style="display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 4px;">CSV File:</label>
+                        <input type="file" id="csv-file-2" accept=".csv">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="action-buttons">
+                <button id="process-btn-c">Compare Routes & Metrics</button>
+                <span class="or-divider">or</span>
+                <button id="demo-btn-c" class="demo-btn">Load Comparison Demo</button>
+            </div>
+
+            <div id="dashboard-c" class="dashboard hidden">
+                <div class="stat-box">Completed <br><span id="val-time-c" style="color: #333;">0.0%</span></div>
+                <div class="stat-box">B1 Dist <br><span id="val-dist1-c" style="color: #F08118;">0 m</span></div>
+                <div class="stat-box">B2 Dist <br><span id="val-dist2-c" style="color: #25476D;">0 m</span></div>
+                <div class="stat-box">B1 Split <br><span id="val-split1-c" style="color: #F08118;">--:--</span></div>
+                <div class="stat-box">B2 Split <br><span id="val-split2-c" style="color: #25476D;">--:--</span></div>
+                <div class="stat-box">B1 Rate <br><span id="val-rate1-c" style="color: rgba(240, 129, 24, 0.6);">--.-</span></div>
+                <div class="stat-box">B2 Rate <br><span id="val-rate2-c" style="color: rgba(37, 71, 109, 0.6);">--.-</span></div>
+            </div>
+
+            <div id="map-container-c" class="hidden" style="position: relative; height: 40vh; min-height: 300px; width: 100%; resize: both; overflow: hidden; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">
+                <div id="map-c" style="height: 100%; width: 100%; z-index: 1;"></div>
+            </div>
+
+            <div id="controls-c" class="controls hidden">
+                <input type="range" id="time-slider-c" min="0" max="100" value="0" step="1" style="width: 100%;">
+            </div>
+
+            <div class="chart-container hidden" id="chart-wrap-c">
+                <canvas id="metricsChartC"></canvas>
+            </div>
+            
+            <div id="trim-sliders-container-c" class="hidden" style="margin-top: 15px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 15px;">
+                
+                <div style="padding: 10px; background: rgba(240, 129, 24, 0.05); border-radius: 8px; border: 1px solid rgba(240, 129, 24, 0.2); display: flex; gap: 20px; align-items: flex-end;">
+                    <div style="flex-grow: 1;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #F08118; font-weight: 600; margin-bottom: 5px;">
+                            <span>Boat 1 Start</span>
+                            <span>Boat 1 End</span>
+                        </div>
+                        <div class="dual-slider-wrapper">
+                            <div class="dual-slider-track" style="background: rgba(240, 129, 24, 0.3);"></div>
+                            <input type="range" id="trim-slider-min-c1" min="0" max="100" value="0">
+                            <input type="range" id="trim-slider-max-c1" min="0" max="100" value="100">
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; width: 90px; flex-shrink: 0;">
+                        <label for="trim-dist-c1" style="font-size: 0.8rem; color: #F08118; font-weight: 600; margin-bottom: 5px;">Dist (m)</label>
+                        <input type="number" id="trim-dist-c1" placeholder="Distance" style="height: 32px; padding: 0 8px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
+                    </div>
+                    <div style="display: flex; flex-direction: column; width: 70px; flex-shrink: 0; border-left: 1px solid rgba(240, 129, 24, 0.3); padding-left: 15px;">
+                        <label style="font-size: 0.8rem; color: #F08118; font-weight: 600; margin-bottom: 5px;">Avg Split</label>
+                        <span id="trim-split-c1" style="font-family: monospace; font-size: 1.1rem; color: #333; font-weight: 600;">--:--</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; width: 60px; flex-shrink: 0;">
+                        <label style="font-size: 0.8rem; color: #F08118; font-weight: 600; margin-bottom: 5px;">Avg Rate</label>
+                        <span id="trim-rate-c1" style="font-family: monospace; font-size: 1.1rem; color: #333; font-weight: 600;">--.-</span>
+                    </div>
+                </div>
+
+                <div style="padding: 10px; background: rgba(37, 71, 109, 0.05); border-radius: 8px; border: 1px solid rgba(37, 71, 109, 0.2); display: flex; gap: 20px; align-items: flex-end;">
+                    <div style="flex-grow: 1;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #25476D; font-weight: 600; margin-bottom: 5px;">
+                            <span>Boat 2 Start</span>
+                            <span>Boat 2 End</span>
+                        </div>
+                        <div class="dual-slider-wrapper">
+                            <div class="dual-slider-track" style="background: rgba(37, 71, 109, 0.3);"></div>
+                            <input type="range" id="trim-slider-min-c2" min="0" max="100" value="0">
+                            <input type="range" id="trim-slider-max-c2" min="0" max="100" value="100">
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; width: 90px; flex-shrink: 0;">
+                        <label for="trim-dist-c2" style="font-size: 0.8rem; color: #25476D; font-weight: 600; margin-bottom: 5px;">Dist (m)</label>
+                        <input type="number" id="trim-dist-c2" placeholder="Distance" style="height: 32px; padding: 0 8px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
+                    </div>
+                    <div style="display: flex; flex-direction: column; width: 70px; flex-shrink: 0; border-left: 1px solid rgba(37, 71, 109, 0.3); padding-left: 15px;">
+                        <label style="font-size: 0.8rem; color: #25476D; font-weight: 600; margin-bottom: 5px;">Avg Split</label>
+                        <span id="trim-split-c2" style="font-family: monospace; font-size: 1.1rem; color: #333; font-weight: 600;">--:--</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; width: 60px; flex-shrink: 0;">
+                        <label style="font-size: 0.8rem; color: #25476D; font-weight: 600; margin-bottom: 5px;">Avg Rate</label>
+                        <span id="trim-rate-c2" style="font-family: monospace; font-size: 1.1rem; color: #333; font-weight: 600;">--.-</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
         <section class="panel" id="export-section">
-            <h2>C: Export Report</h2>
+            <h2>D: Export Report</h2>
             <p>
                 Generate a static PDF report of the current analytical view. This hides interactive controls and formats the map and performance chart for printing or saving as a document.
             </p>
@@ -285,7 +404,7 @@
         </section>
 
         <section class="panel" id="support-section" style="margin-bottom: 2rem;">
-            <h2>D: Support</h2>
+            <h2>E: Support</h2>
             <p>
                 <strong>⭐️ Support the Project (for free!)</strong><br><br>
                 If this tool enhances your coxing, coaching, or rowing analyses, please consider giving the repository a star ⭐️. It costs nothing, helps track community engagement, and encourages future development and updates. It also helps you find it again in a month's time. :)
@@ -297,7 +416,7 @@
         </section>
 
         <section class="panel" id="feedback-section">
-            <h2>E: Feedback</h2>
+            <h2>F: Feedback</h2>
             <p>
                 Encountered a bug or have a feature request? Submit your observations below to help refine the analytical tools.
             </p>
