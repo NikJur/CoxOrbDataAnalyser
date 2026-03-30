@@ -2673,9 +2673,35 @@ function updateTrimWindowsC() {
         }
     }
 
-    // Command the chart to refresh using the newly trimmed percentages
+    // Update the existing chart without destroying the legend states
     if (chartInstanceC) {
-        initChartC(mergedDataC1, mergedDataC2); 
+        const getRelDist = (data, idx) => (data[idx]['Distance'] || 0) - (data[0]['Distance'] || 0);
+        const getTotalDist = (data) => data.length > 0 ? getRelDist(data, data.length - 1) : 1;
+
+        const total1 = getTotalDist(mergedDataC1) || 1;
+        const total2 = getTotalDist(mergedDataC2) || 1;
+
+        const mapToPct = (data, total, key) => data.map((d, i) => ({
+            x: (getRelDist(data, i) / total) * 100,
+            y: key === 'split' ? (d.split_seconds || null) : (parseFloat(d['Rate']) || null)
+        }));
+
+        const split1 = mapToPct(mergedDataC1, total1, 'split');
+        const split2 = mapToPct(mergedDataC2, total2, 'split');
+
+        chartInstanceC.data.datasets[0].data = split1;
+        chartInstanceC.data.datasets[1].data = split2;
+        chartInstanceC.data.datasets[2].data = mapToPct(mergedDataC1, total1, 'rate');
+        chartInstanceC.data.datasets[3].data = mapToPct(mergedDataC2, total2, 'rate');
+
+        // Dynamically rescale the axes to the new fastest/slowest splits in the trimmed window
+        const validSplits = [...split1, ...split2].filter(s => s.y !== null && s.y > 0 && s.y < 300);
+        if (validSplits.length > 0) {
+            chartInstanceC.options.scales.y1.min = Math.max(0, Math.min(...validSplits.map(v => v.y)) - 5);
+            chartInstanceC.options.scales.y1.max = Math.max(...validSplits.map(v => v.y)) + 5;
+        }
+
+        chartInstanceC.update('none'); // 'none' prevents visual stuttering
     }
 
     updateUIC(0);
@@ -2707,7 +2733,7 @@ function findClosestIndexByRelDist(data, targetDist) {
 
 /**
  * The Hybrid Synchronisation Engine. 
- * Visually maps the UI via percentage, but honestly calculates the Time Gap using physical meters.
+ * Visually maps the UI via percentage, extracting exact physical distances covered.
  */
 function updateUIC(targetPercentage) {
     currentSliderPercentageC = targetPercentage;
@@ -2715,7 +2741,7 @@ function updateUIC(targetPercentage) {
     const totalDist1 = mergedDataC1.length > 0 ? (mergedDataC1[mergedDataC1.length - 1]['Distance'] || 0) - (mergedDataC1[0]['Distance'] || 0) : 0;
     const totalDist2 = mergedDataC2.length > 0 ? (mergedDataC2[mergedDataC2.length - 1]['Distance'] || 0) - (mergedDataC2[0]['Distance'] || 0) : 0;
 
-    // Convert the percentage back into physical targets for map/chart locations
+    // Convert the percentage back into physical targets to find the closest data row
     const targetDist1 = (targetPercentage / 100) * totalDist1;
     const targetDist2 = (targetPercentage / 100) * totalDist2;
 
@@ -2728,39 +2754,15 @@ function updateUIC(targetPercentage) {
     const headerEl = document.getElementById('val-time-c');
     if (headerEl) headerEl.innerText = `${targetPercentage.toFixed(1)}%`;
 
-    // HYBRID TIME GAP CALCULATION (Distance-Based)
-    const gapEl = document.getElementById('val-gap-c');
-    if (gapEl && pt1) {
-        //Anchor the truth to Boat 1's physical location on the river
-        const referenceDistance = targetDist1; 
-        
-        // Find Boat 2's time at Boat 1's exact physical location
-        const idx2_gap = findClosestIndexByRelDist(mergedDataC2, referenceDistance);
-        const pt2_gap = idx2_gap !== -1 ? mergedDataC2[idx2_gap] : null;
+    // Extract the actual physical distance traversed from the matched data rows
+    const actualDist1 = pt1 ? Math.max(0, (pt1['Distance'] || 0) - (mergedDataC1[0]['Distance'] || 0)) : 0;
+    const actualDist2 = pt2 ? Math.max(0, (pt2['Distance'] || 0) - (mergedDataC2[0]['Distance'] || 0)) : 0;
 
-        // If Boat 2's piece was physically shorter than Boat 1's current location, we cannot compare them
-        if (!pt2_gap || referenceDistance > totalDist2 + 15) {
-            gapEl.innerText = "B2 Shorter";
-            gapEl.style.color = "#888";
-        } else {
-            const relTime1 = (pt1.seconds_elapsed || 0) - (mergedDataC1[0].seconds_elapsed || 0);
-            const relTime2 = (pt2_gap.seconds_elapsed || 0) - (mergedDataC2[0].seconds_elapsed || 0);
-            const diff = relTime1 - relTime2;
+    const dist1El = document.getElementById('val-dist1-c');
+    if (dist1El) dist1El.innerText = pt1 ? `${Math.round(actualDist1)} m` : "-- m";
 
-            if (Math.abs(diff) < 0.1) {
-                gapEl.innerText = "Level";
-                gapEl.style.color = "#333";
-            } else if (diff < 0) {
-                gapEl.innerText = `B1 Ahead by ${Math.abs(diff).toFixed(1)}s`;
-                gapEl.style.color = "#F08118";
-            } else {
-                gapEl.innerText = `B2 Ahead by ${Math.abs(diff).toFixed(1)}s`;
-                gapEl.style.color = "#25476D";
-            }
-        }
-    } else if (gapEl) {
-        gapEl.innerText = "--";
-    }
+    const dist2El = document.getElementById('val-dist2-c');
+    if (dist2El) dist2El.innerText = pt2 ? `${Math.round(actualDist2)} m` : "-- m";
 
     // Refresh UI Metrics and Map Markers
     if (pt1) {
