@@ -12,10 +12,10 @@
  */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: var(--bg-color);
+    background-color: #0c2849;
 
     /* URL-encoded SVG wave pattern */
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60' viewBox='0 0 120 60'%3E%3Cg fill='none' stroke='%2325476D' stroke-width='4' stroke-linecap='round' opacity='0.15'%3E%3Cpath d='M0 25 C20 25, 25 5, 40 5 C35 15, 45 25, 60 25 C80 25, 85 5, 100 5 C95 15, 105 25, 120 25' /%3E%3Cpath d='M-30 55 C-10 55, -5 35, 10 35 C5 45, 15 55, 30 55 C50 55, 55 35, 70 35 C65 45, 75 55, 90 55 C110 55, 115 35, 130 35 C125 45, 135 55, 150 55' /%3E%3C/g%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60' viewBox='0 0 120 60'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='4' stroke-linecap='round' opacity='0.15'%3E%3Cpath d='M0 25 C20 25, 25 5, 40 5 C35 15, 45 25, 60 25 C80 25, 85 5, 100 5 C95 15, 105 25, 120 25' /%3E%3Cpath d='M-30 55 C-10 55, -5 35, 10 35 C5 45, 15 55, 30 55 C50 55, 55 35, 70 35 C65 45, 75 55, 90 55 C110 55, 115 35, 130 35 C125 45, 135 55, 150 55' /%3E%3C/g%3E%3C/svg%3E");
     background-attachment: fixed; /* Locks the waves in place vertically */
     background-size: 120px 60px;
 
