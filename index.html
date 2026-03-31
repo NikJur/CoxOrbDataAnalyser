@@ -147,7 +147,8 @@
                 <div class="stat-box">Distance (m): <span id="val-dist">--</span></div>
             </div>
 
-            <div class="chart-container">
+            <div class="chart-container" style="position: relative;">
+                <button id="fullscreen-chart-a" class="chart-fullscreen-btn" title="Toggle Fullscreen">⛶</button>
                 <canvas id="metricsChart"></canvas>
             </div>
 
@@ -334,7 +335,8 @@
                 <input type="range" id="time-slider-c" min="0" max="100" value="0" step="1" style="width: 100%;">
             </div>
 
-            <div class="chart-container hidden" id="chart-wrap-c">
+            <div class="chart-container hidden" id="chart-wrap-c" style="position: relative;">
+                <button id="fullscreen-chart-c" class="chart-fullscreen-btn" title="Toggle Fullscreen">⛶</button>
                 <canvas id="metricsChartC"></canvas>
             </div>
             

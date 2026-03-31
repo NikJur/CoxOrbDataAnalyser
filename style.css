@@ -312,6 +312,52 @@ button:hover { background-color: #1C3754; }
 }
 
 /**
+ * Chart Fullscreen Button Styling
+ * Positions the control neatly in the top-left corner of the chart areas.
+ */
+.chart-fullscreen-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    padding: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    transition: background-color 0.2s;
+}
+
+.chart-fullscreen-btn:hover {
+    background-color: #f4f4f4;
+}
+
+/**
+ * Chart Fullscreen Mode
+ * Ensures the chart fills the screen, maintains a solid background, 
+ * and adds padding so the axes do not touch the monitor edges.
+ */
+.chart-container:fullscreen,
+#chart-wrap-c:fullscreen {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 20px; 
+    border-radius: 0;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+/**
  * Component: Dual Range Slider
  * Structured two native HTML range inputs absolutely positioned over each other.
  * Removes default styling and enabled pointer events only on the thumb handles 
