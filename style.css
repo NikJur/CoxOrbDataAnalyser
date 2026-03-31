@@ -203,6 +203,15 @@ button:hover { background-color: #1C3754; }
     background-position: bottom 2px right 2px; /* Snugs the icon right into the corner */
 }
 
+/* Instructs the container to fill the screen securely when the API is triggered */
+#map-container:fullscreen {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    background-color: white; /* Prevents black bars on ultra-wide monitors */
+}
+
 /* * Fallback for Firefox. 
  * Firefox ignores WebKit resizer properties and uses a fixed hit target, 
  * so we just snap the visual icon flush into the corner.

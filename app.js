@@ -249,7 +249,7 @@ function parseGPX(gpxText) {
 
 /**
  * Parses raw CSV/TSV text into an array of JSON objects using PapaParse.
- * Built with heavy regex normalization to conquer CoxOrb file formatting.
+ * Built with heavy regex normalisation to conquer CoxOrb file formatting.
  */
 function parseCSV(csvText) {
     console.log("--- CSV PARSER DEBUG ---");
@@ -467,6 +467,9 @@ function initMap(data) {
     const startLoc = [data[0].lat, data[0].lon];
     mapInstance = L.map('map').setView(startLoc, 15);
 
+    // Add the custom fullscreen control to the map
+    mapInstance.addControl(new L.Control.Fullscreen());
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(mapInstance);
@@ -510,6 +513,70 @@ function initMap(data) {
     // Start watching the container
     resizeObserver.observe(mapContainer);
 }
+
+/**
+ * Custom Leaflet Fullscreen Control
+ * Hooks directly into Leaflet's native control stack (topleft) so it sits 
+ * underneath the default zoom buttons.
+ */
+L.Control.Fullscreen = L.Control.extend({
+    options: {
+        position: 'topleft' // Places it directly under the zoom +/- buttons
+    },
+    onAdd: function (map) {
+        // Create the container using Leaflet's native CSS classes
+        const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+        const button = L.DomUtil.create('a', 'leaflet-control-fullscreen', container);
+        
+        // Style the button
+        button.innerHTML = '⛶';
+        button.href = '#';
+        button.title = 'Toggle Fullscreen';
+        button.style.fontSize = '1.2rem';
+        button.style.lineHeight = '30px'; // Matches Leaflet's default button height
+        button.style.textAlign = 'center';
+        button.style.textDecoration = 'none';
+        button.style.color = '#333';
+
+        // Prevent map clicks when clicking the button
+        L.DomEvent.disableClickPropagation(button);
+
+        // Bind the Fullscreen API logic
+        L.DomEvent.on(button, 'click', function (e) {
+            L.DomEvent.stop(e);
+            
+            // We target the map's parent wrapper so the custom UI (trim sliders, etc.) could potentially be included later if desired.
+            // For now, we specifically target map-container to ensure it expands correctly.
+            const mapWrapper = map.getContainer().parentElement; 
+
+            if (!document.fullscreenElement) {
+                mapWrapper.requestFullscreen().catch(err => {
+                    console.error(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        });
+
+        // Listen for the browser's native fullscreen state changes to swap the icon
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                button.innerHTML = '✖';
+                button.title = "Exit Fullscreen";
+            } else {
+                button.innerHTML = '⛶';
+                button.title = "Toggle Fullscreen";
+            }
+            
+            // Force Leaflet to redraw to fill the new screen dimensions
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 100);
+        });
+
+        return container;
+    }
+});
 
 /**
  * Initializes Chart.js line graph for performance metrics.
