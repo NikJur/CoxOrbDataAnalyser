@@ -1296,6 +1296,9 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
         if (!compareMapInstance) {
             const startLoc = [gpxData[0].lat, gpxData[0].lon];
             compareMapInstance = L.map('compare-map').setView(startLoc, 13);
+
+            compareMapInstance.addControl(new L.Control.Fullscreen()); // Fullscreen control for the comparison map
+
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(compareMapInstance);
@@ -1374,6 +1377,9 @@ document.getElementById('compare-btn').addEventListener('click', async () => {
     // Initialize the comparison map if it does not exist yet
     if (!compareMapInstance) {
         compareMapInstance = L.map('compare-map').setView([51.474, -0.271], 13);
+
+        compareMapInstance.addControl(new L.Control.Fullscreen());
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(compareMapInstance);
@@ -2235,6 +2241,8 @@ function initMapC(data1, data2) {
     // Create a brand new map instance
     mapInstanceC = L.map('map-c').setView(startLoc, 14);
 
+    mapInstanceC.addControl(new L.Control.Fullscreen()); // Adds the fullscreen control to the map
+    
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(mapInstanceC);

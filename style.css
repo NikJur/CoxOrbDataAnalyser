@@ -204,12 +204,14 @@ button:hover { background-color: #1C3754; }
 }
 
 /* Instructs the container to fill the screen securely when the API is triggered */
-#map-container:fullscreen {
+#map-container:fullscreen,
+#compare-map-container:fullscreen,
+#map-container-c:fullscreen {
     width: 100vw;
     height: 100vh;
     margin: 0;
     border-radius: 0;
-    background-color: white; /* Prevents black bars on ultra-wide monitors */
+    background-color: white;
 }
 
 /* * Fallback for Firefox. 
