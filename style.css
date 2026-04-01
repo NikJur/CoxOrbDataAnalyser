@@ -333,11 +333,17 @@ button:hover { background-color: #1C3754; }
     color: #333;
     padding: 0;
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    transition: background-color 0.2s;
+    
+    /* Drops the button to 30% visibility */
+    opacity: 0.3; 
+    /* Ensures both the background colour and the fade effect animate smoothly */
+    transition: background-color 0.2s, opacity 0.2s; 
 }
 
 .chart-fullscreen-btn:hover {
     background-color: #f4f4f4;
+    /* Pops to full solid visibility when the mouse enters */
+    opacity: 1; 
 }
 
 /**
