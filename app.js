@@ -784,6 +784,51 @@ function initChart(data) {
 }
 
 /**
+ * Function: setupChartFullscreen
+ * Description: Attaches native fullscreen toggle functionality to a specific chart container.
+ * Listens for the browser's native API state changes to swap the button icon accordingly.
+ * @param {string} btnId - The HTML ID of the custom fullscreen button.
+ * @param {HTMLElement} containerElement - The DOM node wrapping the Chart.js canvas.
+ */
+function setupChartFullscreen(btnId, containerElement) {
+    const btn = document.getElementById(btnId);
+    if (!btn || !containerElement) return;
+
+    // Toggle fullscreen mode on click
+    btn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            containerElement.requestFullscreen().catch(err => {
+                console.error(`Fullscreen request failed: ${err.message}`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    });
+
+    // Update button icon dynamically based on the active viewport state
+    document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement === containerElement) {
+            btn.innerText = "✖";
+            btn.title = "Exit Fullscreen";
+        } else if (!document.fullscreenElement) {
+            btn.innerText = "⛶";
+            btn.title = "Toggle Fullscreen";
+        }
+    });
+}
+
+// Initialise the fullscreen event listeners targeting the new master wrappers
+const wrapperA = document.getElementById('fullscreen-wrapper-a');
+if (wrapperA) {
+    setupChartFullscreen('fullscreen-chart-a', wrapperA);
+}
+
+const wrapperC = document.getElementById('fullscreen-wrapper-c');
+if (wrapperC) {
+    setupChartFullscreen('fullscreen-chart-c', wrapperC);
+}
+
+/**
  * Loads user-uploaded audio and resets any virtual loop states.
  * Prepares the audio container for standard linear playback.
  */
@@ -2553,7 +2598,10 @@ document.getElementById('process-btn-c')?.addEventListener('click', async (e) =>
         document.getElementById('dashboard-c').classList.remove('hidden');
         document.getElementById('map-container-c').classList.remove('hidden');
         document.getElementById('controls-c').classList.remove('hidden');
-        document.getElementById('chart-wrap-c').classList.remove('hidden');
+
+        // Unhide the Master Wrapper (which automatically displays the chart and sliders inside it)
+        const wrapperC = document.getElementById('fullscreen-wrapper-c');
+        if (wrapperC) wrapperC.classList.remove('hidden');
 
         // Configure the master timeline slider to track total physical distance
         const maxDistC1 = mergedDataC1.length > 0 ? (mergedDataC1[mergedDataC1.length - 1]['Distance'] || 0) - (mergedDataC1[0]['Distance'] || 0) : 0;
@@ -2647,7 +2695,10 @@ document.getElementById('demo-btn-c')?.addEventListener('click', async (e) => {
         document.getElementById('dashboard-c').classList.remove('hidden');
         document.getElementById('map-container-c').classList.remove('hidden');
         document.getElementById('controls-c').classList.remove('hidden');
-        document.getElementById('chart-wrap-c').classList.remove('hidden');
+
+        // Unhide the Master Wrapper (which automatically displays the chart and sliders inside it)
+        const wrapperC = document.getElementById('fullscreen-wrapper-c');
+        if (wrapperC) wrapperC.classList.remove('hidden');
 
         // Configure the master timeline slider to track total physical distance
         const maxDistC1 = mergedDataC1.length > 0 ? (mergedDataC1[mergedDataC1.length - 1]['Distance'] || 0) - (mergedDataC1[0]['Distance'] || 0) : 0;
