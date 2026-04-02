@@ -203,15 +203,23 @@ button:hover { background-color: #1C3754; }
     background-position: bottom 2px right 2px; /* Snugs the icon right into the corner */
 }
 
-/* Instructs the container to fill the screen securely when the API is triggered */
-#map-container:fullscreen,
+/**
+ * Chart Master Wrapper Fullscreen Mode
+ * Expands the wrapper to fill the screen. Flexbox ensures the canvas 
+ * grows to take up the top portion, pinning the trim sliders to the bottom.
+ */
+#fullscreen-wrapper-a:fullscreen,
 #compare-map-container:fullscreen,
-#map-container-c:fullscreen {
+#fullscreen-wrapper-c:fullscreen {
     width: 100vw;
     height: 100vh;
     margin: 0;
+    padding: 20px; 
     border-radius: 0;
     background-color: white;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Adds a scrollbar just in case the monitor is extremely short */
 }
 
 /* * Fallback for Firefox. 

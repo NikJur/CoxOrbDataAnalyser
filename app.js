@@ -817,15 +817,15 @@ function setupChartFullscreen(btnId, containerElement) {
     });
 }
 
-// Initialise the fullscreen event listeners for both analytical charts
-const chartContainerA = document.querySelector('.chart-container');
-if (chartContainerA) {
-    setupChartFullscreen('fullscreen-chart-a', chartContainerA);
+// Initialise the fullscreen event listeners targeting the new master wrappers
+const wrapperA = document.getElementById('fullscreen-wrapper-a');
+if (wrapperA) {
+    setupChartFullscreen('fullscreen-chart-a', wrapperA);
 }
 
-const chartContainerC = document.getElementById('chart-wrap-c');
-if (chartContainerC) {
-    setupChartFullscreen('fullscreen-chart-c', chartContainerC);
+const wrapperC = document.getElementById('fullscreen-wrapper-c');
+if (wrapperC) {
+    setupChartFullscreen('fullscreen-chart-c', wrapperC);
 }
 
 /**
@@ -2598,7 +2598,10 @@ document.getElementById('process-btn-c')?.addEventListener('click', async (e) =>
         document.getElementById('dashboard-c').classList.remove('hidden');
         document.getElementById('map-container-c').classList.remove('hidden');
         document.getElementById('controls-c').classList.remove('hidden');
-        document.getElementById('chart-wrap-c').classList.remove('hidden');
+
+        // Unhide the Master Wrapper (which automatically displays the chart and sliders inside it)
+        const wrapperC = document.getElementById('fullscreen-wrapper-c');
+        if (wrapperC) wrapperC.classList.remove('hidden');
 
         // Configure the master timeline slider to track total physical distance
         const maxDistC1 = mergedDataC1.length > 0 ? (mergedDataC1[mergedDataC1.length - 1]['Distance'] || 0) - (mergedDataC1[0]['Distance'] || 0) : 0;
@@ -2692,7 +2695,10 @@ document.getElementById('demo-btn-c')?.addEventListener('click', async (e) => {
         document.getElementById('dashboard-c').classList.remove('hidden');
         document.getElementById('map-container-c').classList.remove('hidden');
         document.getElementById('controls-c').classList.remove('hidden');
-        document.getElementById('chart-wrap-c').classList.remove('hidden');
+
+        // Unhide the Master Wrapper (which automatically displays the chart and sliders inside it)
+        const wrapperC = document.getElementById('fullscreen-wrapper-c');
+        if (wrapperC) wrapperC.classList.remove('hidden');
 
         // Configure the master timeline slider to track total physical distance
         const maxDistC1 = mergedDataC1.length > 0 ? (mergedDataC1[mergedDataC1.length - 1]['Distance'] || 0) - (mergedDataC1[0]['Distance'] || 0) : 0;
