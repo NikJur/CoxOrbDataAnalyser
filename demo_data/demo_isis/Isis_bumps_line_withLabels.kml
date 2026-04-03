@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml creator="plotaroute.com http://www.plotaroute.com" xmlns="http://earth.google.com/kml/2.2">
+<Document>
+<name>Isis_bumps_line_withLabels</name>
+<open>1</open>
+<Style id="StartIconStyle">
+<IconStyle id="StartIcon">
+<Icon><href>https://www.plotaroute.com/images/icons/starticon.png</href></Icon>
+</IconStyle>
+<LabelStyle><scale>0.7</scale></LabelStyle>
+</Style>
+<Style id="FinishIconStyle">
+<IconStyle id="FinishIcon">
+<Icon><href>https://www.plotaroute.com/images/icons/finishicon.png</href></Icon>
+</IconStyle>
+<LabelStyle><scale>0.7</scale></LabelStyle>
+</Style>
+<Style id="RoutePath">
+<LineStyle>
+<color>E52975F3</color>
+<width>4</width>
+</LineStyle>
+</Style>
+<Style id="WaypointIconStyle">
+<IconStyle id="WaypointIcon">
+<Icon><href>https://www.plotaroute.com/images/icons/waypointicon.png</href></Icon>
+<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle><scale>0.7</scale></LabelStyle>
+</Style>
+<Style id="DistMarkerStyle">
+<IconStyle id="DistMarkerIcon">
+<Icon><href>https://www.plotaroute.com/images/icons/kmicon.png</href></Icon>
+<hotSpot x="0.5" y="0.5" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle><scale>0.7</scale></LabelStyle>
+</Style>
+<LookAt>
+<longitude>-1.240553</longitude>
+<latitude>51.730327</latitude>
+<range>400</range>
+<tilt>60</tilt>
+<altitudeMode>clampToGround</altitudeMode>
+</LookAt>
+<Folder id="Routenull">
+<name><![CDATA[Unnamed Route]]> </name><description><![CDATA[]]></description><Placemark>
+<name><![CDATA[Fly-Over Tour]]></name>
+<description><![CDATA[]]></description>
+<styleUrl>#RoutePath</styleUrl>
+<LineString id="Route">
+<extrude>0</extrude>
+<tessellate>1</tessellate>
+<coordinates>
+-1.2405528,51.7303273,55
+-1.2406697,51.7304782,55
+-1.2408145,51.7306393,55
+-1.2409272,51.7307905,55
+-1.2410479,51.7309317,55
+-1.2411418,51.7310762,55
+-1.2411707,51.7311476,55
+-1.2412035,51.7313021,55
+-1.2412223,51.7314649,55
+-1.241233,51.7316577,55
+-1.2412357,51.7319035,55
+-1.2412153,51.7320559,55
+-1.2412008,51.732279,55
+-1.2412003,51.732454,55
+-1.2412062,51.7325446,55
+-1.2412249,51.7326111,55
+-1.2412518,51.7326809,55
+-1.241292,51.7327606,55
+-1.241359,51.7328753,55
+-1.2414224,51.732973,55
+-1.2414878,51.7330663,55
+-1.2415361,51.733166,55
+-1.2415843,51.7332789,55
+-1.2416326,51.7333969,55
+-1.2416782,51.7335297,55
+-1.2416917,51.7336077,55
+-1.2417077,51.7336759,55
+-1.2417399,51.7337689,55
+-1.2417801,51.7338886,55
+-1.2418231,51.7340215,55
+-1.2418847,51.7341676,55
+-1.2419411,51.7343271,55
+-1.2420108,51.7345099,55
+-1.2420805,51.7346942,55
+-1.2421449,51.7348903,55
+-1.2422039,51.7350796,55
+-1.2422415,51.7352989,55
+-1.2422576,51.7354849,55
+-1.2422898,51.7356641,55
+-1.2423273,51.7358304,55
+-1.2423729,51.7360248,55
+-1.2424373,51.7362091,55
+-1.2424963,51.736352,55
+-1.2425768,51.7364832,55
+-1.2426895,51.7366292,55
+-1.2427693,51.736745,55
+-1.2428772,51.7368752,55
+-1.2442023,51.7382248,55
+-1.2442559,51.738272,55
+-1.2443336,51.7383235,55
+-1.2444677,51.7383883,55
+-1.2445562,51.7384248,55
+-1.244664,51.7384577,55
+-1.2447922,51.7384856,55
+-1.2449054,51.7385139,55
+-1.2449747,51.7385359,55
+-1.2450605,51.7385909,55
+-1.2451812,51.7386989,55
+-1.2452804,51.7387986,55
+-1.2454145,51.7389315,55
+-1.2455406,51.739066,55
+-1.2456854,51.7392255,55
+-1.2464199,51.7398674,55
+-1.2470833,51.7404489,55
+-1.2472497,51.7406117,55
+-1.2474262,51.7407884,55
+-1.2486603,51.7417782,55
+-1.2488332,51.7419457,55
+-1.2491535,51.7422367,55
+-1.2495075,51.7424958,55
+-1.2502327,51.743048,55
+-1.250506,51.7432424,55
+-1.25101,51.7435515,55
+-1.2515572,51.7438371,55
+-1.2533699,51.7447143,55
+</coordinates>
+</LineString>
+</Placemark>
+<Placemark>
+<name>START</name>
+<styleUrl>#StartIconStyle</styleUrl>
+<Point>
+<coordinates>-1.2405528,51.7303273,55</coordinates>
+</Point>
+</Placemark>
+<Placemark>
+<name><![CDATA[FINISH]]></name>
+<description><![CDATA[FINISH]]></description>
+<styleUrl>#WaypointIconStyle</styleUrl>
+<Point>
+<coordinates>-1.2533699,51.7447143,0</coordinates>
+</Point>
+</Placemark>
+<Placemark>
+<name><![CDATA[FINISH]]></name>
+<styleUrl>#FinishIconStyle</styleUrl>
+<Point>
+<coordinates>-1.2533699,51.7447143,55</coordinates>
+</Point>
+</Placemark>
+</Folder>
+<ScreenOverlay>
+<name><![CDATA[plotaroute.com]]></name>
+<visibility>1</visibility>
+<open>1</open>
+<Icon>
+<href>https://www.plotaroute.com/images/logo34reversev3.png</href>
+</Icon>
+<overlayXY x="0" y="0" xunits="fraction" yunits="fraction"/>
+<screenXY x="0.01" y="0.94" xunits="fraction" yunits="fraction"/>
+<rotationXY x="0" y="0" xunits="fraction" yunits="fraction"/>
+<size x="0" y="0" xunits="fraction" yunits="fraction"/>
+</ScreenOverlay>
+<Snippet><![CDATA[This route was downloaded from <a href="https://www.plotaroute.com">plotaroute.com</a>]]></Snippet>
+</Document>
+</kml>
