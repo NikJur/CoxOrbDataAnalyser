@@ -3159,7 +3159,7 @@ if (loadIsisBtn) {
                 
                 boatMarker = L.circleMarker(isisRoutePoints[0], {
                     radius: 7,
-                    fillColor: '#9B59B6', // Match the Isis purple
+                    fillColor: 'red', // Match the Isis purple
                     color: '#ffffff',
                     weight: 2,
                     fillOpacity: 1,
