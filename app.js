@@ -3104,13 +3104,14 @@ if (loadIsisBtn) {
             for (let i = 0; i < lineStrings.length; i++) {
                 const coordsNode = lineStrings[i].getElementsByTagName("coordinates")[0];
                 if (coordsNode) {
-                    const points = coordsNode.textContent.trim().split(/\s+/).map(coord => {
+                    // saving directly to the global array instead of a temporary variable
+                    isisRoutePoints = coordsNode.textContent.trim().split(/\s+/).map(coord => {
                         const parts = coord.split(',');
                         return [parseFloat(parts[1]), parseFloat(parts[0])]; // Leaflet requires [lat, lon]
                     });
                     
-                    // Draw a dashed purple line to easily distinguish it from uploaded GPX tracks
-                    L.polyline(points, { color: '#9B59B6', weight: 4, dashArray: '5, 8', opacity: 0.9 }).addTo(isisLineLayer);
+                    // Draw a dashed purple line to distinguish it from uploaded GPX tracks
+                    L.polyline(isisRoutePoints, { color: '#9B59B6', weight: 4, dashArray: '5, 8', opacity: 0.9 }).addTo(isisLineLayer);
                 }
             }
 
