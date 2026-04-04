@@ -10,6 +10,8 @@ let boatMarker = null;
 let chartInstance = null;
 let currentSliderIndex = 0; // Tracks the current stroke for the chart's vertical line
 
+let isisRoutePoints = []; // Stores the static KML path for the slider
+
 let primaryRouteLayer = null; // Holds the primary map route (solid or segmented)
 
 let isColorBlindMode = false; // Tracks whether the accessible colour palette is active
@@ -79,6 +81,7 @@ if (menuToggle && navLinks) {
 document.getElementById('process-btn').addEventListener('click', async () => {
     const gpxFile = document.getElementById('gpx-upload').files[0];
     const csvFile = document.getElementById('csv-upload').files[0];
+    const processBtn = document.getElementById('process-btn');
 
     if (!gpxFile) {
         alert("Please upload at least a GPX file to visualize the route.");
@@ -88,13 +91,9 @@ document.getElementById('process-btn').addEventListener('click', async () => {
     try {
         processBtn.innerText = "Processing...";
         
-        // parse the GPX file
+        // Parse the GPX file
         const gpxText = await readFileAsText(gpxFile);
         gpxData = parseGPX(gpxText);
-
-        const chartContainer = document.querySelector('.chart-container');
-        const dashboard = document.getElementById('dashboard');
-        const speedToggleContainer = document.getElementById('speed-toggle-container');
 
         // Did the user upload a CSV?
         if (csvFile) {
@@ -105,6 +104,10 @@ document.getElementById('process-btn').addEventListener('click', async () => {
             mergedData = mergeAsOf(gpxData, csvData, 5);            
             masterMergedData = [...mergedData]; // Captures the backup master copy
 
+            if (mergedData.length === 0) {
+                throw new Error("Could not align GPX and CSV timestamps.");
+            }
+
             // Configure the trimming sliders to match the array length
             const trimMin = document.getElementById('trim-slider-min');
             const trimMax = document.getElementById('trim-slider-max');
@@ -113,87 +116,59 @@ document.getElementById('process-btn').addEventListener('click', async () => {
                 trimMax.max = masterMergedData.length - 1;
                 trimMin.value = 0;
                 trimMax.value = masterMergedData.length - 1;
-                document.getElementById('trim-slider-container').classList.remove('hidden');
             }
 
-            if (mergedData.length === 0) {
-                throw new Error("Could not align GPX and CSV timestamps.");
-            }
-
-            // Un-hide the metric elements and render the chart
-            chartContainer.style.display = 'block';
-            dashboard.style.display = 'flex';
-
-            // Defensively expose the metric elements and the speed toggle
-            if (chartContainer) chartContainer.style.display = 'block';
-            if (dashboard) dashboard.style.display = 'flex';
-            if (speedToggleContainer) {
-                speedToggleContainer.classList.remove('hidden');
-                speedToggleContainer.style.display = 'flex';
-            }
-
-            // Safely expose the metric elements and the speed toggle
-            toggleAnalyticalUI(true);
+            // Unhide analytical UI
+            document.getElementById('fullscreen-wrapper-a')?.classList.remove('hidden');
+            document.getElementById('dashboard')?.classList.remove('hidden');
+            document.getElementById('speed-toggle-container')?.classList.remove('hidden');
 
             calculateSmartThresholds();
-
             initChart(mergedData);
+
         } else {
-            // If no CSV is present, use the temporal GPX data
+            // If no CSV is present, use only the GPX data
             mergedData = gpxData; 
             
-            // Defensively conceal the empty elements and the unsupported speed toggle
-            if (chartContainer) chartContainer.style.display = 'none';
-            if (dashboard) dashboard.style.display = 'none';
-            if (speedToggleContainer) speedToggleContainer.style.display = 'none';
+            // hide analytical UI
+            document.getElementById('fullscreen-wrapper-a')?.classList.add('hidden');
+            document.getElementById('dashboard')?.classList.add('hidden');
+            document.getElementById('speed-toggle-container')?.classList.add('hidden');
             
             if (chartInstance) {
                 chartInstance.destroy();
                 chartInstance = null;
             }
-
-            // Safely conceal the empty elements and the unsupported speed toggle
-            toggleAnalyticalUI(false);
-            // Update the map without chart dependencies
-            initMap(mergedData);
-
         }
-        /**
-         * Master Timeline Configuration
-         * Exposes the slider and audio controls once the data arrays are populated.
-         * Binds the maximum slider value to the length of the newly processed dataset,
-         * allowing the user to scrub the map and chart even without an audio track.
-         */
+        
+        // Expose the primary replay container
+        document.getElementById('replay-section')?.classList.remove('hidden');
+        
+        // Master Timeline Configuration
         const audioContainer = document.getElementById('audio-container');
         const timeSlider = document.getElementById('time-slider');
         
         if (mergedData.length > 0) {
-            if (audioContainer) {
-                audioContainer.classList.remove('hidden');
-                audioContainer.style.display = 'flex';
-            }
+            // Unhide the slider controls
+            if (audioContainer) audioContainer.classList.remove('hidden');
             
+            // Bind the slider maximum length to the new dataset
             if (timeSlider) {
                 timeSlider.max = mergedData.length - 1;
                 timeSlider.value = 0;
-                
-                // Resets the blue gradient track to zero for the new file
-                if (typeof updateSliderFill === 'function') {
-                    updateSliderFill(); 
-                }
+                if (typeof updateSliderFill === 'function') updateSliderFill(); 
             }
         }
 
-        // Expose replay section
-        replaySection.classList.remove('hidden');
-        
-        // Initialize universal UI components
+        // Initialise mapping and audio
         initMap(mergedData);
         setupAudio();
         
-        timeSlider.max = mergedData.length - 1;
+        // Force map resize to ensure tiles load correctly after unhiding the container
+        setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(); }, 100);
         
         processBtn.innerText = "Process & Merge Data";
+
     } catch (error) {
         console.error(error);
         alert(`Error processing data: ${error.message}`);
@@ -884,26 +859,65 @@ function updateUI(index) {
 
 /**
  * Event Listener for manual slider dragging.
- * Updates the UI and forces the audio player to seek to the correct corresponding timestamp.
- * Integrates mathematical wrapping to handle the looping virtual timeline for the demo.
+ * Updates the UI, syncs the audio player timestamp, and moves the boat marker.
+ * Intelligently switches between normal GPS data and the static Isis KML route.
  */
 timeSlider.addEventListener('input', (e) => {
-    const index = e.target.value;
-    updateUI(index);
+    const index = parseInt(e.target.value, 10);
     
-    // Ensure data exists and an audio file is loaded before attempting to calculate time
-    if (mergedData.length > 0 && audioPlayer.src) {
-        const targetSeconds = mergedData[index].seconds_elapsed || 0;
+    // Scenario A: Normal GPS Data is loaded (Prioritise this if both exist)
+    if (typeof mergedData !== 'undefined' && mergedData && mergedData.length > 0 && mergedData[index]) {
+        const currentPoint = mergedData[index];
         
-        if (isVirtualAudioLoop && baseAudioDuration > 0) {
-            // Calculate exactly which loop we should be on, and the precise second within that loop
-            virtualLoopCount = Math.floor(targetSeconds / baseAudioDuration);
-            audioPlayer.currentTime = targetSeconds % baseAudioDuration;
-            lastPlaybackTime = audioPlayer.currentTime; // Prevent false loop triggers
-        } else {
-            // Standard linear audio seeking for manual uploads
-            audioPlayer.currentTime = targetSeconds;
+        // Update Dashboard and Chart (using your existing function)
+        if (typeof updateUI === 'function') {
+            updateUI(index);
         }
+        
+        // Move the boat marker
+        if (boatMarker) {
+            boatMarker.setLatLng([currentPoint.lat, currentPoint.lon]);
+        }
+        
+        // Ensure the audio player seeks to the correct timestamp
+        if (typeof audioPlayer !== 'undefined' && audioPlayer && audioPlayer.src) {
+            const targetSeconds = currentPoint.seconds_elapsed || 0;
+            
+            if (typeof isVirtualAudioLoop !== 'undefined' && isVirtualAudioLoop && typeof baseAudioDuration !== 'undefined' && baseAudioDuration > 0) {
+                // Calculate which loop we should be on for the demo
+                virtualLoopCount = Math.floor(targetSeconds / baseAudioDuration);
+                audioPlayer.currentTime = targetSeconds % baseAudioDuration;
+                lastPlaybackTime = audioPlayer.currentTime; // Prevent false loop triggers
+            } else {
+                // Standard linear audio seeking for manual uploads
+                audioPlayer.currentTime = targetSeconds;
+            }
+        }
+    } 
+    // Scenario B: only the static Isis Line is loaded
+    else if (typeof isisRoutePoints !== 'undefined' && isisRoutePoints && isisRoutePoints.length > 0 && isisRoutePoints[index]) {
+        // Move the boat down the purple line
+        if (boatMarker) {
+            boatMarker.setLatLng(isisRoutePoints[index]);
+        }
+        
+        // Clear the dashboard stats since we are just scrubbing a static map line
+        const timeEl = document.getElementById('val-time');
+        if (timeEl) timeEl.innerText = "--:--";
+        
+        const rateEl = document.getElementById('val-rate');
+        if (rateEl) rateEl.innerText = "--.-";
+        
+        const splitEl = document.getElementById('val-split');
+        if (splitEl) splitEl.innerText = "--:--";
+        
+        const distEl = document.getElementById('val-dist');
+        if (distEl) distEl.innerText = "--";
+    }
+
+    // Sync the blue gradient fill behind the slider thumb (if applicable)
+    if (typeof updateSliderFill === 'function') {
+        updateSliderFill();
     }
 });
 
@@ -1248,7 +1262,7 @@ function calculateSmartThresholds() {
 }
 
 /**
- * Fetches pre-uploaded demo data from the repository and initializes the application.
+ * Fetches pre-uploaded demo data from the repository and initialises the application.
  * Uses the native Fetch API to retrieve files directly from the demo_data directory.
  * @param {Event} e - The click event object to prevent default page jumping.
  */
@@ -1277,23 +1291,27 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
         mergedData = mergeAsOf(gpxData, csvData, 5);
         masterMergedData = [...mergedData]; // Captures the master copy
 
-            // Configure the trimming sliders to match the array length
-            const trimMin = document.getElementById('trim-slider-min');
-            const trimMax = document.getElementById('trim-slider-max');
-            if (trimMin && trimMax) {
-                trimMin.max = masterMergedData.length - 1;
-                trimMax.max = masterMergedData.length - 1;
-                trimMin.value = 0;
-                trimMax.value = masterMergedData.length - 1;
-                document.getElementById('trim-slider-container').classList.remove('hidden');
-            }
+        // Configure the trimming sliders to match the array length
+        const trimMin = document.getElementById('trim-slider-min');
+        const trimMax = document.getElementById('trim-slider-max');
+        if (trimMin && trimMax) {
+            trimMin.max = masterMergedData.length - 1;
+            trimMax.max = masterMergedData.length - 1;
+            trimMin.value = 0;
+            trimMax.value = masterMergedData.length - 1;
+            document.getElementById('trim-slider-container').classList.remove('hidden');
+        }
 
         if (mergedData.length === 0) {
             throw new Error("Could not align GPX and CSV timestamps.");
         }
 
-        // Expose the replay container to allow Leaflet and Chart.js to calculate dimensions
-        replaySection.classList.remove('hidden');
+        // UI
+        document.getElementById('replay-section')?.classList.remove('hidden');
+        document.getElementById('fullscreen-wrapper-a')?.classList.remove('hidden');
+        document.getElementById('dashboard')?.classList.remove('hidden');
+        document.getElementById('speed-toggle-container')?.classList.remove('hidden');
+        document.getElementById('audio-container')?.classList.remove('hidden');
 
         calculateSmartThresholds();
 
@@ -1302,42 +1320,39 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
         initChart(mergedData);
 
         // Safely expose all analytical UI elements including the speed toggle
-        toggleAnalyticalUI(true);
-
-        // Fetch and render the comparison GPX automatically for the demo
-        try {
-            const compareResponse = await fetch('demo_data/example_comparison.gpx');
-            if (compareResponse.ok) {
-                const compareText = await compareResponse.text();
-                const compareData = parseGPX(compareText);
-                
-                renderCompareMap(compareData); // Renders the second map automatically
-            }
-        } catch (err) {
-            console.warn("Could not load comparison demo data.", err);
+        if (typeof toggleAnalyticalUI === 'function') {
+            toggleAnalyticalUI(true);
         }
         
         // Configure the audio player with the looped demo recording
-        audioContainer.classList.remove('hidden');
-        audioPlayer.src = 'demo_data/example_recording.m4a';
-        audioPlayer.loop = true; // Instructs the browser to seamlessly restart the audio
+        const audioPlayer = document.getElementById('audio-player');
+        if (audioPlayer) {
+            audioPlayer.src = 'demo_data/example_recording.m4a';
+            audioPlayer.loop = true; // Instructs the browser to seamlessly restart the audio
+            
+            // Reset virtual timeline trackers
+            isVirtualAudioLoop = true;
+            virtualLoopCount = 0;
+            lastPlaybackTime = 0;
+            
+            // Capture the exact duration of the track once the browser loads the file metadata
+            audioPlayer.onloadedmetadata = () => {
+                baseAudioDuration = audioPlayer.duration;
+            };
+        }
         
-        // Reset virtual timeline trackers
-        isVirtualAudioLoop = true;
-        virtualLoopCount = 0;
-        lastPlaybackTime = 0;
-        
-        // Capture the exact duration of the track once the browser loads the file metadata
-        audioPlayer.onloadedmetadata = () => {
-            baseAudioDuration = audioPlayer.duration;
-        };
-        
-        timeSlider.max = mergedData.length - 1;
+        const timeSlider = document.getElementById('time-slider');
+        if (timeSlider) {
+            timeSlider.max = mergedData.length - 1;
+        }
+
+        // Force a map resize
+        setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(); }, 100);
 
         // --- MULTI-ROUTE COMPARISON DEMO SETUP ---
-        document.getElementById('compare-map-container').classList.remove('hidden');
+        document.getElementById('compare-map-container')?.classList.remove('hidden');
 
-        // Initialize the secondary comparison map if it does not exist
+        // Initialise the secondary comparison map if it does not exist
         if (!compareMapInstance) {
             const startLoc = [gpxData[0].lat, gpxData[0].lon];
             compareMapInstance = L.map('compare-map').setView(startLoc, 13);
@@ -1352,7 +1367,7 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
             const resizeObserver = new ResizeObserver(() => {
                 if (compareMapInstance) compareMapInstance.invalidateSize();
             });
-            resizeObserver.observe(container);
+            if (container) resizeObserver.observe(container);
         }
 
         try {
@@ -1363,7 +1378,8 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
                     compareLayers[i] = null;
                 }
                 // Reset toggles to unchecked to start fresh
-                document.getElementById(`toggle-compare-${i+1}`).checked = false;
+                const toggle = document.getElementById(`toggle-compare-${i+1}`);
+                if (toggle) toggle.checked = false;
             }
 
             let bounds = L.latLngBounds([]);
@@ -1372,7 +1388,8 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
             const latlngs1 = gpxData.map(pt => [pt.lat, pt.lon]);
             const poly1 = L.polyline(latlngs1, { color: compareColors[0], weight: 3 });
             compareLayers[0] = poly1;
-            document.getElementById('toggle-compare-1').checked = true; // Visually switch toggle ON
+            const toggle1 = document.getElementById('toggle-compare-1');
+            if (toggle1) toggle1.checked = true; // Visually switch toggle ON
             poly1.addTo(compareMapInstance);
             bounds.extend(poly1.getBounds());
 
@@ -1385,7 +1402,8 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
                 
                 const poly2 = L.polyline(latlngs2, { color: compareColors[1], weight: 3 });
                 compareLayers[1] = poly2;
-                document.getElementById('toggle-compare-2').checked = true; // Visually switch toggle ON
+                const toggle2 = document.getElementById('toggle-compare-2');
+                if (toggle2) toggle2.checked = true; // Visually switch toggle ON
                 poly2.addTo(compareMapInstance);
                 bounds.extend(poly2.getBounds());
             }
@@ -1398,7 +1416,6 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
         } catch (err) {
             console.warn("Could not load secondary comparison demo data.", err);
         }
-
 
         demoBtn.innerText = "Load Demo Data"; // Reset button text on success
     } catch (error) {
@@ -1527,6 +1544,13 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
     csvData = [];
     mergedData = [];
     currentSliderIndex = 0;
+
+    // Remove the Isis overlay if it is active
+    if (mapInstance && mapInstance.hasLayer(isisLineLayer)) {
+        mapInstance.removeLayer(isisLineLayer);
+    }
+    const loadIsisBtn = document.getElementById('load-isis-btn');
+    if (loadIsisBtn) loadIsisBtn.innerText = "Load Isis Race Line";
 
     // Reset the virtual audio loop state to prevent math errors on future uploads
     isVirtualAudioLoop = false;
@@ -3024,3 +3048,142 @@ function applyTrimDistanceC(prefix, masterData) {
 // Bind the change events to the Boat 1 and Boat 2 distance input boxes
 document.getElementById('trim-dist-c1')?.addEventListener('change', () => applyTrimDistanceC('c1', masterMergedDataC1));
 document.getElementById('trim-dist-c2')?.addEventListener('change', () => applyTrimDistanceC('c2', masterMergedDataC2));
+
+
+/**
+ * Logic: Oxford Isis Race Line Overlay
+ * Fetches, parses, and draws the static Isis Bumps course from a KML file.
+ * Includes support for LineString trajectories and Point-based placemarks (Start/Finish).
+ */
+let isisLineLayer = L.featureGroup();
+
+const loadIsisBtn = document.getElementById('load-isis-btn');
+if (loadIsisBtn) {
+    loadIsisBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        
+        // Ensure the parent section, map, and slider controls are visible
+        document.getElementById('replay-section')?.classList.remove('hidden');
+        document.getElementById('map-container').style.display = 'block';
+        document.getElementById('audio-container')?.classList.remove('hidden');
+
+        // Hide the empty chart and dashboard if no actual GPX data has been processed yet
+        // (This prevents hiding your data if you click "Load Isis Line" AFTER loading a GPX)
+        if (typeof chartInstance === 'undefined' || !chartInstance) {
+            document.getElementById('fullscreen-wrapper-a')?.classList.add('hidden');
+            document.getElementById('dashboard')?.classList.add('hidden');
+        }
+        
+        // Initialise a blank map centered near Oxford if one doesn't exist yet
+        if (!mapInstance) {
+            mapInstance = L.map('map').setView([51.737, -1.245], 14);
+            mapInstance.addControl(new L.Control.Fullscreen());
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(mapInstance);
+        }
+
+        // If the layer is already drawn, don't fetch and draw it twice
+        if (mapInstance.hasLayer(isisLineLayer)) {
+            mapInstance.fitBounds(isisLineLayer.getBounds());
+            return;
+        }
+
+        loadIsisBtn.innerText = "Loading...";
+
+        try {
+            const response = await fetch('demo_data/demo_isis/Isis_bumps_line_withLabels.kml');
+            if (!response.ok) throw new Error("Could not retrieve the Isis KML file.");
+            
+            const kmlText = await response.text();
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(kmlText, "text/xml");
+            
+            // Parse the main racing line (LineString)
+            const lineStrings = xmlDoc.getElementsByTagName("LineString");
+            for (let i = 0; i < lineStrings.length; i++) {
+                const coordsNode = lineStrings[i].getElementsByTagName("coordinates")[0];
+                if (coordsNode) {
+                    // saving directly to the global array instead of a temporary variable
+                    isisRoutePoints = coordsNode.textContent.trim().split(/\s+/).map(coord => {
+                        const parts = coord.split(',');
+                        return [parseFloat(parts[1]), parseFloat(parts[0])]; // Leaflet requires [lat, lon]
+                    });
+                    
+                    // Draw a dashed purple line to distinguish it from uploaded GPX tracks
+                    L.polyline(isisRoutePoints, { color: '#9B59B6', weight: 4, dashArray: '5, 8', opacity: 0.9 }).addTo(isisLineLayer);
+                }
+            }
+
+            // Parse the markers (Placemarks containing a Point)
+            const placemarks = xmlDoc.getElementsByTagName("Placemark");
+            for (let i = 0; i < placemarks.length; i++) {
+                const pointNode = placemarks[i].getElementsByTagName("Point")[0];
+                const nameNode = placemarks[i].getElementsByTagName("name")[0];
+                
+                if (pointNode && nameNode) {
+                    // Clean CDATA tags out of the text if they exist
+                    const name = nameNode.textContent.replace("<![CDATA[", "").replace("]]>", "").trim();
+                    const coordsNode = pointNode.getElementsByTagName("coordinates")[0];
+                    
+                    if (coordsNode) {
+                        const parts = coordsNode.textContent.trim().split(',');
+                        if (parts.length >= 2) {
+                            const lat = parseFloat(parts[1]);
+                            const lon = parseFloat(parts[0]);
+                            
+                            // Create a small circular marker for the waypoint
+                            const marker = L.circleMarker([lat, lon], {
+                                radius: 6,
+                                fillColor: '#9B59B6',
+                                color: '#ffffff',
+                                weight: 2,
+                                fillOpacity: 1
+                            });
+                            
+                            // Attach the name as a hover tooltip
+                            marker.bindTooltip(name, { direction: 'top', offset: [0, -5] });
+                            marker.addTo(isisLineLayer);
+                        }
+                    }
+                }
+            }
+
+            // Add the compiled layer to the map and zoom to fit it
+            isisLineLayer.addTo(mapInstance);
+            mapInstance.fitBounds(isisLineLayer.getBounds());
+
+            // --- SPAWN THE BOAT & CONFIGURE THE SLIDER ---
+            if (isisRoutePoints.length > 0) {
+                if (boatMarker) boatMarker.remove(); // Clear any existing boat
+                
+                boatMarker = L.circleMarker(isisRoutePoints[0], {
+                    radius: 7,
+                    fillColor: 'red', // Match the Isis purple
+                    color: '#ffffff',
+                    weight: 2,
+                    fillOpacity: 1,
+                    zIndexOffset: 1000
+                }).addTo(mapInstance);
+
+                boatMarker.bringToFront();
+
+                const timeSlider = document.getElementById('time-slider');
+                if (timeSlider) {
+                    timeSlider.max = isisRoutePoints.length - 1;
+                    timeSlider.value = 0;
+                }
+            }
+            
+            loadIsisBtn.innerText = "Isis Line Loaded";
+            
+            // Force a canvas recalculation in case the div was just unhidden
+            setTimeout(() => mapInstance.invalidateSize(), 100);
+
+        } catch (error) {
+            console.error("Isis Line Parsing Error:", error);
+            alert("Could not load the Isis race line.");
+            loadIsisBtn.innerText = "Load Isis Race Line";
+        }
+    });
+}
