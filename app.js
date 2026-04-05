@@ -3135,14 +3135,20 @@ if (loadIsisBtn) {
                             // Create a small circular marker for the waypoint
                             const marker = L.circleMarker([lat, lon], {
                                 radius: 6,
-                                fillColor: '#9B59B6',
+                                fillColor: '#25476D', 
                                 color: '#ffffff',
                                 weight: 2,
                                 fillOpacity: 1
                             });
                             
-                            // Attach the name as a hover tooltip
-                            marker.bindTooltip(name, { direction: 'top', offset: [0, -5] });
+                            // Attach the name as a permanent tooltip with a custom CSS class
+                            marker.bindTooltip(name, { 
+                                permanent: true, 
+                                direction: 'right', // 'right' prevents the label from blocking the racing line
+                                offset: [8, 0], 
+                                className: 'coxorb-permanent-label' 
+                            });
+
                             marker.addTo(isisLineLayer);
                         }
                     }
