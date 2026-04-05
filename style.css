@@ -866,3 +866,31 @@ audio, #audio-player {
 #dashboard-c {
     margin-top: 1.0rem;
 }
+
+
+/* CoxOrb Permanent Map Labels (Isis Course) */
+.coxorb-permanent-label {
+    background-color: #25476D;
+    color: #ffffff;
+    border: 2px solid #F08118;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 4px 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    white-space: nowrap;
+}
+
+/* Colour the little directional triangle pointing to the dot to match the orange border */
+.coxorb-permanent-label::before {
+    border-right-color: #F08118 !important;
+}
+.leaflet-tooltip-left.coxorb-permanent-label::before {
+    border-left-color: #F08118 !important;
+}
+.leaflet-tooltip-top.coxorb-permanent-label::before {
+    border-top-color: #F08118 !important;
+}
+.leaflet-tooltip-bottom.coxorb-permanent-label::before {
+    border-bottom-color: #F08118 !important;
+}
