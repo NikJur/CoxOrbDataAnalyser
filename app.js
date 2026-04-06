@@ -3193,3 +3193,81 @@ if (loadIsisBtn) {
         }
     });
 }
+
+
+/**
+ * Event Listener for the Section C "Clear" button.
+ * Resets global comparison arrays, safely destroys the dual-chart and map instances, 
+ * clears the physical file inputs, and re-conceals the analytical UI.
+ */
+document.getElementById('clear-compare-c-btn')?.addEventListener('click', () => {
+    // Wipe the global tracking arrays and variables
+    masterMergedDataC1 = [];
+    masterMergedDataC2 = [];
+    mergedDataC1 = [];
+    mergedDataC2 = [];
+    currentSliderPercentageC = 0;
+
+    // Reset the four physical file input fields
+    const fileInputs = ['gpx-file-1', 'csv-file-1', 'gpx-file-2', 'csv-file-2'];
+    fileInputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+
+    // Safely destroy the Chart.js instance to free up memory
+    if (chartInstanceC) {
+        chartInstanceC.destroy();
+        chartInstanceC = null;
+    }
+
+    // Safely destroy the Leaflet map instance and its associated markers
+    if (mapInstanceC) {
+        mapInstanceC.remove();
+        mapInstanceC = null;
+        boatMarkerC1 = null;
+        boatMarkerC2 = null;
+        polylineC1 = null;
+        polylineC2 = null;
+        trimStartMarkerC1 = null;
+        trimEndMarkerC1 = null;
+        trimStartMarkerC2 = null;
+        trimEndMarkerC2 = null;
+    }
+
+    // Reset the dashboard text metrics back to their default empty states
+    const defaultMetrics = {
+        'val-time-c': '0.0%',
+        'val-dist1-c': '0 m',
+        'val-dist2-c': '0 m',
+        'val-split1-c': '--:--',
+        'val-split2-c': '--:--',
+        'val-rate1-c': '--.-',
+        'val-rate2-c': '--.-'
+    };
+    
+    Object.keys(defaultMetrics).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = defaultMetrics[id];
+    });
+
+    // Reset the primary scrubbing slider
+    const sliderC = document.getElementById('time-slider-c');
+    if (sliderC) {
+        sliderC.value = 0;
+        sliderC.max = 100;
+    }
+
+    // Re-apply the 'hidden' class to conceal the visual containers
+    const containersToHide = [
+        'dashboard-c', 
+        'map-container-c', 
+        'controls-c', 
+        'trim-sliders-container-c', 
+        'fullscreen-wrapper-c'
+    ];
+    
+    containersToHide.forEach(id => {
+        document.getElementById(id)?.classList.add('hidden');
+    });
+});
