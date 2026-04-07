@@ -602,19 +602,6 @@ input:checked + .slider:before { transform: translateX(20px); }
     letter-spacing: 0.5px;
 }
 
-/* label without h3 tag (fallback) */
-#audio-container:not(:has(h3))::before {
-    content: 'Coxswain Audio Recording';
-    width: 100%;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--primary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: -30px;
-    text-align: center;
-}
-
 /* Base styling for the native player element */
 audio, #audio-player {
     width: 100%;
