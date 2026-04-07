@@ -2422,8 +2422,8 @@ function initChartC(data1, data2) {
             datasets: [
                 { label: 'Boat 1 Split', data: split1, borderColor: '#F08118', borderWidth: 2, yAxisID: 'y1', order: 1 },
                 { label: 'Boat 2 Split', data: split2, borderColor: '#25476D', borderWidth: 2, yAxisID: 'y1', order: 2 },
-                { label: 'Boat 1 Rate', data: rate1, borderColor: 'rgba(240, 129, 24, 0.4)', borderWidth: 1.5, yAxisID: 'y', order: 3 },
-                { label: 'Boat 2 Rate', data: rate2, borderColor: 'rgba(37, 71, 109, 0.4)', borderWidth: 1.5, yAxisID: 'y', order: 4 }
+                { label: 'Boat 1 Rate', data: rate1, borderColor: 'rgba(240, 129, 24, 0.4)', borderWidth: 1.5, yAxisID: 'y', order: 3, hidden: true}, //toggled off by default
+                { label: 'Boat 2 Rate', data: rate2, borderColor: 'rgba(37, 71, 109, 0.4)', borderWidth: 1.5, yAxisID: 'y', order: 4, hidden: true }
             ]
         },
         options: {
