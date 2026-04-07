@@ -805,16 +805,34 @@ if (wrapperC) {
 
 /**
  * Loads user-uploaded audio and resets any virtual loop states.
+ * * Dynamically hides audio-specific playback controls if no audio file is provided.
  * Prepares the audio container for standard linear playback.
  */
 function setupAudio() {
     const file = audioUpload.files[0];
+    const timelineLabel = document.getElementById('timeline-label');
+    const playbackBtns = document.getElementById('playback-buttons');
+    const volumeBtns = document.getElementById('volume-controls');
+
     if (file) {
+        // AUDIO MODE: Show all controls and update label
         audioContainer.classList.remove('hidden');
         const url = URL.createObjectURL(file);
         audioPlayer.src = url;
         audioPlayer.loop = false; // Ensure manual uploads do not loop
         isVirtualAudioLoop = false; // Disable virtual timeline math
+
+        if (timelineLabel) timelineLabel.innerText = "Coxswain Audio Recording";
+        if (playbackBtns) playbackBtns.style.display = 'flex';
+        if (volumeBtns) volumeBtns.style.display = 'flex';
+    } else {
+        // SILENT MODE: Hide audio controls, leave only the slider and label
+        audioPlayer.src = '';
+        audioPlayer.loop = false;
+        
+        if (timelineLabel) timelineLabel.innerText = "Route Progress";
+        if (playbackBtns) playbackBtns.style.display = 'none';
+        if (volumeBtns) volumeBtns.style.display = 'none';
     }
 }
 
@@ -1330,6 +1348,14 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
             audioPlayer.src = 'demo_data/example_recording.m4a';
             audioPlayer.loop = true; // Instructs the browser to seamlessly restart the audio
             
+            // -Force Audio UI to appear for demo audio
+            const timelineLabel = document.getElementById('timeline-label');
+            const playbackBtns = document.getElementById('playback-buttons');
+            const volumeBtns = document.getElementById('volume-controls');
+            if (timelineLabel) timelineLabel.innerText = "Coxswain Audio Recording";
+            if (playbackBtns) playbackBtns.style.display = 'flex';
+            if (volumeBtns) volumeBtns.style.display = 'flex';
+
             // Reset virtual timeline trackers
             isVirtualAudioLoop = true;
             virtualLoopCount = 0;
@@ -3066,6 +3092,14 @@ if (loadIsisBtn) {
         document.getElementById('replay-section')?.classList.remove('hidden');
         document.getElementById('map-container').style.display = 'block';
         document.getElementById('audio-container')?.classList.remove('hidden');
+
+        // Force audio silent mode for Oxford Isis line (i.e., no audio controls or accidental playback)
+        const timelineLabel = document.getElementById('timeline-label');
+        const playbackBtns = document.getElementById('playback-buttons');
+        const volumeBtns = document.getElementById('volume-controls');
+        if (timelineLabel) timelineLabel.innerText = "Route Progress";
+        if (playbackBtns) playbackBtns.style.display = 'none';
+        if (volumeBtns) volumeBtns.style.display = 'none';
 
         // Hide the empty chart and dashboard if no actual GPX data has been processed yet
         // (This prevents hiding your data if you click "Load Isis Line" AFTER loading a GPX)
