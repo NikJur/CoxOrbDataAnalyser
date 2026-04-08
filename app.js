@@ -1188,6 +1188,7 @@ function toggleAnalyticalUI(isVisible) {
     const speedToggleView = document.getElementById('speed-toggle-container');
     const fairwayToggleView = document.getElementById('fairway-toggle-container'); // Queries the KML toggle
     const buoysToggleView = document.getElementById('buoys-toggle-container'); // Queries the buoys toggle
+    const isisToggleView = document.getElementById('isis-toggle-container');
 
     // Defensively apply styles only if the node successfully exists in the DOM
     if (chartView) {
@@ -1214,6 +1215,12 @@ function toggleAnalyticalUI(isVisible) {
     if (buoysToggleView) {
         buoysToggleView.style.display = isVisible ? 'flex' : 'none';
         if (isVisible) buoysToggleView.classList.remove('hidden');
+    }
+
+    // Applies the visibility state to the Isis route toggle
+    if (isisToggleView) {
+        isisToggleView.style.display = isVisible ? 'flex' : 'none';
+        if (isVisible) isisToggleView.classList.remove('hidden');
     }
 
 }
@@ -1627,6 +1634,10 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
 
     // Reset the independent buoys toggle
     document.getElementById('toggle-buoys').checked = false;
+
+    // Reset the independent Isis route toggle
+    const toggleIsisLine = document.getElementById('toggle-isis-line');
+    if (toggleIsisLine) toggleIsisLine.checked = false;
 
     // Hide the visualization containers again
     replaySection.classList.add('hidden');
@@ -3080,151 +3091,147 @@ document.getElementById('trim-dist-c2')?.addEventListener('change', () => applyT
  * Logic: Oxford Isis Race Line Overlay
  * Fetches, parses, and draws the static Isis Bumps course from a KML file.
  * Includes support for LineString trajectories and Point-based placemarks (Start/Finish).
+ * Shared Logic: Fetch and parse the Isis KML file exactly once.
+ * Populates the map layer and the coordinate array.
  */
 let isisLineLayer = L.featureGroup();
+let isisDataLoaded = false;
 
+async function fetchIsisData() {
+    if (isisDataLoaded) return; // Prevent duplicate network requests
+
+    try {
+        const response = await fetch('demo_data/demo_isis/Isis_bumps_line_withLabels.kml');
+        if (!response.ok) throw new Error("Could not retrieve the Isis KML file.");
+        
+        const kmlText = await response.text();
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(kmlText, "text/xml");
+        
+        // Parse LineString and populate isisRoutePoints
+        const lineStrings = xmlDoc.getElementsByTagName("LineString");
+        for (let i = 0; i < lineStrings.length; i++) {
+            const coordsNode = lineStrings[i].getElementsByTagName("coordinates")[0];
+            if (coordsNode) {
+                isisRoutePoints = coordsNode.textContent.trim().split(/\s+/).map(coord => {
+                    const parts = coord.split(',');
+                    return [parseFloat(parts[1]), parseFloat(parts[0])];
+                });
+                
+                L.polyline(isisRoutePoints, { color: '#9B59B6', weight: 4, dashArray: '5, 8', opacity: 0.9 }).addTo(isisLineLayer);
+            }
+        }
+
+        // Parse Permanent Markers
+        const placemarks = xmlDoc.getElementsByTagName("Placemark");
+        for (let i = 0; i < placemarks.length; i++) {
+            const pointNode = placemarks[i].getElementsByTagName("Point")[0];
+            const nameNode = placemarks[i].getElementsByTagName("name")[0];
+            
+            if (pointNode && nameNode) {
+                const name = nameNode.textContent.replace("<![CDATA[", "").replace("]]>", "").trim();
+                const coordsNode = pointNode.getElementsByTagName("coordinates")[0];
+                
+                if (coordsNode) {
+                    const parts = coordsNode.textContent.trim().split(',');
+                    if (parts.length >= 2) {
+                        const marker = L.circleMarker([parseFloat(parts[1]), parseFloat(parts[0])], {
+                            radius: 6, fillColor: '#25476D', color: '#ffffff', weight: 2, fillOpacity: 1
+                        });
+                        
+                        marker.bindTooltip(name, { 
+                            permanent: true, direction: 'right', offset: [8, 0], className: 'coxorb-permanent-label' 
+                        });
+                        marker.addTo(isisLineLayer);
+                    }
+                }
+            }
+        }
+        isisDataLoaded = true;
+    } catch (error) {
+        console.error("Isis Line Parsing Error:", error);
+    }
+}
+
+/**
+ * Isis Component 1: The Passive Overlay Toggle
+ */
+const toggleIsisLine = document.getElementById('toggle-isis-line');
+if (toggleIsisLine) {
+    toggleIsisLine.addEventListener('change', async (e) => {
+        if (!mapInstance) return;
+        
+        if (e.target.checked) {
+            await fetchIsisData();
+            isisLineLayer.addTo(mapInstance);
+        } else {
+            mapInstance.removeLayer(isisLineLayer);
+        }
+    });
+}
+
+/**
+ * Isis Component 2: The Interactive "Demo" Button
+ */
 const loadIsisBtn = document.getElementById('load-isis-btn');
 if (loadIsisBtn) {
     loadIsisBtn.addEventListener('click', async (e) => {
         e.preventDefault();
         
-        // Ensure the parent section, map, and slider controls are visible
+        // Reveal UI and Initialise Blank Map
         document.getElementById('replay-section')?.classList.remove('hidden');
         document.getElementById('map-container').style.display = 'block';
         document.getElementById('audio-container')?.classList.remove('hidden');
 
-        // Force audio silent mode for Oxford Isis line (i.e., no audio controls or accidental playback)
-        const timelineLabel = document.getElementById('timeline-label');
-        const playbackBtns = document.getElementById('playback-buttons');
-        const volumeBtns = document.getElementById('volume-controls');
-        if (timelineLabel) timelineLabel.innerText = "Route Progress";
-        if (playbackBtns) playbackBtns.style.display = 'none';
-        if (volumeBtns) volumeBtns.style.display = 'none';
-
-        // Hide the empty chart and dashboard if no actual GPX data has been processed yet
-        // (This prevents hiding your data if you click "Load Isis Line" AFTER loading a GPX)
         if (typeof chartInstance === 'undefined' || !chartInstance) {
             document.getElementById('fullscreen-wrapper-a')?.classList.add('hidden');
             document.getElementById('dashboard')?.classList.add('hidden');
         }
-        
-        // Initialise a blank map centered near Oxford if one doesn't exist yet
+
         if (!mapInstance) {
             mapInstance = L.map('map').setView([51.737, -1.245], 14);
             mapInstance.addControl(new L.Control.Fullscreen());
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(mapInstance);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(mapInstance);
         }
 
-        // If the layer is already drawn, don't fetch and draw it twice
-        if (mapInstance.hasLayer(isisLineLayer)) {
-            mapInstance.fitBounds(isisLineLayer.getBounds());
-            return;
-        }
+        // Force Silent Mode for the Audio Container
+        const timelineLabel = document.getElementById('timeline-label');
+        const playbackBtns = document.getElementById('playback-buttons');
+        const volumeBtns = document.getElementById('volume-controls');
+        
+        if (timelineLabel) timelineLabel.innerText = "Route Progress";
+        if (playbackBtns) playbackBtns.style.display = 'none';
+        if (volumeBtns) volumeBtns.style.display = 'none';
 
+        // Fetch Data and Add Layer
         loadIsisBtn.innerText = "Loading...";
+        await fetchIsisData();
+        
+        isisLineLayer.addTo(mapInstance);
+        mapInstance.fitBounds(isisLineLayer.getBounds());
+        
+        // Visually sync the toggle switch so the UI matches the map state
+        if (toggleIsisLine) toggleIsisLine.checked = true;
 
-        try {
-            const response = await fetch('demo_data/demo_isis/Isis_bumps_line_withLabels.kml');
-            if (!response.ok) throw new Error("Could not retrieve the Isis KML file.");
+        // Spawn the Interactive Boat & Configure Slider
+        if (isisRoutePoints.length > 0) {
+            if (boatMarker) boatMarker.remove(); 
             
-            const kmlText = await response.text();
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(kmlText, "text/xml");
-            
-            // Parse the main racing line (LineString)
-            const lineStrings = xmlDoc.getElementsByTagName("LineString");
-            for (let i = 0; i < lineStrings.length; i++) {
-                const coordsNode = lineStrings[i].getElementsByTagName("coordinates")[0];
-                if (coordsNode) {
-                    // saving directly to the global array instead of a temporary variable
-                    isisRoutePoints = coordsNode.textContent.trim().split(/\s+/).map(coord => {
-                        const parts = coord.split(',');
-                        return [parseFloat(parts[1]), parseFloat(parts[0])]; // Leaflet requires [lat, lon]
-                    });
-                    
-                    // Draw a dashed purple line to distinguish it from uploaded GPX tracks
-                    L.polyline(isisRoutePoints, { color: '#9B59B6', weight: 4, dashArray: '5, 8', opacity: 0.9 }).addTo(isisLineLayer);
-                }
+            boatMarker = L.circleMarker(isisRoutePoints[0], {
+                radius: 7, fillColor: 'red', color: '#ffffff', weight: 2, fillOpacity: 1, zIndexOffset: 1000
+            }).addTo(mapInstance);
+
+            boatMarker.bringToFront();
+
+            const timeSlider = document.getElementById('time-slider');
+            if (timeSlider) {
+                timeSlider.max = isisRoutePoints.length - 1;
+                timeSlider.value = 0;
             }
-
-            // Parse the markers (Placemarks containing a Point)
-            const placemarks = xmlDoc.getElementsByTagName("Placemark");
-            for (let i = 0; i < placemarks.length; i++) {
-                const pointNode = placemarks[i].getElementsByTagName("Point")[0];
-                const nameNode = placemarks[i].getElementsByTagName("name")[0];
-                
-                if (pointNode && nameNode) {
-                    // Clean CDATA tags out of the text if they exist
-                    const name = nameNode.textContent.replace("<![CDATA[", "").replace("]]>", "").trim();
-                    const coordsNode = pointNode.getElementsByTagName("coordinates")[0];
-                    
-                    if (coordsNode) {
-                        const parts = coordsNode.textContent.trim().split(',');
-                        if (parts.length >= 2) {
-                            const lat = parseFloat(parts[1]);
-                            const lon = parseFloat(parts[0]);
-                            
-                            // Create a small circular marker for the waypoint
-                            const marker = L.circleMarker([lat, lon], {
-                                radius: 6,
-                                fillColor: '#25476D', 
-                                color: '#ffffff',
-                                weight: 2,
-                                fillOpacity: 1
-                            });
-                            
-                            // Attach the name as a permanent tooltip with a custom CSS class
-                            marker.bindTooltip(name, { 
-                                permanent: true, 
-                                direction: 'right', // 'right' prevents the label from blocking the racing line
-                                offset: [8, 0], 
-                                className: 'coxorb-permanent-label' 
-                            });
-
-                            marker.addTo(isisLineLayer);
-                        }
-                    }
-                }
-            }
-
-            // Add the compiled layer to the map and zoom to fit it
-            isisLineLayer.addTo(mapInstance);
-            mapInstance.fitBounds(isisLineLayer.getBounds());
-
-            // --- SPAWN THE BOAT & CONFIGURE THE SLIDER ---
-            if (isisRoutePoints.length > 0) {
-                if (boatMarker) boatMarker.remove(); // Clear any existing boat
-                
-                boatMarker = L.circleMarker(isisRoutePoints[0], {
-                    radius: 7,
-                    fillColor: 'red', // Match the Isis purple
-                    color: '#ffffff',
-                    weight: 2,
-                    fillOpacity: 1,
-                    zIndexOffset: 1000
-                }).addTo(mapInstance);
-
-                boatMarker.bringToFront();
-
-                const timeSlider = document.getElementById('time-slider');
-                if (timeSlider) {
-                    timeSlider.max = isisRoutePoints.length - 1;
-                    timeSlider.value = 0;
-                }
-            }
-            
-            loadIsisBtn.innerText = "Isis Line Loaded";
-            
-            // Force a canvas recalculation in case the div was just unhidden
-            setTimeout(() => mapInstance.invalidateSize(), 100);
-
-        } catch (error) {
-            console.error("Isis Line Parsing Error:", error);
-            alert("Could not load the Isis race line.");
-            loadIsisBtn.innerText = "Load Isis Race Line";
         }
+        
+        loadIsisBtn.innerText = "Isis Line Loaded";
+        setTimeout(() => mapInstance.invalidateSize(), 100);
     });
 }
 
