@@ -84,11 +84,11 @@
                 </div>
 
                 <div id="speed-thresholds" class="hidden" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                    <label style="font-size: 0.8rem; color: var(--primary); font-weight: 600;">Min (m/s): 
-                        <input type="number" id="min-speed-input" step="0.1" style="width: 60px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
+                    <label style="font-size: 0.8rem; color: red; font-weight: 600;">Min split (m:ss): 
+                        <input type="text" id="slow-split-input" step="0.1" style="width: 60px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
                     </label>
-                    <label style="font-size: 0.8rem; color: var(--primary); font-weight: 600;">Max (m/s): 
-                        <input type="number" id="max-speed-input" step="0.1" style="width: 60px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
+                    <label style="font-size: 0.8rem; color: green; font-weight: 600;">Max split (m:ss): 
+                        <input type="text" id="fast-split-input" step="0.1" style="width: 60px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
                     </label>
                     
                     <button id="default-thresholds-btn" class="secondary-btn" title="Reset to 5th and 95th Percentiles of the trimmed route.">Defaults</button>
