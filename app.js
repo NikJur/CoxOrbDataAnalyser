@@ -671,6 +671,15 @@ function initChart(data) {
                 }
             },
             plugins: {
+                legend: {   // customised legend label
+                    title: {
+                        display: true,
+                        text: '(Click a metric below to toggle its visibility)',
+                        font: { size: 11, style: 'italic', weight: 'normal' },
+                        color: '#666666',
+                        padding: { bottom: 0 }
+                    }
+                },
                 tooltip: {
                     // CoxOrb style tooltip with custom colors and formatting to match the app's theme
                     backgroundColor: '#25476D',
@@ -2524,6 +2533,15 @@ function initChartC(data1, data2) {
             interaction: { mode: 'index', intersect: false },
             elements: { point: { radius: 0, hitRadius: 10 }, line: { tension: 0 } },
             plugins: {
+                legend: {   // customised legend label
+                    title: {
+                        display: true,
+                        text: '(Click a metric below to toggle its visibility)',
+                        font: { size: 11, style: 'italic', weight: 'normal' },
+                        color: '#666666',
+                        padding: { bottom: 0 }
+                    }
+                },
                 tooltip: {
                     callbacks: {
                         title: (items) => items.length ? `Completed: ${items[0].parsed.x.toFixed(1)}%` : '',
