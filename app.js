@@ -1543,6 +1543,14 @@ document.getElementById('compare-btn').addEventListener('click', async () => {
         });
     }
 
+    // Checks the physical state of the Isis toggle before overlaying the route, and fetches the data if not already in memory
+    const isIsisCompareChecked = document.getElementById('toggle-compare-isis').checked;
+    if (isIsisCompareChecked) {
+        fetchIsisData().then(() => {
+            if (compareMapInstance) compareIsisLineLayer.addTo(compareMapInstance);
+        });
+    }
+
     // Zoom the map out just enough to see all drawn lines
     if (bounds.isValid()) {
         compareMapInstance.fitBounds(bounds);
@@ -1679,12 +1687,20 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
     if (compareMapInstance && compareBuoyLayer) {
         compareMapInstance.removeLayer(compareBuoyLayer);
     }
+    // clear Isis line if it exists
+    if (compareMapInstance && compareIsisLineLayer) {
+        compareMapInstance.removeLayer(compareIsisLineLayer);
+    }
 
     // Reset the independent fairway toggle
     document.getElementById('toggle-compare-fairway').checked = false;
 
     // Reset the independent buoys toggle
     document.getElementById('toggle-compare-buoys').checked = false;
+
+    // Reset the independent Isis route toggle
+    const toggleCompareIsisEl = document.getElementById('toggle-compare-isis');
+    if (toggleCompareIsisEl) toggleCompareIsisEl.checked = false;
 
     // Hide the comparison map container again
     document.getElementById('compare-map-container').classList.add('hidden');
@@ -2071,6 +2087,24 @@ if (toggleCompareFairway) {
             });
         } else {
             compareMapInstance.removeLayer(compareFairwayLayer);
+        }
+    });
+}
+
+/** Comparison Map Isis Toggle
+ * Event Listener for the secondary Comparison Map Isis toggle.
+ */
+const toggleCompareIsis = document.getElementById('toggle-compare-isis');
+if (toggleCompareIsis) {
+    toggleCompareIsis.addEventListener('change', (e) => {
+        if (!compareMapInstance) return;
+        
+        if (e.target.checked) {
+            fetchIsisData().then(() => {
+                compareIsisLineLayer.addTo(compareMapInstance);
+            });
+        } else {
+            compareMapInstance.removeLayer(compareIsisLineLayer);
         }
     });
 }
@@ -3106,6 +3140,7 @@ document.getElementById('trim-dist-c2')?.addEventListener('change', () => applyT
  * Populates the map layer and the coordinate array.
  */
 let isisLineLayer = L.featureGroup();
+let compareIsisLineLayer = L.featureGroup(); // Dedicated layer for Section B
 let isisDataLoaded = false;
 
 async function fetchIsisData() {
@@ -3129,7 +3164,9 @@ async function fetchIsisData() {
                     return [parseFloat(parts[1]), parseFloat(parts[0])];
                 });
                 
-                L.polyline(isisRoutePoints, { color: '#9B59B6', weight: 4, dashArray: '5, 8', opacity: 0.9 }).addTo(isisLineLayer);
+                const lineStyle = { color: '#9B59B6', weight: 4, dashArray: '5, 8', opacity: 0.9 }; // Line style for the Isis route
+                L.polyline(isisRoutePoints, lineStyle).addTo(isisLineLayer); // Add to Section A
+                L.polyline(isisRoutePoints, lineStyle).addTo(compareIsisLineLayer); // Add to Section B
             }
         }
 
@@ -3146,14 +3183,18 @@ async function fetchIsisData() {
                 if (coordsNode) {
                     const parts = coordsNode.textContent.trim().split(',');
                     if (parts.length >= 2) {
-                        const marker = L.circleMarker([parseFloat(parts[1]), parseFloat(parts[0])], {
-                            radius: 6, fillColor: '#25476D', color: '#ffffff', weight: 2, fillOpacity: 1
-                        });
-                        
-                        marker.bindTooltip(name, { 
-                            permanent: true, direction: 'right', offset: [8, 0], className: 'coxorb-permanent-label' 
-                        });
-                        marker.addTo(isisLineLayer);
+                        const lat = parseFloat(parts[1]);
+                        const lon = parseFloat(parts[0]);
+                        const markerStyle = { radius: 6, fillColor: '#25476D', color: '#ffffff', weight: 2, fillOpacity: 1 };
+                        const tooltipStyle = { permanent: true, direction: 'right', offset: [8, 0], className: 'coxorb-permanent-label' };
+
+                        // Add to Primary Map
+                        const marker1 = L.circleMarker([lat, lon], markerStyle);
+                        marker1.bindTooltip(name, tooltipStyle).addTo(isisLineLayer);
+
+                        // Add to Comparison Map
+                        const marker2 = L.circleMarker([lat, lon], markerStyle);
+                        marker2.bindTooltip(name, tooltipStyle).addTo(compareIsisLineLayer);
                     }
                 }
             }
