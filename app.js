@@ -408,9 +408,26 @@ function drawPrimaryRoute(useSpeedColors) {
         // Dynamic heatmap mode
         if (thresholdUI) thresholdUI.classList.remove('hidden');
 
+        // Helper function to convert the user's typed "m:ss" back into m/s
+        const parseSplitToSpeed = (str, defaultSpeed) => {
+            if (!str) return defaultSpeed;
+            const parts = String(str).trim().split(':');
+            let secs = 0;
+            if (parts.length === 2) {
+                secs = parseInt(parts[0]) * 60 + parseFloat(parts[1]);
+            } else {
+                secs = parseFloat(parts[0]);
+            }
+            return secs > 0 ? (500 / secs) : defaultSpeed;
+        };
+
         // Extract the boundaries from the HTML inputs
-        const minSpeed = parseFloat(document.getElementById('min-speed-input').value) || 0;
-        const maxSpeed = parseFloat(document.getElementById('max-speed-input').value) || 5;
+        const slowInput = document.getElementById('slow-split-input');
+        const fastInput = document.getElementById('fast-split-input');
+
+        // Extract boundaries. If inputs are broken/empty, default to 2:30 split (3.33 m/s) and 1:45 split (4.76 m/s)
+        const minSpeed = slowInput ? parseSplitToSpeed(slowInput.value, 3.33) : 3.33; 
+        const maxSpeed = fastInput ? parseSplitToSpeed(fastInput.value, 4.76) : 4.76;
 
         for (let i = 0; i < mergedData.length - 1; i++) {
             const pt1 = mergedData[i];
@@ -1267,6 +1284,7 @@ function getDynamicSpeedColor(speed, minSpeed, maxSpeed) {
 /**
  * Calculates the 5th and 95th percentiles of the dataset's speed array.
  * Automatically injects these values into the HTML threshold inputs to trim outliers.
+ * Converts the physical m/s speeds into mm:ss splits and injects them into the UI.
  */
 function calculateSmartThresholds() {
     // Extract valid speed values and sort them in ascending order
@@ -1279,11 +1297,23 @@ function calculateSmartThresholds() {
     const p5Index = Math.floor(speeds.length * 0.05);
     const p95Index = Math.floor(speeds.length * 0.95);
 
-    const minInput = document.getElementById('min-speed-input');
-    const maxInput = document.getElementById('max-speed-input');
+    const slowSpeed = speeds[p5Index]; // Mathematically smaller number = Slower boat
+    const fastSpeed = speeds[p95Index]; // Mathematically larger number = Faster boat
 
-    if (minInput) minInput.value = speeds[p5Index].toFixed(1);
-    if (maxInput) maxInput.value = speeds[p95Index].toFixed(1);
+    // Helper function to convert m/s directly into a clean "m:ss" string
+    const formatSplit = (speedMS) => {
+        if (speedMS <= 0) return "0:00";
+        const totalSeconds = 500 / speedMS;
+        const m = Math.floor(totalSeconds / 60);
+        const s = Math.floor(totalSeconds % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
+    };
+
+    const slowInput = document.getElementById('slow-split-input');
+    const fastInput = document.getElementById('fast-split-input');
+
+    if (slowInput) slowInput.value = formatSplit(slowSpeed);
+    if (fastInput) fastInput.value = formatSplit(fastSpeed);
 }
 
 /**
@@ -1919,7 +1949,7 @@ if (volumeSlider && muteToggle) {
 
 
 /**
- * Event Listener for the "Color Route by Speed" toggle.
+ * Event Listener for the "Colour Route by Speed" toggle.
  * Triggers a complete redraw of the primary Leaflet map path.
  */
 const speedToggle = document.getElementById('toggle-speed-color');
@@ -1930,18 +1960,25 @@ if (speedToggle) {
 }
 
 /**
- * Event Listeners for the dynamic speed threshold inputs.
- * Forces the map to instantaneously redraw the gradient if the user alters the numbers.
+ * Event Listeners for the dynamic split threshold inputs.
+ * Uses the 'change' event instead of 'input' so the map doesn't frantically 
+ * try to recalculate while the user is halfway through typing "1:4...".
  */
-document.getElementById('min-speed-input').addEventListener('input', () => {
-    const toggle = document.getElementById('toggle-speed-color');
-    if (toggle && toggle.checked) drawPrimaryRoute(true);
-});
+const slowSplitInput = document.getElementById('slow-split-input');
+if (slowSplitInput) {
+    slowSplitInput.addEventListener('change', () => {
+        const toggle = document.getElementById('toggle-speed-color');
+        if (toggle && toggle.checked) drawPrimaryRoute(true);
+    });
+}
 
-document.getElementById('max-speed-input').addEventListener('input', () => {
-    const toggle = document.getElementById('toggle-speed-color');
-    if (toggle && toggle.checked) drawPrimaryRoute(true);
-});
+const fastSplitInput = document.getElementById('fast-split-input');
+if (fastSplitInput) {
+    fastSplitInput.addEventListener('change', () => {
+        const toggle = document.getElementById('toggle-speed-color');
+        if (toggle && toggle.checked) drawPrimaryRoute(true);
+    });
+}
 
 /**
  * Event Listener for the "Defaults" threshold button for speed-colouring reset.
