@@ -91,7 +91,7 @@
                         <input type="number" id="max-speed-input" step="0.1" style="width: 60px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
                     </label>
                     
-                    <button id="default-thresholds-btn" class="secondary-btn" title="Reset to 5th and 95th Percentiles">Defaults</button>
+                    <button id="default-thresholds-btn" class="secondary-btn" title="Reset to 5th and 95th Percentiles of the trimmed route.">Defaults</button>
                     <button id="color-blind-btn" class="secondary-btn" title="Toggle an accessible Blue-to-Yellow gradient">Colour Blind Mode</button>
                 </div>
             </div>
@@ -283,6 +283,19 @@
                     </div>
                     <label class="toggle-switch">
                         <input type="checkbox" id="toggle-compare-buoys">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="compare-isis-toggle-container" style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="text-align: right; display: flex; flex-direction: column;">
+                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Show Oxford Bumps Line</span>
+                        <span style="font-size: 0.7rem; color: #6c757d; max-width: 280px;">Overlays the Isis race line.</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-compare-isis">
                         <span class="slider round"></span>
                     </label>
                 </div>
