@@ -167,7 +167,7 @@ document.getElementById('process-btn').addEventListener('click', async () => {
         // Force map resize to ensure tiles load correctly after unhiding the container
         setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(); }, 100);
         
-        processBtn.innerText = "Process & Merge Data";
+        processBtn.innerText = "Data Processed & Merged";
 
     } catch (error) {
         console.error(error);
@@ -1450,7 +1450,8 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
             console.warn("Could not load secondary comparison demo data.", err);
         }
 
-        demoBtn.innerText = "Load Demo Data"; // Reset button text on success
+        demoBtn.innerText = "Demo Data Loaded"; // Reset button text on success
+
     } catch (error) {
         console.error(error);
         alert(`Error loading demo data: ${error.message}`);
@@ -1582,8 +1583,14 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
     if (mapInstance && mapInstance.hasLayer(isisLineLayer)) {
         mapInstance.removeLayer(isisLineLayer);
     }
+
+    // Reset the button texts to their default states
     const loadIsisBtn = document.getElementById('load-isis-btn');
     if (loadIsisBtn) loadIsisBtn.innerText = "Load Isis Race Line";
+    const processBtn = document.getElementById('process-btn');
+    if (processBtn) processBtn.innerText = "Process & Merge Data";
+    const demoBtn = document.getElementById('demo-btn');
+    if (demoBtn) demoBtn.innerText = "Load Demo Data";
 
     // Reset the virtual audio loop state to prevent math errors on future uploads
     isVirtualAudioLoop = false;
