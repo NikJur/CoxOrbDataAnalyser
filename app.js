@@ -1548,7 +1548,7 @@ document.getElementById('compare-btn').addEventListener('click', async () => {
         compareMapInstance.fitBounds(bounds);
     }
 
-    compareBtn.innerText = "Render Comparison Map";
+    compareBtn.innerText = "Comparison Map Rendered";
 });
 
 /**
@@ -1688,6 +1688,10 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
 
     // Hide the comparison map container again
     document.getElementById('compare-map-container').classList.add('hidden');
+
+    // Reset load button text
+    const compareBtn = document.getElementById('compare-btn');
+    if (compareBtn) compareBtn.innerText = "Render Comparison Map";
 });
 
 /**
@@ -2695,7 +2699,7 @@ document.getElementById('process-btn-c')?.addEventListener('click', async (e) =>
         }, 150);
 
         // Resets the button text upon completion
-        btn.innerText = "Compare Routes & Metrics";
+        btn.innerText = "Routes & Metrics Loaded";
 
     } catch (error) {
         console.error("Comparison execution failed:", error);
@@ -2786,7 +2790,7 @@ document.getElementById('demo-btn-c')?.addEventListener('click', async (e) => {
             updateUIC(0);
         }, 150); 
 
-        btn.innerText = "Load Comparison Demo";
+        btn.innerText = "Comparison Demo Loaded";
 
     } catch (error) {
         console.error("Comparison Demo failed:", error);
@@ -3314,8 +3318,18 @@ document.getElementById('clear-compare-c-btn')?.addEventListener('click', () => 
         'trim-sliders-container-c', 
         'fullscreen-wrapper-c'
     ];
+    //
     
     containersToHide.forEach(id => {
         document.getElementById(id)?.classList.add('hidden');
     });
+
+    // Reset button texts when clearing
+    const processBtnC = document.getElementById('process-btn-c');
+    if (processBtnC) processBtnC.innerText = "Compare Routes & Metrics";
+
+    const demoBtnC = document.getElementById('demo-btn-c');
+    if (demoBtnC) demoBtnC.innerText = "Load Comparison Demo";
+    //
+
 });
