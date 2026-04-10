@@ -27,11 +27,23 @@ body {
     align-items: center;
 }
 
+/**
+ * Application Header
+ * Aligned with the main container geometry to ensure width matching on mobile.
+ */
 header {
+    width: 100%;
+    max-width: 1400px; /* Matches the max-width of the main content area */
+    display: flex;
+    box-sizing: border-box; /* Forces padding to push inward, preventing overflow */
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    padding: 2rem 1rem;
+    padding: 1rem;
+    margin: 0 auto 1rem auto; /* Centers alongside main */
     background-color: #ffffff;
     border-bottom: 1px solid #ddd;
+    border-radius: 8px; /* Softens edges to match panels */
 }
 
 /* Styles the main banner logo to be responsive and centered */
