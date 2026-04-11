@@ -80,69 +80,71 @@
 
         <section class="panel hidden" id="replay-section">
             
-            <div id="speed-toggle-container" class="hidden" style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px; margin-bottom: 0.5rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); column-gap: 30px; row-gap: 15px; margin-bottom: 1.0rem; width: 100%;">
 
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="text-align: right; display: flex; flex-direction: column;">
-                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Colour Route by Speed</span>
-                        <span style="font-size: 0.7rem; color: #6c757d; max-width: 280px;">Visualises velocity via a red-green gradient, using statistical percentile bounds as defaults.</span>
+                <div id="speed-toggle-container" class="hidden" style="display: flex; flex-direction: column; justify-content: center; gap: 8px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 15px;">
+                        <div style="text-align: left; display: flex; flex-direction: column;">
+                            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Colour Route by Speed</span>
+                            <span style="font-size: 0.7rem; color: #6c757d;">Visualises velocity via a red-green gradient, using statistical percentile bounds as default.</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-speed-color">
+                            <span class="slider round"></span>
+                        </label>
                     </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="toggle-speed-color">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
 
-                <div id="speed-thresholds" class="hidden" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                    <label style="font-size: 0.8rem; color: red; font-weight: 600;">Min split (m:ss): 
-                        <input type="text" id="slow-split-input" step="0.1" style="width: 60px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
-                    </label>
-                    <label style="font-size: 0.8rem; color: green; font-weight: 600;">Max split (m:ss): 
-                        <input type="text" id="fast-split-input" step="0.1" style="width: 60px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
-                    </label>
-                    
-                    <button id="default-thresholds-btn" class="secondary-btn" title="Reset to 5th and 95th Percentiles of the trimmed route.">Defaults</button>
-                    <button id="color-blind-btn" class="secondary-btn" title="Toggle an accessible Blue-to-Yellow gradient">Colour Blind Mode</button>
-                </div>
-            </div>
-
-            <div id="fairway-toggle-container" class="hidden" style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px; margin-bottom: 1rem;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="text-align: right; display: flex; flex-direction: column;">
-                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Show Fairway Limits</span>
-                        <span style="font-size: 0.7rem; color: #6c757d; max-width: 280px;">Overlays the designated London Tideway port and starboard boundaries. (Thanks to PLA and Thames RC)</span>
+                    <div id="speed-thresholds" class="hidden" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <label style="font-size: 0.8rem; color: red; font-weight: 600;">Min (m:ss): 
+                            <input type="text" id="slow-split-input" placeholder="2:30" style="width: 50px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 4px; outline: none; text-align: center;">
+                        </label>
+                        <label style="font-size: 0.8rem; color: green; font-weight: 600;">Max (m:ss): 
+                            <input type="text" id="fast-split-input" placeholder="1:45" style="width: 50px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 4px; outline: none; text-align: center;">
+                        </label>
+                        <button id="default-thresholds-btn" class="secondary-btn" title="Reset to 5th and 95th Percentiles of the trimmed route.">Defaults</button>
+                        <button id="color-blind-btn" class="secondary-btn" title="Toggle an accessible Blue-to-Yellow gradient">Colour Blind</button>
                     </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="toggle-fairway-limits">
-                        <span class="slider round"></span>
-                    </label>
                 </div>
-            </div>
 
-            <div id="buoys-toggle-container" class="hidden" style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px; margin-bottom: 1rem;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="text-align: right; display: flex; flex-direction: column;">
-                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Show Navigation Buoys</span>
-                        <span style="font-size: 0.7rem; color: #6c757d; max-width: 280px;">Plots named navigational buoys along the Tideway. (Thanks to PLA and Thames RC)</span>
+                <div id="fairway-toggle-container" class="hidden" style="display: flex; flex-direction: column; justify-content: center; gap: 8px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 15px;">
+                        <div style="text-align: left; display: flex; flex-direction: column;">
+                            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Show Fairway Limits</span>
+                            <span style="font-size: 0.7rem; color: #6c757d;">Overlays the designated London Tideway port and starboard boundaries. (Thanks to PLA and Thames RC)</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-fairway-limits">
+                            <span class="slider round"></span>
+                        </label>
                     </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="toggle-buoys">
-                        <span class="slider round"></span>
-                    </label>
                 </div>
-            </div>
 
-            <div id="isis-toggle-container" class="hidden" style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px; margin-bottom: 1rem;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="text-align: right; display: flex; flex-direction: column;">
-                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Show Oxford Bumps Line</span>
-                        <span style="font-size: 0.7rem; color: #6c757d; max-width: 280px;">Overlays the Isis race line.</span>
+                <div id="buoys-toggle-container" class="hidden" style="display: flex; flex-direction: column; justify-content: center; gap: 8px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 15px;">
+                        <div style="text-align: left; display: flex; flex-direction: column;">
+                            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Show Navigation Buoys</span>
+                            <span style="font-size: 0.7rem; color: #6c757d;">Plots named navigational buoys along the Tideway. (Thanks to PLA and Thames RC)</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-buoys">
+                            <span class="slider round"></span>
+                        </label>
                     </div>
-                     <label class="toggle-switch">
-                        <input type="checkbox" id="toggle-isis-line">
-                        <span class="slider round"></span>
-                    </label>
                 </div>
+
+                <div id="isis-toggle-container" class="hidden" style="display: flex; flex-direction: column; justify-content: center; gap: 8px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 15px;">
+                        <div style="text-align: left; display: flex; flex-direction: column;">
+                            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Show Oxford Bumps Line</span>
+                            <span style="font-size: 0.7rem; color: #6c757d;">Overlays the Isis race line.</span>
+                        </div>
+                         <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-isis-line">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
             </div>
 
             <div id="map-container">
@@ -271,44 +273,47 @@
 
             </div>
             
-            <div id="compare-fairway-toggle-container" style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px; margin-bottom: 1rem;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="text-align: right; display: flex; flex-direction: column;">
-                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Show Fairway Limits</span>
-                        <span style="font-size: 0.7rem; color: #6c757d; max-width: 280px;">Overlays the designated London Tideway port and starboard boundaries. (Thanks to PLA and Thames RC)</span>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); column-gap: 30px; row-gap: 15px; margin-bottom: 1.0rem; width: 100%;">
 
+                <div id="compare-fairway-toggle-container" style="display: flex; flex-direction: column; justify-content: center; gap: 8px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 15px;">
+                        <div style="text-align: left; display: flex; flex-direction: column;">
+                            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Show Fairway Limits</span>
+                            <span style="font-size: 0.7rem; color: #6c757d;">Overlays the designated London Tideway port and starboard boundaries. (Thanks to PLA and Thames RC)</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-compare-fairway">
+                            <span class="slider round"></span>
+                        </label>
                     </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="toggle-compare-fairway">
-                        <span class="slider round"></span>
-                    </label>
                 </div>
-            </div>
 
-            <div id="compare-buoys-toggle-container" style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px; margin-bottom: 1rem;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="text-align: right; display: flex; flex-direction: column;">
-                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Show Navigation Buoys</span>
-                        <span style="font-size: 0.7rem; color: #6c757d; max-width: 280px;">Plots named navigational buoys along the Tideway. (Thanks to PLA and Thames RC)</span>
+                <div id="compare-buoys-toggle-container" style="display: flex; flex-direction: column; justify-content: center; gap: 8px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 15px;">
+                        <div style="text-align: left; display: flex; flex-direction: column;">
+                            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Show Navigation Buoys</span>
+                            <span style="font-size: 0.7rem; color: #6c757d;">Plots named navigational buoys along the Tideway. (Thanks to PLA and Thames RC)</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-compare-buoys">
+                            <span class="slider round"></span>
+                        </label>
                     </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="toggle-compare-buoys">
-                        <span class="slider round"></span>
-                    </label>
                 </div>
-            </div>
 
-            <div id="compare-isis-toggle-container" style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px; margin-bottom: 1rem;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="text-align: right; display: flex; flex-direction: column;">
-                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Show Oxford Bumps Line</span>
-                        <span style="font-size: 0.7rem; color: #6c757d; max-width: 280px;">Overlays the Isis race line.</span>
+                <div id="compare-isis-toggle-container" style="display: flex; flex-direction: column; justify-content: center; gap: 8px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 15px;">
+                        <div style="text-align: left; display: flex; flex-direction: column;">
+                            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Show Oxford Bumps Line</span>
+                            <span style="font-size: 0.7rem; color: #6c757d;">Overlays the Isis race line.</span>
+                        </div>
+                         <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-compare-isis">
+                            <span class="slider round"></span>
+                        </label>
                     </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="toggle-compare-isis">
-                        <span class="slider round"></span>
-                    </label>
                 </div>
+
             </div>
 
             <div class="action-buttons">
