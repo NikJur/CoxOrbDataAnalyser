@@ -532,8 +532,10 @@ button:hover { background-color: #1C3754; }
     position: relative;
     display: inline-block;
     width: 44px;
+    min-width: 44px; /* Forces the minimum width */
     height: 24px;
     margin-left: auto; /* Pushes the toggle to the far right of the row */
+    flex: 0 0 44px; /* Tells Flexbox: Do not grow, do not shrink, stay exactly 44px */
 }
 
 /* Hides the default HTML checkbox */
