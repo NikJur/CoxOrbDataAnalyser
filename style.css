@@ -1,5 +1,5 @@
 :root {
-    --primary: #25476D;
+    --primary: rgb(37, 71, 109);
     --bg-color: #e1eefc;
     --panel-bg: #ffffffec;
     --text-main: #333333;
@@ -117,7 +117,7 @@ header {
 
 .nav-links a:hover {
     background: rgba(37, 71, 109, 0.08);
-    color: #F08118;
+    color: #f08118;
     /* Nudges the text slightly to indicate selection */
     transform: translateX(5px);
 }
