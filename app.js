@@ -537,9 +537,10 @@ L.Control.Fullscreen = L.Control.extend({
         L.DomEvent.on(button, 'click', function (e) {
             L.DomEvent.stop(e);
             
-            // We target the map's parent wrapper so the custom UI (trim sliders, etc.) could potentially be included later if desired.
-            // For now, we specifically target map-container to ensure it expands correctly.
-            const mapWrapper = map.getContainer().parentElement; 
+            // Look for master wrappers. If not found (like in Section B), fallback to the standard map container.
+            const mapWrapper = map.getContainer().closest('#map-ui-wrapper') || 
+                               map.getContainer().closest('#map-ui-wrapper-c') || 
+                               map.getContainer().parentElement;
 
             if (!document.fullscreenElement) {
                 mapWrapper.requestFullscreen().catch(err => {

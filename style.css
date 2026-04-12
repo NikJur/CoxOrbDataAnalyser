@@ -234,6 +234,96 @@ button:hover { background-color: #1C3754; }
     overflow-y: auto; /* Adds a scrollbar just in case the monitor is extremely short */
 }
 
+
+/* =========================================
+   FULLSCREEN MAP MODE
+   ========================================= */
+
+/* Expand the wrapper to fill the screen */
+#map-ui-wrapper:fullscreen, 
+#map-ui-wrapper-c:fullscreen {
+    width: 100vw;
+    height: 100vh;
+    background-color: #f8f9fa; 
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* Force the map to fill the background */
+#map-ui-wrapper:fullscreen #map-container,
+#map-ui-wrapper-c:fullscreen #map-container-c {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    border-radius: 0;
+    z-index: 1;
+    resize: none; 
+}
+
+/* Overlay the Dashboard at the top (Transparent Glass) */
+#map-ui-wrapper:fullscreen .dashboard,
+#map-ui-wrapper-c:fullscreen .dashboard {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1000px;
+    z-index: 1000; 
+    /* Highly transparent white to act as a clear glass pane */
+    background: rgba(255, 255, 255, 0.15); 
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle frosted edge */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Softened shadow */
+    margin: 0;
+    /* Keeps the blur so the map lines don't make the text unreadable */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Overlay the Controls at the bottom (Transparent Glass & Wider) */
+#map-ui-wrapper:fullscreen .controls,
+#map-ui-wrapper-c:fullscreen .controls {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%; /* Widened from 90% */
+    max-width: 1200px; /* Widened to give the audio controls more room */
+    z-index: 1000; 
+    background: rgba(255, 255, 255, 0.15); /* Transparent glass */
+    padding: 12px 20px !important;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin: 0;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Force the Audio Container to stay on a single row */
+#map-ui-wrapper:fullscreen #audio-container {
+    margin: 0 !important; /* kills the inline HTML margin-bottom: 15px */
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    padding: 0;
+    flex-wrap: nowrap; /* Forces elements to stay on one horizontal line */
+    gap: 15px; 
+}
+
+/* Make the slider squishy so it absorbs extra space instead of breaking the layout */
+#map-ui-wrapper:fullscreen #time-slider {
+    flex-grow: 1; /* Tells the slider to stretch and fill all remaining empty space */
+    width: auto !important; /* Overrides the inline 50% width */
+}
+
+
 /* * Fallback for Firefox. 
  * Firefox ignores WebKit resizer properties and uses a fixed hit target, 
  * so we just snap the visual icon flush into the corner.
@@ -618,9 +708,7 @@ input:checked + .slider:before { transform: translateX(20px); }
 
 /* Base styling for the native player element */
 audio, #audio-player {
-    width: 100%;
-    height: 40px;
-    outline: none;
+    display: none !important; /* Hides the invisible player so it takes up 0 pixels */
 }
 
 /**
