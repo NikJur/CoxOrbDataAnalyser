@@ -229,7 +229,7 @@ function parseGPX(gpxText) {
             const timeDate = new Date(timeNode.textContent);
             if (i === 0) startTime = timeDate.getTime();
             
-            const seconds_elapsed = Math.round((timeDate.getTime() - startTime) / 1000);
+            const seconds_elapsed = (timeDate.getTime() - startTime) / 1000;
 
             // Accumulate distance using GPS coordinates
             if (lastLat !== null && lastLon !== null) {
@@ -626,6 +626,9 @@ function initChart(data) {
     const rateData = data.map(d => parseFloat(d['Rate']) || null);
     const splitData = data.map(d => d.split_seconds || null);
 
+    // CHECK: Does the rate array contain valid rowing strokes? -> otherwise we will strike through metric by default later in the legend filter
+    const hasRateData = rateData.some(r => r !== null && r > 0);
+
     // Extracts the Check metric using a flexible key search to bypass CSV whitespace errors
     const checkData = data.map(d => {
         const key = Object.keys(d).find(k => k.trim().toLowerCase() === 'check');
@@ -660,6 +663,7 @@ function initChart(data) {
                     borderWidth: 1.5, // Reduces line thickness to prevent visual clutter
                     order: 2,         // Pushes the blue line to the background layer
                     yAxisID: 'y',
+                    hidden: !hasRateData, // Automatically crossout if no data exists
                     normalized: true // Tells Chart.js data is sorted, skipping expensive parsing
                 },
                 {
@@ -933,17 +937,11 @@ function updateUI(index) {
     let displayTime = pt['Elapsed Time'];
     if (!displayTime) {
         const secs = pt.seconds_elapsed || 0;
-        const m = Math.floor(secs / 60);
-        const s = Math.floor(secs % 60).toString().padStart(2, '0');
+        const h = Math.floor(secs / 3600);
+        const m = Math.floor((secs % 3600) / 60).toString().padStart(2, '0');
+        const s = (secs % 60).toFixed(1).padStart(4, '0'); // Forces the .X decimal
         
-        // If the piece is longer than an hour, add the hour prefix
-        if (m >= 60) {
-            const h = Math.floor(m / 60);
-            const rm = (m % 60).toString().padStart(2, '0');
-            displayTime = `${h}:${rm}:${s}`;
-        } else {
-            displayTime = `${m}:${s}`;
-        }
+        displayTime = `${h}:${m}:${s}`; // format: 0:24:15.4
     }
 
     // Update Dashboard Values
