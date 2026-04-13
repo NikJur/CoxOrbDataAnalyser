@@ -101,46 +101,43 @@ document.getElementById('process-btn').addEventListener('click', async () => {
             csvData = parseCSV(csvText);
 
             // Merge datasets based on timestamp
-            mergedData = mergeAsOf(gpxData, csvData, 5);            
-            masterMergedData = [...mergedData]; // Captures the backup master copy
-
-            if (mergedData.length === 0) {
-                throw new Error("Could not align GPX and CSV timestamps.");
-            }
-
-            // Configure the trimming sliders to match the array length
-            const trimMin = document.getElementById('trim-slider-min');
-            const trimMax = document.getElementById('trim-slider-max');
-            if (trimMin && trimMax) {
-                trimMin.max = masterMergedData.length - 1;
-                trimMax.max = masterMergedData.length - 1;
-                trimMin.value = 0;
-                trimMax.value = masterMergedData.length - 1;
-            }
-
-            // Unhide analytical UI
-            document.getElementById('fullscreen-wrapper-a')?.classList.remove('hidden');
-            document.getElementById('dashboard')?.classList.remove('hidden');
-            document.getElementById('speed-toggle-container')?.classList.remove('hidden');
-
-            calculateSmartThresholds();
-            initChart(mergedData);
-
+            mergedData = mergeAsOf(gpxData, csvData, 5);  
+            
         } else {
             // If no CSV is present, use only the GPX data
             mergedData = gpxData; 
-            
-            // hide analytical UI
-            document.getElementById('fullscreen-wrapper-a')?.classList.add('hidden');
-            document.getElementById('dashboard')?.classList.add('hidden');
-            document.getElementById('speed-toggle-container')?.classList.add('hidden');
-            
-            if (chartInstance) {
-                chartInstance.destroy();
-                chartInstance = null;
-            }
         }
-        
+
+        masterMergedData = [...mergedData]; // Captures the backup master copy
+
+        if (mergedData.length === 0) {
+            throw new Error("Could not align data. File may be corrupted.");
+        }
+
+        // Configure the trimming sliders to match the array length
+        const trimMin = document.getElementById('trim-slider-min');
+        const trimMax = document.getElementById('trim-slider-max');
+        if (trimMin && trimMax) {
+            trimMin.max = masterMergedData.length - 1;
+            trimMax.max = masterMergedData.length - 1;
+            trimMin.value = 0;
+            trimMax.value = masterMergedData.length - 1;
+        }
+
+        // Unhide analytical UI
+        document.getElementById('fullscreen-wrapper-a')?.classList.remove('hidden');
+        document.getElementById('dashboard')?.classList.remove('hidden');
+        document.getElementById('speed-toggle-container')?.classList.remove('hidden');
+        document.getElementById('trim-slider-container')?.classList.remove('hidden');
+
+        // Unhide the map overlays for GPX-only uploads
+        document.getElementById('fairway-toggle-container')?.classList.remove('hidden');
+        document.getElementById('buoys-toggle-container')?.classList.remove('hidden');
+        document.getElementById('isis-toggle-container')?.classList.remove('hidden');
+
+        calculateSmartThresholds();
+        initChart(mergedData);
+
         // Expose the primary replay container
         document.getElementById('replay-section')?.classList.remove('hidden');
         
@@ -194,6 +191,7 @@ function readFileAsText(file) {
 .
  * Parses raw GPX XML string into an array of coordinate objects.
  * Calculates 'seconds_elapsed' relative to the first track point.
+ * Extracts native '<speed>' tags to calculate splits without needing a CSV.
  * @param {string} gpxText - Raw XML string.
  * @returns {Array<Object>} Array of objects: { lat, lon, time, seconds_elapsed }.
  */
@@ -204,19 +202,61 @@ function parseGPX(gpxText) {
     
     const parsed = [];
     let startTime = null;
+    let totalDist = 0;
+    let lastLat = null;
+    let lastLon = null;
+
+    // Internal helper to calculate distance between two GPS coordinates in meters
+    const getHaversine = (lat1, lon1, lat2, lon2) => {
+        const R = 6371e3; // Earth radius in meters
+        const p1 = lat1 * Math.PI/180;
+        const p2 = lat2 * Math.PI/180;
+        const dp = (lat2-lat1) * Math.PI/180;
+        const dl = (lon2-lon1) * Math.PI/180;
+        const a = Math.sin(dp/2) * Math.sin(dp/2) + Math.cos(p1) * Math.cos(p2) * Math.sin(dl/2) * Math.sin(dl/2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    };
 
     for (let i = 0; i < trkpts.length; i++) {
         const pt = trkpts[i];
         const lat = parseFloat(pt.getAttribute('lat'));
         const lon = parseFloat(pt.getAttribute('lon'));
+
         const timeNode = pt.getElementsByTagName('time')[0];
+        const speedNode = pt.getElementsByTagName('speed')[0]; // Look for the speed tag
         
         if (timeNode) {
             const timeDate = new Date(timeNode.textContent);
             if (i === 0) startTime = timeDate.getTime();
             
-            const seconds_elapsed = Math.round((timeDate.getTime() - startTime) / 1000);
-            parsed.push({ lat, lon, seconds_elapsed });
+            const seconds_elapsed = (timeDate.getTime() - startTime) / 1000;
+
+            // Accumulate distance using GPS coordinates
+            if (lastLat !== null && lastLon !== null) {
+                totalDist += getHaversine(lastLat, lastLon, lat, lon);
+            }
+            lastLat = lat;
+            lastLon = lon;
+
+            // Extract speed and format it like the CSV parser does
+            let speedMS = 0;
+            let splitSecs = null;
+            if (speedNode) {
+                speedMS = parseFloat(speedNode.textContent) || 0;
+                // Cutoff: Only calculate a split if the boat is moving faster than 1.66 m/s (5:00 split).
+                if (speedMS > 1.66) {
+                    splitSecs = 500 / speedMS;
+                }
+            }
+            
+            parsed.push({ 
+                lat, 
+                lon, 
+                seconds_elapsed,
+                'Speed (m/s)': speedMS,  // Powers the Map Heatmap
+                split_seconds: splitSecs, // Powers the Chart and Dashboard
+                'Distance': totalDist // Provides a fallback distance if no CSV is loaded
+            });
         }
     }
     return parsed;
@@ -586,6 +626,9 @@ function initChart(data) {
     const rateData = data.map(d => parseFloat(d['Rate']) || null);
     const splitData = data.map(d => d.split_seconds || null);
 
+    // CHECK: Does the rate array contain valid rowing strokes? -> otherwise we will strike through metric by default later in the legend filter
+    const hasRateData = rateData.some(r => r !== null && r > 0);
+
     // Extracts the Check metric using a flexible key search to bypass CSV whitespace errors
     const checkData = data.map(d => {
         const key = Object.keys(d).find(k => k.trim().toLowerCase() === 'check');
@@ -620,6 +663,7 @@ function initChart(data) {
                     borderWidth: 1.5, // Reduces line thickness to prevent visual clutter
                     order: 2,         // Pushes the blue line to the background layer
                     yAxisID: 'y',
+                    hidden: !hasRateData, // Automatically crossout if no data exists
                     normalized: true // Tells Chart.js data is sorted, skipping expensive parsing
                 },
                 {
@@ -679,6 +723,15 @@ function initChart(data) {
                         font: { size: 11, style: 'italic', weight: 'normal' },
                         color: '#666666',
                         padding: { bottom: 0 }
+                    }
+                },
+                labels: {
+                    // Dynamically hide legend items if the dataset is completely empty (e.g., GPX only)
+                    filter: function(item, chartData) {
+                        const dataset = chartData.datasets[item.datasetIndex];
+                        // CHECK: Does this dataset have at least one valid number greater than 0?
+                        // If it is just an array of nulls or zeros, it will hide the legend label entirely.
+                        return dataset.data.some(val => typeof val === 'number' && val > 0); 
                     }
                 },
                 tooltip: {
@@ -880,9 +933,20 @@ function updateUI(index) {
         boatMarker.setLatLng([pt.lat, pt.lon]);
     }
 
+    // Try to use the formatted CSV string first. If missing, convert the GPX seconds mathematically.
+    let displayTime = pt['Elapsed Time'];
+    if (!displayTime) {
+        const secs = pt.seconds_elapsed || 0;
+        const h = Math.floor(secs / 3600);
+        const m = Math.floor((secs % 3600) / 60).toString().padStart(2, '0');
+        const s = (secs % 60).toFixed(1).padStart(4, '0'); // Forces the .X decimal
+        
+        displayTime = `${h}:${m}:${s}`; // format: 0:24:15.4
+    }
+
     // Update Dashboard Values
     // Injects the active metrics into the HTML DOM. Uses '|| "--"' as a fallback if data is missing.
-    document.getElementById('val-time').innerText = pt['Elapsed Time'] || pt.seconds_elapsed;
+    document.getElementById('val-time').innerText = displayTime;
     document.getElementById('val-rate').innerText = pt['Rate'] || "--";
     document.getElementById('val-dist').innerText = pt['Distance'] ? Math.round(pt['Distance']) : "--"; // rounded to the nearest whole meter
 
@@ -1297,8 +1361,8 @@ function getDynamicSpeedColor(speed, minSpeed, maxSpeed) {
  * Converts the physical m/s speeds into mm:ss splits and injects them into the UI.
  */
 function calculateSmartThresholds() {
-    // Extract valid speed values and sort them in ascending order
-    const speeds = mergedData.map(pt => pt['Speed (m/s)']).filter(s => s != null && !isNaN(s));
+    // Extract valid speed values and sort them in ascending order + Filter out speeds < 1.66 m/s to align with the 300-second split cutoff
+    const speeds = mergedData.map(pt => pt['Speed (m/s)']).filter(s => s != null && s > 1.66 && !isNaN(s));
     if (speeds.length === 0) return;
 
     speeds.sort((a, b) => a - b);
