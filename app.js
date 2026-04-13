@@ -721,6 +721,15 @@ function initChart(data) {
                         padding: { bottom: 0 }
                     }
                 },
+                labels: {
+                    // Dynamically hide legend items if the dataset is completely empty (e.g., GPX only)
+                    filter: function(item, chartData) {
+                        const dataset = chartData.datasets[item.datasetIndex];
+                        // CHECK: Does this dataset have at least one valid number greater than 0?
+                        // If it is just an array of nulls or zeros, it will hide the legend label entirely.
+                        return dataset.data.some(val => typeof val === 'number' && val > 0); 
+                    }
+                },
                 tooltip: {
                     // CoxOrb style tooltip with custom colors and formatting to match the app's theme
                     backgroundColor: '#25476D',
@@ -920,9 +929,26 @@ function updateUI(index) {
         boatMarker.setLatLng([pt.lat, pt.lon]);
     }
 
+    // Try to use the formatted CSV string first. If missing, convert the GPX seconds mathematically.
+    let displayTime = pt['Elapsed Time'];
+    if (!displayTime) {
+        const secs = pt.seconds_elapsed || 0;
+        const m = Math.floor(secs / 60);
+        const s = Math.floor(secs % 60).toString().padStart(2, '0');
+        
+        // If the piece is longer than an hour, add the hour prefix
+        if (m >= 60) {
+            const h = Math.floor(m / 60);
+            const rm = (m % 60).toString().padStart(2, '0');
+            displayTime = `${h}:${rm}:${s}`;
+        } else {
+            displayTime = `${m}:${s}`;
+        }
+    }
+
     // Update Dashboard Values
     // Injects the active metrics into the HTML DOM. Uses '|| "--"' as a fallback if data is missing.
-    document.getElementById('val-time').innerText = pt['Elapsed Time'] || pt.seconds_elapsed;
+    document.getElementById('val-time').innerText = displayTime;
     document.getElementById('val-rate').innerText = pt['Rate'] || "--";
     document.getElementById('val-dist').innerText = pt['Distance'] ? Math.round(pt['Distance']) : "--"; // rounded to the nearest whole meter
 
