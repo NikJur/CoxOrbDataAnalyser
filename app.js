@@ -130,6 +130,11 @@ document.getElementById('process-btn').addEventListener('click', async () => {
         document.getElementById('speed-toggle-container')?.classList.remove('hidden');
         document.getElementById('trim-slider-container')?.classList.remove('hidden');
 
+        // Unhide the map overlays for GPX-only uploads
+        document.getElementById('fairway-toggle-container')?.classList.remove('hidden');
+        document.getElementById('buoys-toggle-container')?.classList.remove('hidden');
+        document.getElementById('isis-toggle-container')?.classList.remove('hidden');
+
         calculateSmartThresholds();
         initChart(mergedData);
 
