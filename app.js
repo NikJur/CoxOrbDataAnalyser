@@ -101,46 +101,38 @@ document.getElementById('process-btn').addEventListener('click', async () => {
             csvData = parseCSV(csvText);
 
             // Merge datasets based on timestamp
-            mergedData = mergeAsOf(gpxData, csvData, 5);            
-            masterMergedData = [...mergedData]; // Captures the backup master copy
-
-            if (mergedData.length === 0) {
-                throw new Error("Could not align GPX and CSV timestamps.");
-            }
-
-            // Configure the trimming sliders to match the array length
-            const trimMin = document.getElementById('trim-slider-min');
-            const trimMax = document.getElementById('trim-slider-max');
-            if (trimMin && trimMax) {
-                trimMin.max = masterMergedData.length - 1;
-                trimMax.max = masterMergedData.length - 1;
-                trimMin.value = 0;
-                trimMax.value = masterMergedData.length - 1;
-            }
-
-            // Unhide analytical UI
-            document.getElementById('fullscreen-wrapper-a')?.classList.remove('hidden');
-            document.getElementById('dashboard')?.classList.remove('hidden');
-            document.getElementById('speed-toggle-container')?.classList.remove('hidden');
-
-            calculateSmartThresholds();
-            initChart(mergedData);
-
+            mergedData = mergeAsOf(gpxData, csvData, 5);  
+            
         } else {
             // If no CSV is present, use only the GPX data
             mergedData = gpxData; 
-            
-            // hide analytical UI
-            document.getElementById('fullscreen-wrapper-a')?.classList.add('hidden');
-            document.getElementById('dashboard')?.classList.add('hidden');
-            document.getElementById('speed-toggle-container')?.classList.add('hidden');
-            
-            if (chartInstance) {
-                chartInstance.destroy();
-                chartInstance = null;
-            }
         }
-        
+
+        masterMergedData = [...mergedData]; // Captures the backup master copy
+
+        if (mergedData.length === 0) {
+            throw new Error("Could not align data. File may be corrupted.");
+        }
+
+        // Configure the trimming sliders to match the array length
+        const trimMin = document.getElementById('trim-slider-min');
+        const trimMax = document.getElementById('trim-slider-max');
+        if (trimMin && trimMax) {
+            trimMin.max = masterMergedData.length - 1;
+            trimMax.max = masterMergedData.length - 1;
+            trimMin.value = 0;
+            trimMax.value = masterMergedData.length - 1;
+        }
+
+        // Unhide analytical UI
+        document.getElementById('fullscreen-wrapper-a')?.classList.remove('hidden');
+        document.getElementById('dashboard')?.classList.remove('hidden');
+        document.getElementById('speed-toggle-container')?.classList.remove('hidden');
+        document.getElementById('trim-slider-container')?.classList.remove('hidden');
+
+        calculateSmartThresholds();
+        initChart(mergedData);
+
         // Expose the primary replay container
         document.getElementById('replay-section')?.classList.remove('hidden');
         
@@ -194,6 +186,7 @@ function readFileAsText(file) {
 .
  * Parses raw GPX XML string into an array of coordinate objects.
  * Calculates 'seconds_elapsed' relative to the first track point.
+ * Extracts native '<speed>' tags to calculate splits without needing a CSV.
  * @param {string} gpxText - Raw XML string.
  * @returns {Array<Object>} Array of objects: { lat, lon, time, seconds_elapsed }.
  */
@@ -210,13 +203,31 @@ function parseGPX(gpxText) {
         const lat = parseFloat(pt.getAttribute('lat'));
         const lon = parseFloat(pt.getAttribute('lon'));
         const timeNode = pt.getElementsByTagName('time')[0];
+        const speedNode = pt.getElementsByTagName('speed')[0]; // Look for the speed tag
         
         if (timeNode) {
             const timeDate = new Date(timeNode.textContent);
             if (i === 0) startTime = timeDate.getTime();
             
             const seconds_elapsed = Math.round((timeDate.getTime() - startTime) / 1000);
-            parsed.push({ lat, lon, seconds_elapsed });
+
+            // Extract speed and format it like the CSV parser does
+            let speedMS = 0;
+            let splitSecs = null;
+            if (speedNode) {
+                speedMS = parseFloat(speedNode.textContent) || 0;
+                if (speedMS > 0) {
+                    splitSecs = 500 / speedMS;
+                }
+            }
+            
+            parsed.push({ 
+                lat, 
+                lon, 
+                seconds_elapsed,
+                'Speed (m/s)': speedMS,  // Powers the Map Heatmap
+                split_seconds: splitSecs // Powers the Chart and Dashboard
+            });
         }
     }
     return parsed;
