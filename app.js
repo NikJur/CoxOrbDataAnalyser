@@ -197,11 +197,26 @@ function parseGPX(gpxText) {
     
     const parsed = [];
     let startTime = null;
+    let totalDist = 0;
+    let lastLat = null;
+    let lastLon = null;
+
+    // Internal helper to calculate distance between two GPS coordinates in meters
+    const getHaversine = (lat1, lon1, lat2, lon2) => {
+        const R = 6371e3; // Earth radius in meters
+        const p1 = lat1 * Math.PI/180;
+        const p2 = lat2 * Math.PI/180;
+        const dp = (lat2-lat1) * Math.PI/180;
+        const dl = (lon2-lon1) * Math.PI/180;
+        const a = Math.sin(dp/2) * Math.sin(dp/2) + Math.cos(p1) * Math.cos(p2) * Math.sin(dl/2) * Math.sin(dl/2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    };
 
     for (let i = 0; i < trkpts.length; i++) {
         const pt = trkpts[i];
         const lat = parseFloat(pt.getAttribute('lat'));
         const lon = parseFloat(pt.getAttribute('lon'));
+
         const timeNode = pt.getElementsByTagName('time')[0];
         const speedNode = pt.getElementsByTagName('speed')[0]; // Look for the speed tag
         
@@ -211,12 +226,20 @@ function parseGPX(gpxText) {
             
             const seconds_elapsed = Math.round((timeDate.getTime() - startTime) / 1000);
 
+            // Accumulate distance using GPS coordinates
+            if (lastLat !== null && lastLon !== null) {
+                totalDist += getHaversine(lastLat, lastLon, lat, lon);
+            }
+            lastLat = lat;
+            lastLon = lon;
+
             // Extract speed and format it like the CSV parser does
             let speedMS = 0;
             let splitSecs = null;
             if (speedNode) {
                 speedMS = parseFloat(speedNode.textContent) || 0;
-                if (speedMS > 0) {
+                // Cutoff: Only calculate a split if the boat is moving faster than 1.66 m/s (5:00 split).
+                if (speedMS > 1.66) {
                     splitSecs = 500 / speedMS;
                 }
             }
@@ -226,7 +249,8 @@ function parseGPX(gpxText) {
                 lon, 
                 seconds_elapsed,
                 'Speed (m/s)': speedMS,  // Powers the Map Heatmap
-                split_seconds: splitSecs // Powers the Chart and Dashboard
+                split_seconds: splitSecs, // Powers the Chart and Dashboard
+                'Distance': totalDist // Provides a fallback distance if no CSV is loaded
             });
         }
     }
@@ -1308,8 +1332,8 @@ function getDynamicSpeedColor(speed, minSpeed, maxSpeed) {
  * Converts the physical m/s speeds into mm:ss splits and injects them into the UI.
  */
 function calculateSmartThresholds() {
-    // Extract valid speed values and sort them in ascending order
-    const speeds = mergedData.map(pt => pt['Speed (m/s)']).filter(s => s != null && !isNaN(s));
+    // Extract valid speed values and sort them in ascending order + Filter out speeds < 1.66 m/s to align with the 300-second split cutoff
+    const speeds = mergedData.map(pt => pt['Speed (m/s)']).filter(s => s != null && s > 1.66 && !isNaN(s));
     if (speeds.length === 0) return;
 
     speeds.sort((a, b) => a - b);
