@@ -502,10 +502,31 @@ function initMap(data) {
     // Add the custom fullscreen control to the map
     mapInstance.addControl(new L.Control.Fullscreen());
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(mapInstance);
-    
+    // ==========================================
+    // MAP LAYERS CONFIGURATION
+    // ==========================================
+    // Standard OpenStreetMap Layer
+    const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19
+    });
+    // High-Resolution Satellite Layer (Esri)
+    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles © Esri',
+        maxZoom: 19
+    });
+
+    // Add the standard map to the canvas by default
+    osmLayer.addTo(mapInstance);
+
+    // Create the toggle menu in the top-right corner
+    const baseMaps = {
+        "Standard Map": osmLayer,
+        "Satellite View": satelliteLayer
+    };
+    L.control.layers(baseMaps, null, { position: 'topleft' }).addTo(mapInstance);
+    // ==========================================
+
     // Render the initial solid blue route using the new dynamic function
     drawPrimaryRoute(false);
 
@@ -1496,9 +1517,26 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
 
             compareMapInstance.addControl(new L.Control.Fullscreen()); // Fullscreen control for the comparison map
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(compareMapInstance);
+            // ==========================================
+            // MAP LAYERS CONFIGURATION (SECTION B)
+            // ==========================================
+            const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            });
+            const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles © Esri',
+                maxZoom: 19
+            });
+
+            osmLayer.addTo(compareMapInstance); // Uses the Section B map variable
+
+            const baseMaps = {
+                "Standard Map": osmLayer,
+                "Satellite View": satelliteLayer
+            };
+            L.control.layers(baseMaps, null, { position: 'topleft' }).addTo(compareMapInstance);
+            // ==========================================
 
             const container = document.getElementById('compare-map-container');
             const resizeObserver = new ResizeObserver(() => {
@@ -1574,15 +1612,32 @@ document.getElementById('compare-btn').addEventListener('click', async () => {
 
     document.getElementById('compare-map-container').classList.remove('hidden');
 
-    // Initialize the comparison map if it does not exist yet
+    // Initialise the comparison map if it does not exist yet
     if (!compareMapInstance) {
         compareMapInstance = L.map('compare-map').setView([51.474, -0.271], 13);
 
         compareMapInstance.addControl(new L.Control.Fullscreen());
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(compareMapInstance);
+        // ==========================================
+        // MAP LAYERS CONFIGURATION (SECTION B)
+        // ==========================================
+        const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        });
+        const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles © Esri',
+            maxZoom: 19
+        });
+
+        osmLayer.addTo(compareMapInstance); // Uses the Section B map variable
+
+        const baseMaps = {
+            "Standard Map": osmLayer,
+            "Satellite View": satelliteLayer
+        };
+        L.control.layers(baseMaps, null, { position: 'topleft' }).addTo(compareMapInstance);
+        // ==========================================
 
         const container = document.getElementById('compare-map-container');
         const resizeObserver = new ResizeObserver(() => {
@@ -2505,9 +2560,31 @@ function initMapC(data1, data2) {
 
     mapInstanceC.addControl(new L.Control.Fullscreen()); // Adds the fullscreen control to the map
     
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(mapInstanceC);
+// ==========================================
+    // MAP LAYERS CONFIGURATION (SECTION C)
+    // ==========================================
+    // Standard OpenStreetMap Layer
+    const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19
+    });
+    // High-Resolution Satellite Layer (Esri)
+    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles © Esri',
+        maxZoom: 19
+    });
+
+    // Add the standard map to the canvas by default
+    osmLayer.addTo(mapInstanceC);
+
+    // Create the toggle menu in the top-right corner
+    const baseMaps = {
+        "Standard Map": osmLayer,
+        "Satellite View": satelliteLayer
+    };
+    L.control.layers(baseMaps, null, { position: 'topleft' }).addTo(mapInstanceC);
+    // ==========================================
+
 
     const bounds = L.latLngBounds([]);
 
