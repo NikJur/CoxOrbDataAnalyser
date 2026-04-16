@@ -364,6 +364,52 @@ button:hover { background-color: #1C3754; }
     box-shadow: 0 2px 4px rgba(0,0,0,0.4);
 }
 
+/* =========================================
+   CUSTOM LEAFLET MAP CONTROLS
+   ========================================= */
+/* Shrink the Layer Toggle Icon to 30x30 to match the Fullscreen button */
+.leaflet-control-layers-toggle {
+    width: 30px !important;
+    height: 30px !important;
+    background-size: 16px 16px !important; /* Scales the physical image down */
+    background-position: center !important;
+    border-radius: 4px !important;
+}
+
+/* Style the expanded menu box */
+.leaflet-control-layers-expanded {
+    padding: 10px 12px !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(37, 71, 109, 0.2) !important; /* Navy border */
+    border-radius: 6px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+    
+    /* Apply CoxOrb Navy typography */
+    color: var(--primary) !important; 
+    font-family: inherit !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+}
+
+/* Add an Orange hover effect to the text */
+.leaflet-control-layers-expanded label {
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.leaflet-control-layers-expanded label:hover {
+    color: #F08118 !important; /* CoxOrb Orange */
+}
+
+/* Magically colour the native HTML radio buttons */
+.leaflet-control-layers-selector {
+    accent-color: #F08118 !important; /* Turns the inner dot CoxOrb Orange when clicked */
+    margin-top: 1px;
+    cursor: pointer;
+}
+
 /* * Container for the playback and timeline controls. 
  */
 .controls {
