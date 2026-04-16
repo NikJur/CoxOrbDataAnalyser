@@ -2945,27 +2945,32 @@ document.getElementById('demo-btn-c')?.addEventListener('click', async (e) => {
     btn.innerText = "Loading Demo...";
 
     try {
-        // Fetches the existing demo files from the demo folder
+        // Fetch Boat 1 files from the original demo folder
         const resGpx1 = await fetch('demo_data/example.GPX');
-        const resGpx2 = await fetch('demo_data/example_comparison.gpx');
-        const resCsv = await fetch('demo_data/example_GRAPH.CSV');
+        const resCsv1 = await fetch('demo_data/example_GRAPH.CSV');
+        
+        // Fetch Boat 2 files from the new WEHoRR folder
+        const resGpx2 = await fetch('demo_data/demo_wehorr/gps_wehorr.GPX');
+        const resCsv2 = await fetch('demo_data/demo_wehorr/data_wehorr.CSV');
 
-        if (!resGpx1.ok || !resGpx2.ok || !resCsv.ok) {
+        if (!resGpx1.ok || !resCsv1.ok || !resGpx2.ok || !resCsv2.ok) {
             throw new Error("Could not locate demo files on the server.");
         }
 
         const txtGpx1 = await resGpx1.text();
+        const txtCsv1 = await resCsv1.text();
         const txtGpx2 = await resGpx2.text();
-        const txtCsv = await resCsv.text();
+        const txtCsv2 = await resCsv2.text();
 
-        // Parses the data
+        // Parse the data for both boats
         const gpxData1 = parseGPX(txtGpx1);
-        const gpxData2 = parseGPX(txtGpx2);
+        const parsedCsv1 = parseCSV(txtCsv1);
         
-        const parsedCsv = parseCSV(txtCsv);
+        const gpxData2 = parseGPX(txtGpx2);
+        const parsedCsv2 = parseCSV(txtCsv2);
 
-        mergedDataC1 = mergeAsOf(gpxData1, parsedCsv, 5);
-        mergedDataC2 = mergeAsOf(gpxData2, parsedCsv, 5);
+        mergedDataC1 = mergeAsOf(gpxData1, parsedCsv1, 5);
+        mergedDataC2 = mergeAsOf(gpxData2, parsedCsv2, 5);
 
         // Captures the backup master arrays for trimming
         masterMergedDataC1 = [...mergedDataC1];
