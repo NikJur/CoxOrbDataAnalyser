@@ -2597,7 +2597,6 @@ function initMapC(data1, data2) {
     L.control.layers(baseMaps, null, { position: 'topleft' }).addTo(mapInstanceC);
     // ==========================================
 
-
     const bounds = L.latLngBounds([]);
 
     // Draw Boat 1 Trajectory (Orange)
