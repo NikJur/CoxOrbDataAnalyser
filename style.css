@@ -323,6 +323,26 @@ button:hover { background-color: #1C3754; }
     width: auto !important; /* Overrides the inline 50% width */
 }
 
+/* Overrides the default Navy typography specifically when the app enters fullscreen mode AND Satellite View is active.
+   Forces the text to CoxOrb Orange (#F08118) to contrast against dark satellite water. */
+#map-ui-wrapper.satellite-active:fullscreen .dashboard h2,
+#map-ui-wrapper.satellite-active:fullscreen .dashboard h3,
+#map-ui-wrapper.satellite-active:fullscreen .dashboard p,
+#map-ui-wrapper.satellite-active:fullscreen .dashboard span,
+#map-ui-wrapper.satellite-active:fullscreen .dashboard div,
+#map-ui-wrapper.satellite-active:fullscreen .controls label,
+#map-ui-wrapper.satellite-active:fullscreen .controls span,
+#map-ui-wrapper-c.satellite-active:fullscreen .dashboard h2,
+#map-ui-wrapper-c.satellite-active:fullscreen .dashboard h3,
+#map-ui-wrapper-c.satellite-active:fullscreen .dashboard p,
+#map-ui-wrapper-c.satellite-active:fullscreen .dashboard span,
+#map-ui-wrapper-c.satellite-active:fullscreen .dashboard div,
+#map-ui-wrapper-c.satellite-active:fullscreen .controls label,
+#map-ui-wrapper-c.satellite-active:fullscreen .controls span {
+    color: #F08118 !important;
+}
+
+
 
 /* * Fallback for Firefox. 
  * Firefox ignores WebKit resizer properties and uses a fixed hit target, 

@@ -527,6 +527,18 @@ function initMap(data) {
     L.control.layers(baseMaps, null, { position: 'topleft' }).addTo(mapInstance);
     // ==========================================
 
+    // Listen for layer changes to toggle the orange UI typography in fullscreen
+    mapInstance.on('baselayerchange', function (e) {
+        const wrapper = document.getElementById('map-ui-wrapper');
+        if (!wrapper) return;
+        
+        if (e.name === "Satellite View") {
+            wrapper.classList.add('satellite-active');
+        } else {
+            wrapper.classList.remove('satellite-active');
+        }
+    });
+
     // Render the initial solid blue route using the new dynamic function
     drawPrimaryRoute(false);
 
@@ -536,7 +548,7 @@ function initMap(data) {
         iconSize: [14, 14] 
     });
 
-    // Initializes the draggable boat marker with a high z-index to sit above the trim bars
+    // Initialises the draggable boat marker with a high z-index to sit above the trim bars
     boatMarker = L.marker(startLoc, { 
         icon: boatIcon, 
         zIndexOffset: 1000 
@@ -2584,7 +2596,6 @@ function initMapC(data1, data2) {
     };
     L.control.layers(baseMaps, null, { position: 'topleft' }).addTo(mapInstanceC);
     // ==========================================
-
 
     const bounds = L.latLngBounds([]);
 
