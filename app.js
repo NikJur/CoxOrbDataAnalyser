@@ -1519,91 +1519,6 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
         // Force a map resize
         setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(); }, 100);
 
-        // --- MULTI-ROUTE COMPARISON DEMO SETUP ---
-        document.getElementById('compare-map-container')?.classList.remove('hidden');
-
-        // Initialise the secondary comparison map if it does not exist
-        if (!compareMapInstance) {
-            const startLoc = [gpxData[0].lat, gpxData[0].lon];
-            compareMapInstance = L.map('compare-map').setView(startLoc, 13);
-
-            compareMapInstance.addControl(new L.Control.Fullscreen()); // Fullscreen control for the comparison map
-
-            // ==========================================
-            // MAP LAYERS CONFIGURATION (SECTION B)
-            // ==========================================
-            const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors',
-                maxZoom: 19
-            });
-            const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                attribution: 'Tiles © Esri',
-                maxZoom: 19
-            });
-
-            osmLayer.addTo(compareMapInstance); // Uses the Section B map variable
-
-            const baseMaps = {
-                "Standard Map": osmLayer,
-                "Satellite View": satelliteLayer
-            };
-            L.control.layers(baseMaps, null, { position: 'topleft' }).addTo(compareMapInstance);
-            // ==========================================
-
-            const container = document.getElementById('compare-map-container');
-            const resizeObserver = new ResizeObserver(() => {
-                if (compareMapInstance) compareMapInstance.invalidateSize();
-            });
-            if (container) resizeObserver.observe(container);
-        }
-
-        try {
-            // Clear any previously existing layers from manual uploads
-            for(let i = 0; i < 5; i++) {
-                if (compareLayers[i]) {
-                    compareMapInstance.removeLayer(compareLayers[i]);
-                    compareLayers[i] = null;
-                }
-                // Reset toggles to unchecked to start fresh
-                const toggle = document.getElementById(`toggle-compare-${i+1}`);
-                if (toggle) toggle.checked = false;
-            }
-
-            let bounds = L.latLngBounds([]);
-
-            // Slot 1: The Primary Demo Route (Blue)
-            const latlngs1 = gpxData.map(pt => [pt.lat, pt.lon]);
-            const poly1 = L.polyline(latlngs1, { color: compareColors[0], weight: 3 });
-            compareLayers[0] = poly1;
-            const toggle1 = document.getElementById('toggle-compare-1');
-            if (toggle1) toggle1.checked = true; // Visually switch toggle ON
-            poly1.addTo(compareMapInstance);
-            bounds.extend(poly1.getBounds());
-
-            // Slot 2: Fetch and render the secondary Comparison Demo Route (Orange)
-            const compareResponse = await fetch('demo_data/example_comparison.gpx');
-            if (compareResponse.ok) {
-                const compareText = await compareResponse.text();
-                const compareData = parseGPX(compareText);
-                const latlngs2 = compareData.map(pt => [pt.lat, pt.lon]);
-                
-                const poly2 = L.polyline(latlngs2, { color: compareColors[1], weight: 3 });
-                compareLayers[1] = poly2;
-                const toggle2 = document.getElementById('toggle-compare-2');
-                if (toggle2) toggle2.checked = true; // Visually switch toggle ON
-                poly2.addTo(compareMapInstance);
-                bounds.extend(poly2.getBounds());
-            }
-
-            // Adjust map view to encompass both routes
-            if (bounds.isValid()) {
-                compareMapInstance.fitBounds(bounds);
-            }
-
-        } catch (err) {
-            console.warn("Could not load secondary comparison demo data.", err);
-        }
-
         demoBtn.innerText = "Demo Data Loaded"; // Reset button text on success
 
     } catch (error) {
@@ -1879,6 +1794,10 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
     // Reset load button text
     const compareBtn = document.getElementById('compare-btn');
     if (compareBtn) compareBtn.innerText = "Render Comparison Map";
+
+    // Reset the Section B demo button text
+    const demoBtnB = document.getElementById('demo-btn-b');
+    if (demoBtnB) demoBtnB.innerText = "Load Demo Data";
 });
 
 /**
@@ -3586,4 +3505,101 @@ document.getElementById('clear-compare-c-btn')?.addEventListener('click', () => 
     if (demoBtnC) demoBtnC.innerText = "Load Comparison Demo";
     //
 
+});
+
+
+/**
+ * SECTION B: STEERING DEMO ENGINE
+ * Fetches three distinct GPX files and plots them side-by-side on the comparative map.
+ */
+document.getElementById('demo-btn-b')?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('demo-btn-b');
+    btn.innerText = "Loading Steering Demo...";
+
+    try {
+        // Unhide the Section B map container
+        document.getElementById('compare-map-container')?.classList.remove('hidden');
+
+        // Initialise the secondary comparison map if it does not exist yet
+        if (!compareMapInstance) {
+            compareMapInstance = L.map('compare-map').setView([51.474, -0.271], 13);
+            compareMapInstance.addControl(new L.Control.Fullscreen());
+
+            const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
+            const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
+
+            osmLayer.addTo(compareMapInstance);
+
+            const baseMaps = {
+                "Standard Map": osmLayer,
+                "Satellite View": satelliteLayer
+            };
+            L.control.layers(baseMaps, null, { position: 'topleft' }).addTo(compareMapInstance);
+
+            const container = document.getElementById('compare-map-container');
+            const resizeObserver = new ResizeObserver(() => {
+                if (compareMapInstance) compareMapInstance.invalidateSize();
+            });
+            if (container) resizeObserver.observe(container);
+        }
+
+        // Clear any previously existing layers from manual uploads
+        for (let i = 0; i < 5; i++) {
+            if (compareLayers[i]) {
+                compareMapInstance.removeLayer(compareLayers[i]);
+                compareLayers[i] = null;
+            }
+            const toggle = document.getElementById(`toggle-compare-${i+1}`);
+            if (toggle) toggle.checked = false;
+        }
+
+        let bounds = L.latLngBounds([]);
+
+        // Fetch all three demo files simultaneously
+        const [res1, res2, res3] = await Promise.all([
+            fetch('demo_data/example.GPX'),
+            fetch('demo_data/example_comparison.GPX'),
+            fetch('demo_data/demo_wehorr/gps_wehorr.GPX')
+        ]);
+
+        if (!res1.ok || !res2.ok || !res3.ok) throw new Error("Could not load all Section B demo files.");
+
+        const txt1 = await res1.text();
+        const txt2 = await res2.text();
+        const txt3 = await res3.text();
+
+        // Helper function to process and draw a single line
+        const processAndDraw = (gpxText, slotIndex) => {
+            const parsedData = parseGPX(gpxText);
+            const latlngs = parsedData.map(pt => [pt.lat, pt.lon]);
+            const poly = L.polyline(latlngs, { color: compareColors[slotIndex], weight: 3 });
+            
+            compareLayers[slotIndex] = poly;
+            poly.addTo(compareMapInstance);
+            bounds.extend(poly.getBounds());
+
+            // Visually check the toggle switch
+            const toggle = document.getElementById(`toggle-compare-${slotIndex + 1}`);
+            if (toggle) toggle.checked = true;
+        };
+
+        // Draw the three routes into Slots 0, 1, and 2
+        processAndDraw(txt1, 1); // Blue Line
+        processAndDraw(txt2, 3); // Orange Line
+        processAndDraw(txt3, 4); // Black Line
+
+        // Adjust map view to perfectly frame all three routes
+        if (bounds.isValid()) {
+            compareMapInstance.fitBounds(bounds, { padding: [20, 20] });
+        }
+
+        setTimeout(() => compareMapInstance.invalidateSize(), 100);
+        btn.innerText = "Demo Data Loaded";
+
+    } catch (error) {
+        console.error("Section B Demo failed:", error);
+        alert(`Error loading steering demo data: ${error.message}`);
+        btn.innerText = "Load Demo Data";
+    }
 });
