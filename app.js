@@ -134,6 +134,7 @@ document.getElementById('process-btn').addEventListener('click', async () => {
         document.getElementById('fairway-toggle-container')?.classList.remove('hidden');
         document.getElementById('buoys-toggle-container')?.classList.remove('hidden');
         document.getElementById('isis-toggle-container')?.classList.remove('hidden');
+        document.getElementById('bridges-toggle-container')?.classList.remove('hidden');
 
         calculateSmartThresholds();
         initChart(mergedData);
@@ -1474,6 +1475,7 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
         document.getElementById('dashboard')?.classList.remove('hidden');
         document.getElementById('speed-toggle-container')?.classList.remove('hidden');
         document.getElementById('audio-container')?.classList.remove('hidden');
+        document.getElementById('bridges-toggle-container')?.classList.remove('hidden');
 
         calculateSmartThresholds();
 
@@ -2363,6 +2365,74 @@ if (toggleCompareBuoys) {
             });
         } else {
             compareMapInstance.removeLayer(compareBuoyLayer);
+        }
+    });
+}
+
+
+/**
+ * Logic: Tideway Bridges Overlay
+ * Plots distinct markers for key Tideway bridges. 
+ * Injects local images into custom HTML tooltips that appear on hover.
+ */
+
+// Global layer group for the bridges
+let bridgesLayer = L.featureGroup();
+let bridgesLoaded = false;
+
+// The exact GPS coordinates for the Championship Course bridges
+const tidewayBridges = [
+    { name: "Chiswick Bridge", lat: 51.4731070, lon: -0.2697993, img: "London_bridges/Chiswick_bridge_cropped.png" },
+    { name: "Barnes Railway Bridge", lat: 51.4727400, lon: -0.2537921, img: "London_bridges/Barnes_railway_bridge_cropped.png" },
+    { name: "Hammersmith Bridge", lat: 51.4883597, lon: -0.2302652, img: "London_bridges/Hammersmith_bridge_cropped.png" },
+    { name: "Putney Bridge", lat: 51.4669835, lon: -0.2128739, img: "London_bridges/Putney_bridge_cropped.png" },
+    { name: "Fulham Railway Bridge", lat: 51.4659766, lon: -0.2095773, img: "London_bridges/Fulham_railway_bridge_cropped.png" }
+];
+
+function buildBridgesLayer() {
+    if (bridgesLoaded) return; // Prevent building duplicate markers
+    
+    tidewayBridges.forEach(bridge => {
+        // Create a distinct marker (e.g., a white circle with a heavy Navy border)
+        const marker = L.circleMarker([bridge.lat, bridge.lon], {
+            radius: 7,
+            fillColor: '#ffffff',
+            color: '#25476D', // CoxOrb Navy
+            weight: 3,
+            fillOpacity: 1,
+            zIndexOffset: 500
+        });
+
+        // Construct the HTML for the hover popup containing the image
+        const tooltipHTML = `
+            <b>${bridge.name}</b><br>
+            <img src="${bridge.img}" alt="${bridge.name}">
+        `;
+
+        // Bind the tooltip to trigger on hover
+        marker.bindTooltip(tooltipHTML, {
+            className: 'bridge-image-tooltip',
+            direction: 'top',
+            offset: [0, -10] // Shifts it slightly above the user's cursor
+        });
+
+        marker.addTo(bridgesLayer);
+    });
+
+    bridgesLoaded = true;
+}
+
+// Attach the Event Listener to the HTML Toggle Switch
+const toggleBridges = document.getElementById('toggle-bridges');
+if (toggleBridges) {
+    toggleBridges.addEventListener('change', (e) => {
+        if (!mapInstance) return;
+        
+        if (e.target.checked) {
+            buildBridgesLayer();
+            bridgesLayer.addTo(mapInstance);
+        } else {
+            mapInstance.removeLayer(bridgesLayer);
         }
     });
 }

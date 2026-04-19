@@ -1049,3 +1049,29 @@ audio, #audio-player {
 .leaflet-tooltip-bottom.coxorb-permanent-label::before {
     border-bottom-color: #F08118 !important;
 }
+
+
+/* Custom Leaflet Tooltip for Bridge Images */
+.bridge-image-tooltip {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(37, 71, 109, 0.2) !important;
+    border-radius: 8px !important;
+    padding: 8px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+    text-align: center;
+}
+
+.bridge-image-tooltip img {
+    width: 180px; /* Forces all cropped images to be a uniform width */
+    height: auto;
+    border-radius: 4px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+}
+
+.bridge-image-tooltip b {
+    color: #25476D;
+    font-size: 0.9rem;
+    font-family: inherit;
+}
