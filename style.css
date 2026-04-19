@@ -1060,18 +1060,43 @@ audio, #audio-player {
     padding: 8px !important;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
     text-align: center;
+    
+    /* DESKTOP: Give the tooltip a rigid backbone */
+    width: 500px !important;
+    
+    /* MOBILE: Restrict the maximum size to 85% of the screen width */
+    max-width: 85vw !important; 
+    white-space: normal !important; /* Allows text to wrap on tiny screens */
 }
 
 .bridge-image-tooltip img {
-    width: 180px; /* Forces all cropped images to be a uniform width */
+    width: 100%; 
     height: auto;
     border-radius: 4px;
     margin-top: 5px;
     border: 1px solid #ccc;
 }
 
-.bridge-image-tooltip b {
+/* Custom content wrapper inside the standard Leaflet Popup */
+.bridge-image-content {
+    text-align: center;
+    width: 100%; /* Base width for desktop */
+    max-width: 75vw; /* Safety constraint for mobile screens */
+}
+
+/* Enlarged, legible typography for the bridge title */
+.bridge-image-content b {
+    display: block;
+    font-size: 1.25rem; /* Bumps the font size up to be highly readable */
     color: #25476D;
-    font-size: 0.9rem;
-    font-family: inherit;
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+/* Fluid image scaling */
+.bridge-image-content img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid #ccc;
 }

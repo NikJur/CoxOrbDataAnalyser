@@ -2403,17 +2403,19 @@ function buildBridgesLayer() {
             zIndexOffset: 500
         });
 
-        // Construct the HTML for the hover popup containing the image
-        const tooltipHTML = `
-            <b>${bridge.name}</b><br>
-            <img src="${bridge.img}" alt="${bridge.name}">
+        // Construct the HTML payload using a CSS wrapper for large text
+        const popupHTML = `
+            <div class="bridge-image-content">
+                <b>${bridge.name}</b>
+                <img src="${bridge.img}" alt="${bridge.name}">
+            </div>
         `;
 
         // Bind the tooltip to trigger on hover
-        marker.bindTooltip(tooltipHTML, {
+        marker.bindTooltip(popupHTML, {
             className: 'bridge-image-tooltip',
             direction: 'top',
-            offset: [0, -10] // Shifts it slightly above the user's cursor
+            offset: [0, -10], // Shifts it slightly above the user's cursor
         });
 
         marker.addTo(bridgesLayer);
