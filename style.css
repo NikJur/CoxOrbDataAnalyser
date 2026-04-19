@@ -1049,3 +1049,54 @@ audio, #audio-player {
 .leaflet-tooltip-bottom.coxorb-permanent-label::before {
     border-bottom-color: #F08118 !important;
 }
+
+
+/* Custom Leaflet Tooltip for Bridge Images */
+.bridge-image-tooltip {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(37, 71, 109, 0.2) !important;
+    border-radius: 8px !important;
+    padding: 8px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+    text-align: center;
+    
+    /* DESKTOP: Give the tooltip a rigid backbone */
+    width: 500px !important;
+    
+    /* MOBILE: Restrict the maximum size to 85% of the screen width */
+    max-width: 85vw !important; 
+    white-space: normal !important; /* Allows text to wrap on tiny screens */
+}
+
+.bridge-image-tooltip img {
+    width: 100%; 
+    height: auto;
+    border-radius: 4px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Custom content wrapper inside the standard Leaflet Popup */
+.bridge-image-content {
+    text-align: center;
+    width: 100%; /* Base width for desktop */
+    max-width: 75vw; /* Safety constraint for mobile screens */
+}
+
+/* Enlarged, legible typography for the bridge title */
+.bridge-image-content b {
+    display: block;
+    font-size: 1.25rem; /* Bumps the font size up to be highly readable */
+    color: #25476D;
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+/* Fluid image scaling */
+.bridge-image-content img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
