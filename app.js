@@ -1742,6 +1742,13 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
     const toggleIsisLine = document.getElementById('toggle-isis-line');
     if (toggleIsisLine) toggleIsisLine.checked = false;
 
+    // Reset the Tideway Bridges toggle and remove the markers
+    const toggleBridgesEl = document.getElementById('toggle-bridges');
+    if (toggleBridgesEl) toggleBridgesEl.checked = false;
+    if (typeof bridgesLayer !== 'undefined' && bridgesLayer && mapInstance) {
+        mapInstance.removeLayer(bridgesLayer);
+    }
+
     // Hide the visualization containers again
     replaySection.classList.add('hidden');
     audioContainer.classList.add('hidden');
