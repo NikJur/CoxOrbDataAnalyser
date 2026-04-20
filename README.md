@@ -19,7 +19,7 @@ Upload GPX files to view the exact course steered on an interactive map.
 
 - Fairway Limits Overlay: Toggle on the Thames Tideway fairway boundaries directly on the map. The boundaries are parsed from a local KML file and rendered as polylines, giving coxswains an instant visual reference for where they should (and shouldn't) be steering.
 
-- Navigation Buoys Overlay: Toggle named navigational buoys along the Tideway onto the map. Each buoy is rendered as a colour-coded circle marker (colours sourced from the KML data) with a hover tooltip displaying the buoy's name. Buoy data courtesy of the Port of London Authority (PLA) and Thames Rowing Club.
+- Navigation Buoys Overlay: Toggle named navigational buoys along the Tideway onto the map. Each buoy is rendered as a colour-coded circle marker with a hover tooltip displaying the buoy's name. Buoy data courtesy of the Port of London Authority (PLA) and Thames Rowing Club.
 
 - Isis Race Line Overlay: Load the Oxford Isis Bumps course line onto the map. Both the primary map and the Comparison Mode support this overlay, allowing Isis-based steering analysis alongside any uploaded GPX tracks.
 
