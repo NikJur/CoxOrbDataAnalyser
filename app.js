@@ -1742,6 +1742,13 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
     const toggleIsisLine = document.getElementById('toggle-isis-line');
     if (toggleIsisLine) toggleIsisLine.checked = false;
 
+    // Reset the Tideway Bridges toggle and remove the markers
+    const toggleBridgesEl = document.getElementById('toggle-bridges');
+    if (toggleBridgesEl) toggleBridgesEl.checked = false;
+    if (typeof bridgesLayer !== 'undefined' && bridgesLayer && mapInstance) {
+        mapInstance.removeLayer(bridgesLayer);
+    }
+
     // Hide the visualization containers again
     replaySection.classList.add('hidden');
     audioContainer.classList.add('hidden');
@@ -2951,7 +2958,7 @@ document.getElementById('demo-btn-c')?.addEventListener('click', async (e) => {
         const resGpx1 = await fetch('demo_data/example.GPX');
         const resCsv1 = await fetch('demo_data/example_GRAPH.CSV');
         
-        // Fetch Boat 2 files from the new WEHoRR folder
+        // Fetch Boat 2 files from the WEHoRR folder
         const resGpx2 = await fetch('demo_data/demo_wehorr/gps_wehorr.GPX');
         const resCsv2 = await fetch('demo_data/demo_wehorr/data_wehorr.CSV');
 
@@ -3631,7 +3638,7 @@ document.getElementById('demo-btn-b')?.addEventListener('click', async (e) => {
         // Fetch all three demo files simultaneously
         const [res1, res2, res3] = await Promise.all([
             fetch('demo_data/example.GPX'),
-            fetch('demo_data/example_comparison.GPX'),
+            fetch('demo_data/example_comparison.gpx'),
             fetch('demo_data/demo_wehorr/gps_wehorr.GPX')
         ]);
 
