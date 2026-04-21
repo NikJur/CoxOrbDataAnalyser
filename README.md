@@ -21,6 +21,8 @@ Upload GPX files to view the exact course steered on an interactive map.
 
 - Navigation Buoys Overlay: Toggle named navigational buoys along the Tideway onto the map. Each buoy is rendered as a colour-coded circle marker with a hover tooltip displaying the buoy's name. Buoy data courtesy of the Port of London Authority (PLA) and Thames Rowing Club.
 
+- Tideway Bridges Overlay: Toggle key London Tideway bridge markers on the map and hover to view bridge drawings for visual reference.
+
 - Isis Race Line Overlay: Load the Oxford Isis Bumps course line onto the map. Both the primary map and the Comparison Mode support this overlay, allowing Isis-based steering analysis alongside any uploaded GPX tracks.
 
 ### 2. Performance Metrics
@@ -56,4 +58,4 @@ Found a bug or have a feature request? Use the Contact & Feedback form built dir
 ---
 
 ## ⭐️ Support the Project (for free!)
-If this tool enhances your coxing, coaching, or rowing analyses, please consider giving this repository a star ⭐️. It costs nothing, helps track community engagement, and encourages future development and updates. It also helps you find it again in a months time. :)
+If this tool enhances your coxing, coaching, or rowing analyses, please consider giving this repository a star ⭐️. It costs nothing, helps track community engagement, and encourages future development and updates. It also helps you find it again in a month's time. :)
