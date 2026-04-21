@@ -58,4 +58,4 @@ Found a bug or have a feature request? Use the Contact & Feedback form built dir
 ---
 
 ## ⭐️ Support the Project (for free!)
-If this tool enhances your coxing, coaching, or rowing analyses, please consider giving this repository a star ⭐️. It costs nothing, helps track community engagement, and encourages future development and updates. It also helps you find it again in a months time. :)
+If this tool enhances your coxing, coaching, or rowing analyses, please consider giving this repository a star ⭐️. It costs nothing, helps track community engagement, and encourages future development and updates. It also helps you find it again in a month's time. :)
