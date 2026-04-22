@@ -1775,7 +1775,7 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
         document.getElementById(`toggle-compare-${i+1}`).checked = true;
     }
 
-    // Explicitly command Leaflet to remove the KML layers (fairway and buoys) if they exist, without relying on the toggle state
+    // Explicitly command Leaflet to remove the KML layers (fairway and buoys, and bridge drawings) if they exist, without relying on the toggle state
     if (compareMapInstance && compareFairwayLayer) {
         compareMapInstance.removeLayer(compareFairwayLayer);
     }
@@ -1785,6 +1785,10 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
     // clear Isis line if it exists
     if (compareMapInstance && compareIsisLineLayer) {
         compareMapInstance.removeLayer(compareIsisLineLayer);
+    }
+    // clear bridge drawings if they exist
+    if (typeof compareBridgesLayer !== 'undefined' && compareBridgesLayer) {
+            compareMapInstance.removeLayer(compareBridgesLayer);
     }
 
     // Reset the independent fairway toggle
@@ -1807,6 +1811,10 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
     // Reset the Section B demo button text
     const demoBtnB = document.getElementById('demo-btn-b');
     if (demoBtnB) demoBtnB.innerText = "Load Demo Data";
+
+    // Reset the independent Bridges toggle
+    const toggleCompareBridgesEl = document.getElementById('toggle-compare-bridges');
+    if (toggleCompareBridgesEl) toggleCompareBridgesEl.checked = false;
 });
 
 /**
@@ -2430,6 +2438,63 @@ function buildBridgesLayer() {
 
     bridgesLoaded = true;
 }
+
+/**
+ * Logic: Section B Tideway Bridges Overlay
+ * A dedicated layer for the comparison map to prevent Leaflet cross-contamination.
+ */
+let compareBridgesLayer = L.featureGroup();
+let compareBridgesLoaded = false;
+
+function buildCompareBridgesLayer() {
+    if (compareBridgesLoaded) return; 
+    
+    // Reusing the tidewayBridges array from Section A
+    tidewayBridges.forEach(bridge => {
+        const marker = L.circleMarker([bridge.lat, bridge.lon], {
+            radius: 7,
+            fillColor: '#ffffff',
+            color: '#25476D', // CoxOrb Navy
+            weight: 3,
+            fillOpacity: 1,
+            zIndexOffset: 500
+        });
+
+        const popupHTML = `
+            <div class="bridge-image-content">
+                <b>${bridge.name}</b>
+                <img src="${bridge.img}" alt="${bridge.name}">
+            </div>
+        `;
+
+        // Bind the tooltip to trigger on hover
+        marker.bindTooltip(popupHTML, {
+            className: 'bridge-image-tooltip',
+            direction: 'top',
+            offset: [0, -10], // Shifts it slightly above the user's cursor
+        });
+
+        marker.addTo(compareBridgesLayer);
+    });
+
+    compareBridgesLoaded = true;
+}
+
+// Attach the Event Listener to the Section B Toggle Switch
+const toggleCompareBridges = document.getElementById('toggle-compare-bridges');
+if (toggleCompareBridges) {
+    toggleCompareBridges.addEventListener('change', (e) => {
+        if (!compareMapInstance) return; // Prevent crashes if the map isn't rendered yet
+        
+        if (e.target.checked) {
+            buildCompareBridgesLayer();
+            compareBridgesLayer.addTo(compareMapInstance);
+        } else {
+            compareMapInstance.removeLayer(compareBridgesLayer);
+        }
+    });
+}
+
 
 // Attach the Event Listener to the HTML Toggle Switch
 const toggleBridges = document.getElementById('toggle-bridges');
