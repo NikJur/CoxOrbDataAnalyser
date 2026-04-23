@@ -84,7 +84,7 @@ document.getElementById('process-btn').addEventListener('click', async () => {
     const processBtn = document.getElementById('process-btn');
 
     if (!gpxFile) {
-        alert("Please upload at least a GPX file to visualize the route.");
+        alert("Please upload at least a GPX file to visualise the route.");
         return;
     }
 
@@ -94,6 +94,52 @@ document.getElementById('process-btn').addEventListener('click', async () => {
         // Parse the GPX file
         const gpxText = await readFileAsText(gpxFile);
         gpxData = parseGPX(gpxText);
+
+        // SAFETY CHECK
+        if (!gpxData || gpxData.length === 0) {
+            alert("Error: We couldn't extract any GPS coordinates from this file. It may be corrupted or in an unsupported format.");
+            processBtn.innerText = "Process & Merge Data";
+            return; // Halts the script so it doesn't crash the map
+        }
+
+        // ==========================================
+        // STRAVA / MISSING TIME CHECK
+        // ==========================================
+        // Checks if the time value actually contains data rather than just checking if the key exists
+        const hasTimestamps = gpxData.length > 0 && gpxData[0].time !== null;
+
+        if (!hasTimestamps) {
+            // Trigger the Strava warning
+            alert("Notice: This GPX file is missing timestamp data (this is very common with Strava exports).\n\nWe will plot your steering route on the map, but we cannot sync stroke metrics (CSV) or audio without time data.");
+            
+            // Bypass the merge engine entirely and just use the spatial coordinates
+            mergedData = gpxData;
+            masterMergedData = [...mergedData];
+
+            // Unhide the primary replay section container
+            document.getElementById('replay-section')?.classList.remove('hidden');
+
+            // Unhide ONLY the spatial map overlays
+            document.getElementById('fairway-toggle-container')?.classList.remove('hidden');
+            document.getElementById('buoys-toggle-container')?.classList.remove('hidden');
+            document.getElementById('isis-toggle-container')?.classList.remove('hidden');
+            document.getElementById('bridges-toggle-container')?.classList.remove('hidden');
+
+            // Ensure metric-dependent UI elements remain hidden so they don't show blank/broken numbers
+            document.getElementById('fullscreen-wrapper-a')?.classList.add('hidden');
+            document.getElementById('dashboard')?.classList.add('hidden');
+            document.getElementById('speed-toggle-container')?.classList.add('hidden');
+            document.getElementById('trim-slider-container')?.classList.add('hidden');
+            document.getElementById('audio-container')?.classList.add('hidden');
+            
+            // Draw the map using just the spatial data and stop execution here
+            initMap(mergedData);
+            setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(); }, 100);
+            
+            processBtn.innerText = "GPS Route Loaded";
+            return; // HALT execution here so it doesn't try to load charts/audio!
+        }
+        // ==========================================
 
         // Did the user upload a CSV?
         if (csvFile) {
@@ -189,12 +235,14 @@ function readFileAsText(file) {
 }
 
 /**
-.
  * Parses raw GPX XML string into an array of coordinate objects.
- * Calculates 'seconds_elapsed' relative to the first track point.
+ * Calculates 'seconds_elapsed' relative to the first track point if time data exists.
  * Extracts native '<speed>' tags to calculate splits without needing a CSV.
+ * Calculates accumulated Haversine distance between points.
+ * Safely handles GPX files missing <time> tags (e.g., Strava exports) by bypassing time-dependent logic.
+ *
  * @param {string} gpxText - Raw XML string.
- * @returns {Array<Object>} Array of objects: { lat, lon, time, seconds_elapsed }.
+ * @returns {Array<Object>} Array of parsed GPS and metric data objects.
  */
 function parseGPX(gpxText) {
     const parser = new DOMParser();
@@ -207,7 +255,7 @@ function parseGPX(gpxText) {
     let lastLat = null;
     let lastLon = null;
 
-    // Internal helper to calculate distance between two GPS coordinates in meters
+    // Calculates distance between two GPS coordinates in meters
     const getHaversine = (lat1, lon1, lat2, lon2) => {
         const R = 6371e3; // Earth radius in meters
         const p1 = lat1 * Math.PI/180;
@@ -223,45 +271,55 @@ function parseGPX(gpxText) {
         const lat = parseFloat(pt.getAttribute('lat'));
         const lon = parseFloat(pt.getAttribute('lon'));
 
-        const timeNode = pt.getElementsByTagName('time')[0];
-        const speedNode = pt.getElementsByTagName('speed')[0]; // Look for the speed tag
-        
-        if (timeNode) {
-            const timeDate = new Date(timeNode.textContent);
-            if (i === 0) startTime = timeDate.getTime();
-            
-            const seconds_elapsed = (timeDate.getTime() - startTime) / 1000;
+        // Skips invalid coordinates to prevent calculation errors
+        if (isNaN(lat) || isNaN(lon)) continue;
 
-            // Accumulate distance using GPS coordinates
-            if (lastLat !== null && lastLon !== null) {
-                totalDist += getHaversine(lastLat, lastLon, lat, lon);
-            }
-            lastLat = lat;
-            lastLon = lon;
-
-            // Extract speed and format it like the CSV parser does
-            let speedMS = 0;
-            let splitSecs = null;
-            if (speedNode) {
-                speedMS = parseFloat(speedNode.textContent) || 0;
-                // Cutoff: Only calculate a split if the boat is moving faster than 1.66 m/s (5:00 split).
-                if (speedMS > 1.66) {
-                    splitSecs = 500 / speedMS;
-                }
-            }
-            
-            parsed.push({ 
-                lat, 
-                lon, 
-                seconds_elapsed,
-                'Speed (m/s)': speedMS,  // Powers the Map Heatmap
-                split_seconds: splitSecs, // Powers the Chart and Dashboard
-                'Distance': totalDist // Provides a fallback distance if no CSV is loaded
-            });
+        // Accumulates distance using GPS coordinates
+        if (lastLat !== null && lastLon !== null) {
+            totalDist += getHaversine(lastLat, lastLon, lat, lon);
         }
+        lastLat = lat;
+        lastLon = lon;
+
+        const timeNode = pt.getElementsByTagName('time')[0];
+        const speedNode = pt.getElementsByTagName('speed')[0];
+        
+        let seconds_elapsed = null;
+        let timeStr = null;
+
+        // Extracts time data only if the node exists
+        if (timeNode) {
+            timeStr = timeNode.textContent;
+            const timeDate = new Date(timeStr);
+            if (startTime === null) startTime = timeDate.getTime();
+            seconds_elapsed = (timeDate.getTime() - startTime) / 1000;
+        }
+
+        // Extracts speed and formats it to match the CSV parser
+        let speedMS = 0;
+        let splitSecs = null;
+        if (speedNode) {
+            speedMS = parseFloat(speedNode.textContent) || 0;
+            // Applies cutoff: calculates a split only if the boat moves faster than 1.66 m/s
+            if (speedMS > 1.66) {
+                splitSecs = 500 / speedMS;
+            }
+        }
+        
+        // Pushes the constructed object to the parsed array regardless of time data
+        parsed.push({ 
+            lat: lat, 
+            lon: lon, 
+            time: timeStr,
+            seconds_elapsed: seconds_elapsed,
+            'Speed (m/s)': speedMS, // Powers the Map Heatmap
+            split_seconds: splitSecs,  // Powers the Chart and Dashboard
+            'Distance': totalDist // Provides a fallback distance if no CSV is loaded
+        });
     }
     return parsed;
 }
+            
 
 /**
  * Parses raw CSV/TSV text into an array of JSON objects using PapaParse.
