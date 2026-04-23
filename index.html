@@ -553,6 +553,15 @@
 
     </main>
 
+    <div id="strava-warning-modal" class="hidden">
+        <div class="modal-content">
+            <h3 class="modal-title">Missing Timestamps</h3>
+            <p class="modal-body">This GPX file is missing timestamp data (this is very common with Strava exports).</p>
+            <p class="modal-subtext">We will plot your steering route on the map, but we cannot sync stroke metrics (CSV) or audio without time data.</p>
+            <button id="close-modal-btn" class="process-btn" style="width: 100%; margin-top: 15px;">Understood</button>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>

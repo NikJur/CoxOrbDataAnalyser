@@ -1100,3 +1100,63 @@ audio, #audio-player {
     border-radius: 4px;
     border: 1px solid #ccc;
 }
+
+
+/* Custom Modal Overlay */
+#strava-warning-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(37, 71, 109, 0.4); /* Frosted Navy Background */
+    backdrop-filter: blur(4px);
+    z-index: 9999; /* Forces it to the very front */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hide the modal when not in use */
+#strava-warning-modal.hidden {
+    display: none !important;
+}
+
+/* The Box Itself */
+.modal-content {
+    background: white;
+    border-top: 6px solid #F08118; /* CoxOrb Orange Accent */
+    border-radius: 8px;
+    padding: 25px 30px;
+    max-width: 420px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    animation: modalPop 0.3s ease-out;
+}
+
+.modal-title {
+    color: #25476D; /* CoxOrb Navy */
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+}
+
+.modal-body {
+    color: #333;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.modal-subtext {
+    color: #6c757d;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin-bottom: 0;
+}
+
+/* Smooth pop-in animation */
+@keyframes modalPop {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}

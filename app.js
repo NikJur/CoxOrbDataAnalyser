@@ -110,8 +110,8 @@ document.getElementById('process-btn').addEventListener('click', async () => {
 
         if (!hasTimestamps) {
             // Trigger the Strava warning
-            alert("Notice: This GPX file is missing timestamp data (this is very common with Strava exports).\n\nWe will plot your steering route on the map, but we cannot sync stroke metrics (CSV) or audio without time data.");
-            
+            document.getElementById('strava-warning-modal')?.classList.remove('hidden');
+
             // Bypass the merge engine entirely and just use the spatial coordinates
             mergedData = gpxData;
             masterMergedData = [...mergedData];
@@ -251,6 +251,15 @@ document.getElementById('process-btn').addEventListener('click', async () => {
         processBtn.innerText = "Process & Merge Data";
     }
 });
+
+/**
+ * Event Listener for the Custom Warning Modal
+ * Hides the modal when the user clicks "Understood"
+ */
+document.getElementById('close-modal-btn')?.addEventListener('click', () => {
+    document.getElementById('strava-warning-modal').classList.add('hidden');
+});
+
 
 /**
  * Utility function to read a File object as text.
