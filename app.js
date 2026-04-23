@@ -126,12 +126,44 @@ document.getElementById('process-btn').addEventListener('click', async () => {
             document.getElementById('bridges-toggle-container')?.classList.remove('hidden');
 
             // Ensure metric-dependent UI elements remain hidden so they don't show blank/broken numbers
-            document.getElementById('fullscreen-wrapper-a')?.classList.add('hidden');
             document.getElementById('dashboard')?.classList.add('hidden');
             document.getElementById('speed-toggle-container')?.classList.add('hidden');
-            document.getElementById('trim-slider-container')?.classList.add('hidden');
-            document.getElementById('audio-container')?.classList.add('hidden');
+
+            // Keep the parent visible to allow trim sliders to show, but hides the chart canvas itself
+            document.getElementById('fullscreen-wrapper-a')?.classList.remove('hidden');
+            document.getElementById('metricsChart')?.classList.add('hidden'); 
+            document.getElementById('fullscreen-chart-a')?.classList.add('hidden'); // Hides the fullscreen button too
+
+            // Configures and exposes the Trim Sliders
+            document.getElementById('trim-slider-container')?.classList.remove('hidden');
+            const trimMin = document.getElementById('trim-slider-min');
+            const trimMax = document.getElementById('trim-slider-max');
+            if (trimMin && trimMax) {
+                trimMin.max = masterMergedData.length - 1;
+                trimMax.max = masterMergedData.length - 1;
+                trimMin.value = 0;
+                trimMax.value = masterMergedData.length - 1;
+            }
+
+            // Expose the progress bar but hides the audio-specific UI
+            document.getElementById('audio-container')?.classList.remove('hidden');
+            document.getElementById('time-slider')?.classList.remove('hidden');
             
+            // Hides the audio controls
+            document.getElementById('playback-buttons')?.classList.add('hidden'); 
+            document.getElementById('volume-controls')?.classList.add('hidden');
+            
+            // Disable the audio upload input so they don't try to upload audio later
+            const audioUpload = document.getElementById('audio-upload');
+            if (audioUpload) audioUpload.disabled = true;
+
+            const timeSlider = document.getElementById('time-slider');
+            if (timeSlider) {
+                timeSlider.max = mergedData.length - 1;
+                timeSlider.value = 0;
+                if (typeof updateSliderFill === 'function') updateSliderFill(); 
+            }
+
             // Draw the map using just the spatial data and stop execution here
             initMap(mergedData);
             setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(); }, 100);
