@@ -91,6 +91,19 @@ document.getElementById('process-btn').addEventListener('click', async () => {
     try {
         processBtn.innerText = "Processing...";
         
+        // --- RESET UI FROM POTENTIAL STRAVA STATE ---
+        document.getElementById('chart-wrap-a')?.classList.remove('hidden');
+        document.getElementById('fullscreen-chart-a')?.classList.remove('hidden');
+        document.getElementById('playback-buttons')?.classList.remove('hidden');
+        document.getElementById('volume-controls')?.classList.remove('hidden');
+        
+        const resetLabel = document.getElementById('timeline-label');
+        if (resetLabel) resetLabel.innerText = "Coxswain Audio Recording";
+        
+        const resetUpload = document.getElementById('audio-upload');
+        if (resetUpload) resetUpload.disabled = false;
+        // --------------------------------------------
+
         // Parse the GPX file
         const gpxText = await readFileAsText(gpxFile);
         gpxData = parseGPX(gpxText);
@@ -131,7 +144,7 @@ document.getElementById('process-btn').addEventListener('click', async () => {
 
             // Keep the parent visible to allow trim sliders to show, but hides the chart canvas itself
             document.getElementById('fullscreen-wrapper-a')?.classList.remove('hidden');
-            document.getElementById('metricsChart')?.classList.add('hidden'); 
+            document.getElementById('chart-wrap-a')?.classList.add('hidden'); 
             document.getElementById('fullscreen-chart-a')?.classList.add('hidden'); // Hides the fullscreen button too
 
             // Configures and exposes the Trim Sliders
@@ -148,14 +161,14 @@ document.getElementById('process-btn').addEventListener('click', async () => {
             // Expose the progress bar but hides the audio-specific UI
             document.getElementById('audio-container')?.classList.remove('hidden');
             document.getElementById('time-slider')?.classList.remove('hidden');
+
+            // Renames the label to reflect spatial scrubbing rather than audio
+            const timelineLabel = document.getElementById('timeline-label');
+            if (timelineLabel) timelineLabel.innerText = "Route Progress";
             
             // Hides the audio controls
             document.getElementById('playback-buttons')?.classList.add('hidden'); 
-            document.getElementById('volume-controls')?.classList.add('hidden');
-            
-            // Disable the audio upload input so they don't try to upload audio later
-            const audioUpload = document.getElementById('audio-upload');
-            if (audioUpload) audioUpload.disabled = true;
+            document.getElementById('volume-controls')?.classList.add('hidden');      
 
             const timeSlider = document.getElementById('time-slider');
             if (timeSlider) {
@@ -204,6 +217,7 @@ document.getElementById('process-btn').addEventListener('click', async () => {
 
         // Unhide analytical UI
         document.getElementById('fullscreen-wrapper-a')?.classList.remove('hidden');
+        document.getElementById('chart-wrap-a')?.classList.remove('hidden');
         document.getElementById('dashboard')?.classList.remove('hidden');
         document.getElementById('speed-toggle-container')?.classList.remove('hidden');
         document.getElementById('trim-slider-container')?.classList.remove('hidden');
@@ -227,6 +241,16 @@ document.getElementById('process-btn').addEventListener('click', async () => {
         if (mergedData.length > 0) {
             // Unhide the slider controls
             if (audioContainer) audioContainer.classList.remove('hidden');
+
+            // Resets the label and unhides the audio controls in case a Strava file was loaded previously
+            const timelineLabel = document.getElementById('timeline-label');
+            if (timelineLabel) timelineLabel.innerText = "Coxswain Audio Recording";
+            
+            document.getElementById('playback-buttons')?.classList.remove('hidden');
+            document.getElementById('volume-controls')?.classList.remove('hidden');
+            
+            const audioUpload = document.getElementById('audio-upload');
+            if (audioUpload) audioUpload.disabled = false;
             
             // Bind the slider maximum length to the new dataset
             if (timeSlider) {
@@ -1534,6 +1558,19 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
     demoBtn.innerText = "Loading Demo...";
 
     try {
+        // --- RESET UI FROM POTENTIAL STRAVA STATE ---
+        document.getElementById('chart-wrap-a')?.classList.remove('hidden');
+        document.getElementById('fullscreen-chart-a')?.classList.remove('hidden');
+        document.getElementById('playback-buttons')?.classList.remove('hidden');
+        document.getElementById('volume-controls')?.classList.remove('hidden');
+        
+        const resetLabel = document.getElementById('timeline-label');
+        if (resetLabel) resetLabel.innerText = "Coxswain Audio Recording";
+        
+        const resetUpload = document.getElementById('audio-upload');
+        if (resetUpload) resetUpload.disabled = false;
+        // --------------------------------------------
+
         // Retrieve raw file data from the server directories
         const gpxResponse = await fetch('demo_data/example.GPX');
         const csvResponse = await fetch('demo_data/example_GRAPH.CSV');
@@ -3605,30 +3642,34 @@ if (loadIsisBtn) {
     loadIsisBtn.addEventListener('click', async (e) => {
         e.preventDefault();
         
-        // Reveal UI and Initialise Blank Map
+        // Reveal Primary UI and Initialise Blank Map
         document.getElementById('replay-section')?.classList.remove('hidden');
         document.getElementById('map-container').style.display = 'block';
         document.getElementById('audio-container')?.classList.remove('hidden');
+        document.getElementById('time-slider')?.classList.remove('hidden');
 
-        if (typeof chartInstance === 'undefined' || !chartInstance) {
-            document.getElementById('fullscreen-wrapper-a')?.classList.add('hidden');
-            document.getElementById('dashboard')?.classList.add('hidden');
-        }
+        // Hide the chart since there are no stroke metrics
+        document.getElementById('chart-wrap-a')?.classList.add('hidden');
+        document.getElementById('fullscreen-chart-a')?.classList.add('hidden');
+        document.getElementById('dashboard')?.classList.add('hidden');
+        document.getElementById('speed-toggle-container')?.classList.add('hidden');
+        document.getElementById('trim-slider-container')?.classList.add('hidden');
+        
+        // Hide audio controls and rename the timeline
+        document.getElementById('playback-buttons')?.classList.add('hidden');
+        document.getElementById('volume-controls')?.classList.add('hidden');
+        
+        const timelineLabel = document.getElementById('timeline-label');
+        if (timelineLabel) timelineLabel.innerText = "Route Progress";
+        
+        const audioUpload = document.getElementById('audio-upload');
+        if (audioUpload) audioUpload.disabled = true;
 
         if (!mapInstance) {
             mapInstance = L.map('map').setView([51.737, -1.245], 14);
             mapInstance.addControl(new L.Control.Fullscreen());
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(mapInstance);
         }
-
-        // Force Silent Mode for the Audio Container
-        const timelineLabel = document.getElementById('timeline-label');
-        const playbackBtns = document.getElementById('playback-buttons');
-        const volumeBtns = document.getElementById('volume-controls');
-        
-        if (timelineLabel) timelineLabel.innerText = "Route Progress";
-        if (playbackBtns) playbackBtns.style.display = 'none';
-        if (volumeBtns) volumeBtns.style.display = 'none';
 
         // Fetch Data and Add Layer
         loadIsisBtn.innerText = "Loading...";
