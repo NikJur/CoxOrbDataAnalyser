@@ -1951,6 +1951,20 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
     // Reset the independent Bridges toggle
     const toggleCompareBridgesEl = document.getElementById('toggle-compare-bridges');
     if (toggleCompareBridgesEl) toggleCompareBridgesEl.checked = false;
+
+    // Un-hides the extra overlays panel if it is currently minimized
+    document.getElementById('compare-extra-toggles')?.classList.remove('hidden');
+    
+    // Resets the hide/show button text to the default label
+    const toggleUiBtn = document.getElementById('toggle-compare-ui-btn');
+    if (toggleUiBtn) toggleUiBtn.innerText = "Hide Overlays";
+
+    // Forces map resize just in case the layout shifts during the clear
+    setTimeout(() => {
+        if (typeof compareMapInstance !== 'undefined' && compareMapInstance) {
+            compareMapInstance.invalidateSize();
+        }
+    }, 150);
 });
 
 /**
@@ -3886,4 +3900,33 @@ document.getElementById('demo-btn-b')?.addEventListener('click', async (e) => {
         alert(`Error loading steering demo data: ${error.message}`);
         btn.innerText = "Load Demo Data";
     }
+});
+
+/**
+ * Logic: Section B UI Minimiser
+ * Toggles the visibility of the extra overlay switches (Fairway, Buoys, Isis, Bridges).
+ * Maximizes vertical map space while keeping the main Route inputs visible.
+ * Forces a map resize to prevent Leaflet rendering glitches.
+ */
+document.getElementById('toggle-compare-ui-btn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const extrasPanel = document.getElementById('compare-extra-toggles'); 
+    const btn = e.target;
+
+    if (extrasPanel?.classList.contains('hidden')) {
+        // Reveals the extra overlays panel
+        extrasPanel.classList.remove('hidden');
+        btn.innerText = "Hide Overlays";
+    } else {
+        // Hides the extra overlays panel
+        extrasPanel?.classList.add('hidden');
+        btn.innerText = "Show Overlays";
+    }
+
+    // Forces Leaflet to recalculate the canvas size after the page layout shifts
+    setTimeout(() => {
+        if (typeof compareMapInstance !== 'undefined' && compareMapInstance) {
+            compareMapInstance.invalidateSize();
+        }
+    }, 150);
 });
