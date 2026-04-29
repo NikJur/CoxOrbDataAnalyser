@@ -1952,14 +1952,13 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
     const toggleCompareBridgesEl = document.getElementById('toggle-compare-bridges');
     if (toggleCompareBridgesEl) toggleCompareBridgesEl.checked = false;
 
-    // Un-hides the extra overlays panel if it is currently minimized
+    // Un-hide the extra overlays panel if it was minimized
     document.getElementById('compare-extra-toggles')?.classList.remove('hidden');
     
-    // Resets the hide/show button text to the default label
-    const toggleUiBtn = document.getElementById('toggle-compare-ui-btn');
-    if (toggleUiBtn) toggleUiBtn.innerText = "Hide Overlays";
+    // Reset the tiny button icon back to minus
+    const miniToggleBtn = document.getElementById('mini-toggle-ui-btn');
+    if (miniToggleBtn) miniToggleBtn.innerText = "−";
 
-    // Forces map resize just in case the layout shifts during the clear
     setTimeout(() => {
         if (typeof compareMapInstance !== 'undefined' && compareMapInstance) {
             compareMapInstance.invalidateSize();
@@ -3904,26 +3903,23 @@ document.getElementById('demo-btn-b')?.addEventListener('click', async (e) => {
 
 /**
  * Logic: Section B UI Minimiser
- * Toggles the visibility of the extra overlay switches (Fairway, Buoys, Isis, Bridges).
- * Maximizes vertical map space while keeping the main Route inputs visible.
- * Forces a map resize to prevent Leaflet rendering glitches.
+ * Toggles the extra overlays panel and flips the icon between minus (−) and plus (+).
  */
-document.getElementById('toggle-compare-ui-btn')?.addEventListener('click', (e) => {
+document.getElementById('mini-toggle-ui-btn')?.addEventListener('click', (e) => {
     e.preventDefault();
     const extrasPanel = document.getElementById('compare-extra-toggles'); 
-    const btn = e.target;
+    const btn = document.getElementById('mini-toggle-ui-btn');
 
     if (extrasPanel?.classList.contains('hidden')) {
-        // Reveals the extra overlays panel
+        // Reveal the panel
         extrasPanel.classList.remove('hidden');
-        btn.innerText = "Hide Overlays";
+        btn.innerText = "−";
     } else {
-        // Hides the extra overlays panel
+        // Hide the panel
         extrasPanel?.classList.add('hidden');
-        btn.innerText = "Show Overlays";
+        btn.innerText = "+";
     }
 
-    // Forces Leaflet to recalculate the canvas size after the page layout shifts
     setTimeout(() => {
         if (typeof compareMapInstance !== 'undefined' && compareMapInstance) {
             compareMapInstance.invalidateSize();
