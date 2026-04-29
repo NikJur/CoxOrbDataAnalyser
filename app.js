@@ -1951,6 +1951,19 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
     // Reset the independent Bridges toggle
     const toggleCompareBridgesEl = document.getElementById('toggle-compare-bridges');
     if (toggleCompareBridgesEl) toggleCompareBridgesEl.checked = false;
+
+    // Un-hide the extra overlays panel if it was minimized
+    document.getElementById('compare-extra-toggles')?.classList.remove('hidden');
+    
+    // Reset the tiny button icon back to minus
+    const miniToggleBtn = document.getElementById('mini-toggle-ui-btn');
+    if (miniToggleBtn) miniToggleBtn.innerText = "−";
+
+    setTimeout(() => {
+        if (typeof compareMapInstance !== 'undefined' && compareMapInstance) {
+            compareMapInstance.invalidateSize();
+        }
+    }, 150);
 });
 
 /**
@@ -3886,4 +3899,30 @@ document.getElementById('demo-btn-b')?.addEventListener('click', async (e) => {
         alert(`Error loading steering demo data: ${error.message}`);
         btn.innerText = "Load Demo Data";
     }
+});
+
+/**
+ * Logic: Section B UI Minimiser
+ * Toggles the extra overlays panel and flips the icon between minus (−) and plus (+).
+ */
+document.getElementById('mini-toggle-ui-btn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const extrasPanel = document.getElementById('compare-extra-toggles'); 
+    const btn = document.getElementById('mini-toggle-ui-btn');
+
+    if (extrasPanel?.classList.contains('hidden')) {
+        // Reveal the panel
+        extrasPanel.classList.remove('hidden');
+        btn.innerText = "−";
+    } else {
+        // Hide the panel
+        extrasPanel?.classList.add('hidden');
+        btn.innerText = "+";
+    }
+
+    setTimeout(() => {
+        if (typeof compareMapInstance !== 'undefined' && compareMapInstance) {
+            compareMapInstance.invalidateSize();
+        }
+    }, 150);
 });
