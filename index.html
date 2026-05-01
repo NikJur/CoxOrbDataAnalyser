@@ -319,7 +319,22 @@
                         −
                     </button>
                 </div>
+
                 <div id="compare-extra-toggles" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); column-gap: 30px; row-gap: 15px; margin-bottom: 1.0rem; width: 100%;">
+                    
+                    <div id="compare-speed-toggle-container" style="display: flex; flex-direction: column; justify-content: center; gap: 8px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 15px;">
+                            <div style="text-align: left; display: flex; flex-direction: column;">
+                                <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Colour Routes by Speed</span>
+                                <span style="font-size: 0.7rem; color: #6c757d;">Applies a shared red-green velocity gradient across all active routes based on combined statistical bounds.</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="toggle-compare-speed">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+
                     <div id="compare-fairway-toggle-container" style="display: flex; flex-direction: column; justify-content: center; gap: 8px;">
                         <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 15px;">
                             <div style="text-align: left; display: flex; flex-direction: column;">
