@@ -534,21 +534,6 @@ function mergeAsOf(gpx, csv, tolerance) {
 }
 
 /**
- * Evaluates the velocity magnitude and assigns a corresponding hex color.
- * Maps velocities to a standard heatmap gradient (Red = Slow, Green = Fast).
- * Designed around typical rowing shell velocities in meters per second.
- * @param {number} speed - The recorded speed value in m/s.
- * @returns {string} The designated hex color string.
- */
-function getSpeedColor(speed) {
-    if (speed > 4.5) return '#27AE60'; // Fast (Green)
-    if (speed > 3.5) return '#2ECC71'; // Above Average (Light Green)
-    if (speed > 2.5) return '#F1C40F'; // Average (Yellow)
-    if (speed > 1.5) return '#E67E22'; // Slow (Orange)
-    return '#E74C3C';                  // Very Slow/Stationary (Red)
-}
-
-/**
  * Constructs the primary path on the Leaflet map.
  * Reads user-defined minimum and maximum speed thresholds to paint a dynamic gradient.
  * @param {boolean} useSpeedColors - Flag defining whether to use the heatmap gradient.
@@ -4101,12 +4086,4 @@ document.getElementById('mini-toggle-ui-btn')?.addEventListener('click', (e) => 
             compareMapInstance.invalidateSize();
         }
     }, 150);
-});
-
-/**
- * Event Listener for the Section B Speed Toggle.
- * Automatically clicks the render button to repaint the map instantly.
- */
-document.getElementById('toggle-compare-speed')?.addEventListener('change', () => {
-    document.getElementById('compare-btn').click();
 });
