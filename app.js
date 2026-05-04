@@ -3872,7 +3872,41 @@ if (loadIsisBtn) {
         if (!mapInstance) {
             mapInstance = L.map('map').setView([51.737, -1.245], 14);
             mapInstance.addControl(new L.Control.Fullscreen());
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(mapInstance);
+
+            // ==========================================
+            // MAP LAYERS CONFIGURATION i.e. satellite vs standard
+            // ==========================================
+            const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            });
+            
+            const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles © Esri',
+                maxZoom: 19
+            });
+
+            osmLayer.addTo(mapInstance);
+
+            const baseMaps = {
+                "Standard Map": osmLayer,
+                "Satellite View": satelliteLayer
+            };
+            L.control.layers(baseMaps, null, { position: 'topleft' }).addTo(mapInstance);
+
+            // Listen for layer changes to toggle the orange UI typography in fullscreen
+            mapInstance.on('baselayerchange', function (e) {
+                const wrapper = document.getElementById('map-ui-wrapper');
+                if (!wrapper) return;
+                
+                if (e.name === "Satellite View") {
+                    wrapper.classList.add('satellite-active');
+                } else {
+                    wrapper.classList.remove('satellite-active');
+                }
+            });
+            // ==========================================
+
         }
 
         // Fetch Data and Add Layer
