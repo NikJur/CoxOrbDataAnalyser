@@ -2124,6 +2124,11 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
             compareMapInstance.removeLayer(compareBridgesLayer);
     }
 
+    // clear HOCR bridge drawings if they exist
+    if (typeof compareHocrBridgesLayer !== 'undefined' && compareHocrBridgesLayer) {
+        if (compareMapInstance) compareMapInstance.removeLayer(compareHocrBridgesLayer);
+    }
+
     // Reset the independent fairway toggle
     document.getElementById('toggle-compare-fairway').checked = false;
 
@@ -2157,6 +2162,10 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
 
     // Un-hide the extra overlays panel if it was minimized
     document.getElementById('compare-extra-toggles')?.classList.remove('hidden');
+
+    // Reset the independent HOCR Bridges toggle
+    const toggleCompareHocrBridgesEl = document.getElementById('toggle-compare-hocr-bridges');
+    if (toggleCompareHocrBridgesEl) toggleCompareHocrBridgesEl.checked = false;
     
     // Reset the tiny button icon back to minus
     const miniToggleBtn = document.getElementById('mini-toggle-ui-btn');
@@ -2874,13 +2883,13 @@ let hocrBridgesLoaded = false;
 
 // The exact GPS coordinates for the Head of the Charles bridges
 const hocrBridges = [
-    { name: "Longfellow Bridge", lat: 42.3615350, lon: -71.0754380, img: "HOCR_bridges/Longfellow_bridge.png" },
-    { name: "Boston University Bridge", lat: 42.3527256, lon: -71.1105626, img: "HOCR_bridges/Boston_university_bridge.png" },
-    { name: "River Street Bridge", lat: 42.3612472, lon: -71.1167492, img: "HOCR_bridges/River_street_bridge.png" },
-    { name: "Western Avenue Bridge", lat: 42.3642467, lon: -71.1168987, img: "HOCR_bridges/Western_avenue_bridge.png" },
-    { name: "Weeks Footbridge", lat: 42.3684618, lon: -71.1181508, img: "HOCR_bridges/Weeks_footbridge.png" },
+    { name: "Longfellow Bridge", lat: 42.3615350, lon: -71.0754380, img: "HOCR_bridges/Longfellow_bridge_cropped.png" },
+    { name: "Boston University Bridge", lat: 42.3527256, lon: -71.1105626, img: "HOCR_bridges/Boston_university_bridge_cropped.png" },
+    { name: "River Street Bridge", lat: 42.3612472, lon: -71.1167492, img: "HOCR_bridges/River_street_bridge_cropped.png" },
+    { name: "Western Avenue Bridge", lat: 42.3642467, lon: -71.1168987, img: "HOCR_bridges/Western_avenue_bridge_cropped.png" },
+    { name: "Weeks Footbridge", lat: 42.3684618, lon: -71.1181508, img: "HOCR_bridges/Weeks_footbridge_cropped.png" },
     { name: "Anderson Memorial Bridge", lat: 42.3689537, lon: -71.1231868, img: "HOCR_bridges/Anderson_memorial_bridge_cropped.png" },
-    { name: "Eliot Bridge", lat: 42.3717340, lon: -71.1329087, img: "HOCR_bridges/Eliot_bridge.png" }
+    { name: "Eliot Bridge", lat: 42.3717340, lon: -71.1329087, img: "HOCR_bridges/Eliot_bridge_cropped.png" }
 ];
 
 function buildHocrBridgesLayer() {
@@ -2926,6 +2935,62 @@ if (toggleHocrBridges) {
             hocrBridgesLayer.addTo(mapInstance);
         } else {
             mapInstance.removeLayer(hocrBridgesLayer);
+        }
+    });
+}
+
+/**
+ * Logic: Section B HOCR Bridges Overlay
+ * A dedicated layer for the comparison map to prevent Leaflet cross-contamination.
+ */
+let compareHocrBridgesLayer = L.featureGroup();
+let compareHocrBridgesLoaded = false;
+
+function buildCompareHocrBridgesLayer() {
+    if (compareHocrBridgesLoaded) return; 
+    
+    // Reusing the hocrBridges array from Section A
+    hocrBridges.forEach(bridge => {
+        const marker = L.circleMarker([bridge.lat, bridge.lon], {
+            radius: 7,
+            fillColor: '#ffffff',
+            color: '#25476D', // CoxOrb Navy
+            weight: 3,
+            fillOpacity: 1,
+            zIndexOffset: 500
+        });
+
+        const popupHTML = `
+            <div class="bridge-image-content">
+                <b>${bridge.name}</b>
+                <img src="${bridge.img}" alt="${bridge.name}">
+            </div>
+        `;
+
+        // Bind the tooltip to trigger on hover
+        marker.bindTooltip(popupHTML, {
+            className: 'bridge-image-tooltip',
+            direction: 'top',
+            offset: [0, -10], // Shifts it slightly above the user's cursor
+        });
+
+        marker.addTo(compareHocrBridgesLayer);
+    });
+
+    compareHocrBridgesLoaded = true;
+}
+
+// Attach the Event Listener to the Section B Toggle Switch
+const toggleCompareHocrBridges = document.getElementById('toggle-compare-hocr-bridges');
+if (toggleCompareHocrBridges) {
+    toggleCompareHocrBridges.addEventListener('change', (e) => {
+        if (!compareMapInstance) return; // Prevent crashes if the map isn't rendered yet
+        
+        if (e.target.checked) {
+            buildCompareHocrBridgesLayer();
+            compareHocrBridgesLayer.addTo(compareMapInstance);
+        } else {
+            compareMapInstance.removeLayer(compareHocrBridgesLayer);
         }
     });
 }
