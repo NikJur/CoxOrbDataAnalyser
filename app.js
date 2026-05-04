@@ -138,6 +138,7 @@ document.getElementById('process-btn').addEventListener('click', async () => {
             document.getElementById('buoys-toggle-container')?.classList.remove('hidden');
             document.getElementById('isis-toggle-container')?.classList.remove('hidden');
             document.getElementById('bridges-toggle-container')?.classList.remove('hidden');
+            document.getElementById('hocr-bridges-toggle-container')?.classList.remove('hidden');
 
             // Ensure metric-dependent UI elements remain hidden so they don't show blank/broken numbers
             document.getElementById('dashboard')?.classList.add('hidden');
@@ -228,6 +229,7 @@ document.getElementById('process-btn').addEventListener('click', async () => {
         document.getElementById('buoys-toggle-container')?.classList.remove('hidden');
         document.getElementById('isis-toggle-container')?.classList.remove('hidden');
         document.getElementById('bridges-toggle-container')?.classList.remove('hidden');
+        document.getElementById('hocr-bridges-toggle-container')?.classList.remove('hidden');
 
         calculateSmartThresholds();
         initChart(mergedData);
@@ -1598,6 +1600,7 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
         document.getElementById('speed-toggle-container')?.classList.remove('hidden');
         document.getElementById('audio-container')?.classList.remove('hidden');
         document.getElementById('bridges-toggle-container')?.classList.remove('hidden');
+        document.getElementById('hocr-bridges-toggle-container')?.classList.remove('hidden');
 
         calculateSmartThresholds();
 
@@ -2079,9 +2082,6 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
         mapInstance.removeLayer(hocrBridgesLayer);
     }
     
-    // Hides the container again
-    document.getElementById('hocr-bridges-toggle-container')?.classList.add('hidden');
-
     // Hide the visualization containers again
     replaySection.classList.add('hidden');
     audioContainer.classList.add('hidden');
