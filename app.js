@@ -1717,7 +1717,7 @@ document.getElementById('compare-btn').addEventListener('click', async () => {
     let combinedSpeeds = [];
     const parsedRoutes = [];
 
-    // Phase 1: Parses all ACTIVE files and pools the speed data
+    // Phase 1: Parses all active files and pools the speed data
     for (let i = 1; i <= 5; i++) {
         const fileInput = document.getElementById(`gpx-compare-${i}`);
         const isChecked = document.getElementById(`toggle-compare-${i}`)?.checked;
@@ -1728,9 +1728,9 @@ document.getElementById('compare-btn').addEventListener('click', async () => {
                 const parsedData = parseGPX(gpxText);
                 parsedRoutes[i] = parsedData;
 
-                // BUG FIX: Only pool speeds if the route is actually toggled ON
+                // Only pool speeds if the route is actually toggled on
                 if (isSpeedMode && isChecked) {
-                    // BUG FIX: Filter speeds > 1.5 m/s (approx 5:30 split) to ignore drifting/turning
+                    // Filter speeds > 1.5 m/s (approx 5:30 split) to ignore drifting/turning
                     const routeSpeeds = parsedData
                         .map(pt => pt['Speed (m/s)'] || 0)
                         .filter(s => s > 1.5); 
@@ -1840,7 +1840,7 @@ document.getElementById('compare-btn').addEventListener('click', async () => {
                 }
                 routeLayer = L.layerGroup(segments);
             } else {
-                // Constructs a standard solid polyline using the designated row color
+                // Constructs a standard solid polyline using the designated row colour
                 const latlngs = parsedData.map(pt => [pt.lat, pt.lon]);
                 routeLayer = L.polyline(latlngs, { color: compareColors[i-1], weight: 3 });
             }
@@ -1958,7 +1958,7 @@ document.getElementById('toggle-compare-speed')?.addEventListener('change', (e) 
 
 /**
  * Event Listener: Section B Defaults Button.
- * Clears user-defined inputs, forcing the math engine to recalculate percentiles.
+ * Clears user-defined inputs, forcing the maths engine to recalculate percentiles.
  */
 document.getElementById('default-thresholds-btn-b')?.addEventListener('click', () => {
     const slowInput = document.getElementById('slow-split-input-b');
@@ -1966,7 +1966,7 @@ document.getElementById('default-thresholds-btn-b')?.addEventListener('click', (
     if (slowInput) slowInput.value = '';
     if (fastInput) fastInput.value = '';
     
-    // Commands the map to re-render using fresh math
+    // Commands the map to re-render using fresh maths
     document.getElementById('compare-btn').click();
 });
 
