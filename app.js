@@ -2140,6 +2140,8 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
     // Resets the unified speed toggle
     const toggleCompareSpeedEl = document.getElementById('toggle-compare-speed');
     if (toggleCompareSpeedEl) toggleCompareSpeedEl.checked = false;
+    // Hides the speed threshold sub-menu
+    document.getElementById('compare-speed-thresholds')?.classList.add('hidden');
 
     // Un-hide the extra overlays panel if it was minimized
     document.getElementById('compare-extra-toggles')?.classList.remove('hidden');
