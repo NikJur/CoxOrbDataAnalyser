@@ -2072,6 +2072,16 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
         mapInstance.removeLayer(bridgesLayer);
     }
 
+    // Resets the HOCR Bridges toggle and removes the markers
+    const toggleHocrBridgesEl = document.getElementById('toggle-hocr-bridges');
+    if (toggleHocrBridgesEl) toggleHocrBridgesEl.checked = false;
+    if (typeof hocrBridgesLayer !== 'undefined' && hocrBridgesLayer && mapInstance) {
+        mapInstance.removeLayer(hocrBridgesLayer);
+    }
+    
+    // Hides the container again
+    document.getElementById('hocr-bridges-toggle-container')?.classList.add('hidden');
+
     // Hide the visualization containers again
     replaySection.classList.add('hidden');
     audioContainer.classList.add('hidden');
@@ -2849,6 +2859,73 @@ if (toggleBridges) {
             bridgesLayer.addTo(mapInstance);
         } else {
             mapInstance.removeLayer(bridgesLayer);
+        }
+    });
+}
+
+/**
+ * Logic: HOCR Bridges Overlay
+ * Plots distinct markers for the key Charles River bridges. 
+ * Injects local images into custom HTML tooltips that appear on hover.
+ */
+
+let hocrBridgesLayer = L.featureGroup();
+let hocrBridgesLoaded = false;
+
+// The exact GPS coordinates for the Head of the Charles bridges
+const hocrBridges = [
+    { name: "Longfellow Bridge", lat: 42.3615350, lon: -71.0754380, img: "HOCR_bridges/Longfellow_bridge.png" },
+    { name: "Boston University Bridge", lat: 42.3527256, lon: -71.1105626, img: "HOCR_bridges/Boston_university_bridge.png" },
+    { name: "River Street Bridge", lat: 42.3612472, lon: -71.1167492, img: "HOCR_bridges/River_street_bridge.png" },
+    { name: "Western Avenue Bridge", lat: 42.3642467, lon: -71.1168987, img: "HOCR_bridges/Western_avenue_bridge.png" },
+    { name: "Weeks Footbridge", lat: 42.3684618, lon: -71.1181508, img: "HOCR_bridges/Weeks_footbridge.png" },
+    { name: "Anderson Memorial Bridge", lat: 42.3689537, lon: -71.1231868, img: "HOCR_bridges/Anderson_memorial_bridge_cropped.png" },
+    { name: "Eliot Bridge", lat: 42.3717340, lon: -71.1329087, img: "HOCR_bridges/Eliot_bridge.png" }
+];
+
+function buildHocrBridgesLayer() {
+    if (hocrBridgesLoaded) return; 
+    
+    hocrBridges.forEach(bridge => {
+        const marker = L.circleMarker([bridge.lat, bridge.lon], {
+            radius: 7,
+            fillColor: '#ffffff',
+            color: '#25476D', 
+            weight: 3,
+            fillOpacity: 1,
+            zIndexOffset: 500
+        });
+
+        const popupHTML = `
+            <div class="bridge-image-content">
+                <b>${bridge.name}</b>
+                <img src="${bridge.img}" alt="${bridge.name}">
+            </div>
+        `;
+
+        marker.bindTooltip(popupHTML, {
+            className: 'bridge-image-tooltip',
+            direction: 'top',
+            offset: [0, -10], 
+        });
+
+        marker.addTo(hocrBridgesLayer);
+    });
+
+    hocrBridgesLoaded = true;
+}
+
+// Attach the Event Listener to the HTML Toggle Switch
+const toggleHocrBridges = document.getElementById('toggle-hocr-bridges');
+if (toggleHocrBridges) {
+    toggleHocrBridges.addEventListener('change', (e) => {
+        if (!mapInstance) return;
+        
+        if (e.target.checked) {
+            buildHocrBridgesLayer();
+            hocrBridgesLayer.addTo(mapInstance);
+        } else {
+            mapInstance.removeLayer(hocrBridgesLayer);
         }
     });
 }
@@ -3980,6 +4057,9 @@ if (loadHocrBtn) {
             
             const audioInput = document.getElementById('audio-upload');
             if (audioInput) audioInput.value = '';
+
+            // Unhides the HOCR specific bridge toggle
+            document.getElementById('hocr-bridges-toggle-container')?.classList.remove('hidden');
 
             // Commands the master render engine to process this newly "uploaded" file
             document.getElementById('process-btn').click();
