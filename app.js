@@ -15,6 +15,7 @@ let isisRoutePoints = []; // Stores the static KML path for the slider
 let primaryRouteLayer = null; // Holds the primary map route (solid or segmented)
 
 let isColorBlindMode = false; // Tracks whether the accessible colour palette is active
+let isColorBlindModeB = false; // Tracks the active state of the accessible colour palette for Section B
 
 let compareMapInstance = null;
 let compareLayers = [null, null, null, null, null];
@@ -1712,36 +1713,148 @@ document.getElementById('compare-btn').addEventListener('click', async () => {
     }
 
     let bounds = L.latLngBounds([]);
+    const isSpeedMode = document.getElementById('toggle-compare-speed')?.checked;
+    let combinedSpeeds = [];
+    const parsedRoutes = [];
 
-    // Loop through all 5 input slots
+    // Phase 1: Parses all active files and pools the speed data
     for (let i = 1; i <= 5; i++) {
         const fileInput = document.getElementById(`gpx-compare-${i}`);
-        const isChecked = document.getElementById(`toggle-compare-${i}`).checked;
-
+        const isChecked = document.getElementById(`toggle-compare-${i}`)?.checked;
+        
         if (fileInput.files.length > 0) {
             try {
-                // Clear existing layer from this slot if overwriting
-                if (compareLayers[i-1]) {
-                    compareMapInstance.removeLayer(compareLayers[i-1]);
-                }
-
-                // Read and parse the local file
                 const gpxText = await readFileAsText(fileInput.files[0]);
                 const parsedData = parseGPX(gpxText);
-                const latlngs = parsedData.map(pt => [pt.lat, pt.lon]);
+                parsedRoutes[i] = parsedData;
 
-                // Create the polyline using the designated row color
-                const polyline = L.polyline(latlngs, { color: compareColors[i-1], weight: 3 });
-                compareLayers[i-1] = polyline;
-
-                bounds.extend(polyline.getBounds());
-
-                // Immediately draw it if the toggle is currently switched "on"
-                if (isChecked) {
-                    polyline.addTo(compareMapInstance);
+                // Only pool speeds if the route is actually toggled on
+                if (isSpeedMode && isChecked) {
+                    // Filter speeds > 1.5 m/s (approx 5:30 split) to ignore drifting/turning
+                    const routeSpeeds = parsedData
+                        .map(pt => pt['Speed (m/s)'] || 0)
+                        .filter(s => s > 1.5); 
+                    combinedSpeeds = combinedSpeeds.concat(routeSpeeds);
                 }
             } catch (err) {
                 console.error(`Error parsing Route ${i}:`, err);
+            }
+        }
+    }
+
+    // Retrieves user-defined custom thresholds if they exist
+    const slowInputBox = document.getElementById('slow-split-input-b');
+    const fastInputBox = document.getElementById('fast-split-input-b');
+    const customSlowMs = slowInputBox ? convertSplitStrToMs(slowInputBox.value) : null;
+    const customFastMs = fastInputBox ? convertSplitStrToMs(fastInputBox.value) : null;
+
+    // Calculates the global 5th and 95th percentiles from the clean pool
+    let sharedMinSpeed = 0;
+    let sharedMaxSpeed = 0;
+
+    // Determines final bounds: Custom inputs take priority over statistical calculation
+    if (isSpeedMode) {
+        if (customSlowMs && customFastMs) {
+            sharedMinSpeed = customSlowMs;
+            sharedMaxSpeed = customFastMs;
+        } else if (combinedSpeeds.length > 0) {
+            // Calculates percentiles if inputs are blank
+            combinedSpeeds.sort((a, b) => a - b);
+            sharedMinSpeed = combinedSpeeds[Math.floor(combinedSpeeds.length * 0.05)];
+            sharedMaxSpeed = combinedSpeeds[Math.floor(combinedSpeeds.length * 0.95)];
+            
+            // Populates the UI inputs with the mathematically derived splits
+            if (slowInputBox) slowInputBox.value = convertMsToSplitStr(sharedMinSpeed);
+            if (fastInputBox) fastInputBox.value = convertMsToSplitStr(sharedMaxSpeed);
+        }
+    }
+
+    /**
+     * Generates an interpolated RGB colour based on boat velocity.
+     * Integrates an accessible Blue-to-Yellow mode alongside the default Red-to-Green.
+     * @param {number} speed - The current trackpoint velocity in m/s.
+     * @param {number} min - The global lower bound velocity.
+     * @param {number} max - The global upper bound velocity.
+     * @returns {string} Formatted RGB colour string.
+     */
+    const getGradientColor = (speed, min, max) => {
+        if (max === min) return isColorBlindModeB ? '#25476D' : '#5cb85c'; 
+        
+        let ratio = (speed - min) / (max - min);
+        ratio = Math.max(0, Math.min(1, ratio)); // Clamps ratio between 0 and 1
+        
+        let r, g, b;
+        
+        if (isColorBlindModeB) {
+            // Accessible Mode: Navy Blue (Slow) -> Grey (Mid) -> Yellow (Fast)
+            if (ratio < 0.5) {
+                const pct = ratio * 2; 
+                r = Math.round(37 + pct * (200 - 37));
+                g = Math.round(71 + pct * (200 - 71));
+                b = Math.round(109 + pct * (200 - 109));
+            } else {
+                const pct = (ratio - 0.5) * 2; 
+                r = Math.round(200 + pct * (240 - 200));
+                g = Math.round(200 + pct * (129 - 200));
+                b = Math.round(200 + pct * (24 - 200));
+            }
+        } else {
+            // Default Mode: Red (Slow) -> Yellow (Mid) -> Green (Fast)
+            if (ratio < 0.5) {
+                const pct = ratio * 2; 
+                r = Math.round(217 + pct * (240 - 217));
+                g = Math.round(83 + pct * (173 - 83));
+                b = Math.round(79 + pct * (78 - 79));
+            } else {
+                const pct = (ratio - 0.5) * 2; 
+                r = Math.round(240 + pct * (92 - 240));
+                g = Math.round(173 + pct * (184 - 173));
+                b = Math.round(78 + pct * (92 - 78));
+            }
+        }
+        return `rgb(${r},${g},${b})`;
+    };
+
+    // Phase 2: Loops through the parsed data and physically draws the layers
+    for (let i = 1; i <= 5; i++) {
+        const isChecked = document.getElementById(`toggle-compare-${i}`).checked;
+        const parsedData = parsedRoutes[i];
+
+        if (parsedData) {
+            // Clears existing layer from this slot if overwriting
+            if (compareLayers[i-1]) {
+                compareMapInstance.removeLayer(compareLayers[i-1]);
+            }
+
+            let routeLayer;
+            
+            if (isSpeedMode) {
+                // Constructs a segmented layer group to apply the gradient point-by-point
+                const segments = [];
+                for (let j = 0; j < parsedData.length - 1; j++) {
+                    const pt1 = parsedData[j];
+                    const pt2 = parsedData[j + 1];
+                    const speed = pt1['Speed (m/s)'] || 0;
+                    const color = getGradientColor(speed, sharedMinSpeed, sharedMaxSpeed);
+                    segments.push(L.polyline([[pt1.lat, pt1.lon], [pt2.lat, pt2.lon]], { color: color, weight: 4 }));
+                }
+                routeLayer = L.layerGroup(segments);
+            } else {
+                // Constructs a standard solid polyline using the designated row colour
+                const latlngs = parsedData.map(pt => [pt.lat, pt.lon]);
+                routeLayer = L.polyline(latlngs, { color: compareColors[i-1], weight: 3 });
+            }
+
+            // Stores the layer securely so the individual checkboxes can toggle it later
+            compareLayers[i-1] = routeLayer;
+
+            // Extends the map boundaries
+            const latlngsForBounds = parsedData.map(pt => [pt.lat, pt.lon]);
+            bounds.extend(L.polyline(latlngsForBounds).getBounds());
+
+            // Immediately draws it if the toggle is currently switched "on"
+            if (isChecked) {
+                routeLayer.addTo(compareMapInstance);
             }
         }
     }
@@ -1784,6 +1897,33 @@ document.getElementById('compare-btn').addEventListener('click', async () => {
 });
 
 /**
+ * Converts velocity in meters per second to a formatted 500m split string.
+ * @param {number} speedMs - Velocity in m/s.
+ * @returns {string} Formatted split time (e.g., "1:55") or placeholder if invalid.
+ */
+const convertMsToSplitStr = (speedMs) => {
+    if (!speedMs || speedMs <= 0) return "--:--";
+    const totalSecs = 500 / speedMs;
+    const mins = Math.floor(totalSecs / 60);
+    const secs = Math.floor(totalSecs % 60).toString().padStart(2, '0');
+    return `${mins}:${secs}`;
+};
+
+/**
+ * Parses a 500m split string back into meters per second.
+ * @param {string} splitStr - Formatted split time (e.g., "1:55").
+ * @returns {number|null} Velocity in m/s, or null if parsing fails.
+ */
+const convertSplitStrToMs = (splitStr) => {
+    if (!splitStr || typeof splitStr !== 'string') return null;
+    const parts = splitStr.trim().split(':');
+    if (parts.length !== 2) return null;
+    const secs = parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+    if (isNaN(secs) || secs <= 0) return null;
+    return 500 / secs;
+};
+
+/**
  * Attaches event listeners to all 5 toggle switches.
  * Instantly adds or removes the corresponding line from the map when clicked.
  */
@@ -1799,6 +1939,66 @@ for (let i = 1; i <= 5; i++) {
         }
     });
 }
+
+/**
+ * Event Listener: Section B Speed Toggle.
+ * Unhides the threshold controls and automatically re-renders the map.
+ */
+document.getElementById('toggle-compare-speed')?.addEventListener('change', (e) => {
+    const thresholdsPanel = document.getElementById('compare-speed-thresholds');
+    if (thresholdsPanel) {
+        if (e.target.checked) {
+            thresholdsPanel.classList.remove('hidden');
+        } else {
+            thresholdsPanel.classList.add('hidden');
+        }
+    }
+    document.getElementById('compare-btn').click();
+});
+
+/**
+ * Event Listener: Section B Defaults Button.
+ * Clears user-defined inputs, forcing the maths engine to recalculate percentiles.
+ */
+document.getElementById('default-thresholds-btn-b')?.addEventListener('click', () => {
+    const slowInput = document.getElementById('slow-split-input-b');
+    const fastInput = document.getElementById('fast-split-input-b');
+    if (slowInput) slowInput.value = '';
+    if (fastInput) fastInput.value = '';
+    
+    // Commands the map to re-render using fresh maths
+    document.getElementById('compare-btn').click();
+});
+
+/**
+ * Event Listener: Section B Colour Blind Toggle.
+ * Inverts the palette flag and updates the visual UI state.
+ */
+const colorBlindBtnB = document.getElementById('color-blind-btn-b');
+if (colorBlindBtnB) {
+    colorBlindBtnB.addEventListener('click', () => {
+        isColorBlindModeB = !isColorBlindModeB;
+        colorBlindBtnB.innerText = isColorBlindModeB ? "Standard Colours" : "Colour Blind Mode";
+        
+        const toggle = document.getElementById('toggle-compare-speed');
+        if (toggle && toggle.checked) {
+            document.getElementById('compare-btn').click();
+        }
+    });
+}
+
+/**
+ * Event Listeners: Section B Custom Input Adjustments.
+ * Detects when a user types a new split and clicks away (or presses Enter).
+ */
+['slow-split-input-b', 'fast-split-input-b'].forEach(id => {
+    document.getElementById(id)?.addEventListener('change', () => {
+        const toggle = document.getElementById('toggle-compare-speed');
+        if (toggle && toggle.checked) {
+            document.getElementById('compare-btn').click();
+        }
+    });
+});
 
 /**
  * Event Listener for the Primary "Clear" button.
@@ -1951,6 +2151,10 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
     // Reset the independent Bridges toggle
     const toggleCompareBridgesEl = document.getElementById('toggle-compare-bridges');
     if (toggleCompareBridgesEl) toggleCompareBridgesEl.checked = false;
+
+    // Resets the unified speed toggle
+    const toggleCompareSpeedEl = document.getElementById('toggle-compare-speed');
+    if (toggleCompareSpeedEl) toggleCompareSpeedEl.checked = false;
 
     // Un-hide the extra overlays panel if it was minimized
     document.getElementById('compare-extra-toggles')?.classList.remove('hidden');
@@ -3925,4 +4129,12 @@ document.getElementById('mini-toggle-ui-btn')?.addEventListener('click', (e) => 
             compareMapInstance.invalidateSize();
         }
     }, 150);
+});
+
+/**
+ * Event Listener for the Section B Speed Toggle.
+ * Automatically clicks the render button to repaint the map instantly.
+ */
+document.getElementById('toggle-compare-speed')?.addEventListener('change', () => {
+    document.getElementById('compare-btn').click();
 });
