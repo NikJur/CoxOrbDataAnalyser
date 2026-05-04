@@ -4011,7 +4011,9 @@ document.getElementById('clear-compare-c-btn')?.addEventListener('click', () => 
 
 /**
  * SECTION B: STEERING DEMO ENGINE
- * Fetches three distinct GPX files and plots them side-by-side on the comparative map.
+ * Fetches three distinct GPX files from the server.
+ * Injects the fetched data into the physical file input slots using the DataTransfer API.
+ * Triggers the main comparison render engine to draw the map and apply speed gradients.
  */
 document.getElementById('demo-btn-b')?.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -4019,45 +4021,10 @@ document.getElementById('demo-btn-b')?.addEventListener('click', async (e) => {
     btn.innerText = "Loading Steering Demo...";
 
     try {
-        // Unhide the Section B map container
+        // Unhides the Section B map container
         document.getElementById('compare-map-container')?.classList.remove('hidden');
 
-        // Initialise the secondary comparison map if it does not exist yet
-        if (!compareMapInstance) {
-            compareMapInstance = L.map('compare-map').setView([51.474, -0.271], 13);
-            compareMapInstance.addControl(new L.Control.Fullscreen());
-
-            const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
-            const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
-
-            osmLayer.addTo(compareMapInstance);
-
-            const baseMaps = {
-                "Standard Map": osmLayer,
-                "Satellite View": satelliteLayer
-            };
-            L.control.layers(baseMaps, null, { position: 'topleft' }).addTo(compareMapInstance);
-
-            const container = document.getElementById('compare-map-container');
-            const resizeObserver = new ResizeObserver(() => {
-                if (compareMapInstance) compareMapInstance.invalidateSize();
-            });
-            if (container) resizeObserver.observe(container);
-        }
-
-        // Clear any previously existing layers from manual uploads
-        for (let i = 0; i < 5; i++) {
-            if (compareLayers[i]) {
-                compareMapInstance.removeLayer(compareLayers[i]);
-                compareLayers[i] = null;
-            }
-            const toggle = document.getElementById(`toggle-compare-${i+1}`);
-            if (toggle) toggle.checked = false;
-        }
-
-        let bounds = L.latLngBounds([]);
-
-        // Fetch all three demo files simultaneously
+        // Fetches all three demo files simultaneously
         const [res1, res2, res3] = await Promise.all([
             fetch('demo_data/example.GPX'),
             fetch('demo_data/example_comparison.gpx'),
@@ -4070,32 +4037,37 @@ document.getElementById('demo-btn-b')?.addEventListener('click', async (e) => {
         const txt2 = await res2.text();
         const txt3 = await res3.text();
 
-        // Helper function to process and draw a single line
-        const processAndDraw = (gpxText, slotIndex) => {
-            const parsedData = parseGPX(gpxText);
-            const latlngs = parsedData.map(pt => [pt.lat, pt.lon]);
-            const poly = L.polyline(latlngs, { color: compareColors[slotIndex], weight: 3 });
+        // Helper function: Spoofs a user file upload using the DataTransfer API
+        const loadIntoSlot = (text, slotNum, filename) => {
+            const dt = new DataTransfer();
+            const file = new File([text], filename, { type: "application/gpx+xml" });
+            dt.items.add(file);
             
-            compareLayers[slotIndex] = poly;
-            poly.addTo(compareMapInstance);
-            bounds.extend(poly.getBounds());
-
-            // Visually check the toggle switch
-            const toggle = document.getElementById(`toggle-compare-${slotIndex + 1}`);
+            // Injects the file into the HTML input
+            const fileInput = document.getElementById(`gpx-compare-${slotNum}`);
+            if (fileInput) fileInput.files = dt.files;
+            
+            // Checks the corresponding UI toggle
+            const toggle = document.getElementById(`toggle-compare-${slotNum}`);
             if (toggle) toggle.checked = true;
         };
 
-        // Draw the three routes into Slots 0, 1, and 2
-        processAndDraw(txt1, 1); // Blue Line
-        processAndDraw(txt2, 3); // Orange Line
-        processAndDraw(txt3, 4); // Black Line
-
-        // Adjust map view to perfectly frame all three routes
-        if (bounds.isValid()) {
-            compareMapInstance.fitBounds(bounds, { padding: [20, 20] });
+        // Clears any previously existing files and toggles from manual uploads
+        for (let i = 1; i <= 5; i++) {
+            const fileInput = document.getElementById(`gpx-compare-${i}`);
+            if (fileInput) fileInput.value = ''; 
+            const toggle = document.getElementById(`toggle-compare-${i}`);
+            if (toggle) toggle.checked = false;
         }
 
-        setTimeout(() => compareMapInstance.invalidateSize(), 100);
+        // Loads the demo files cleanly into slots 1, 3, and 4
+        loadIntoSlot(txt1, 2, "wehorr_demo_1.gpx");
+        loadIntoSlot(txt2, 4, "wehorr_demo_2.gpx");
+        loadIntoSlot(txt3, 5, "wehorr_demo_3.gpx");
+
+        // Commands the main render engine to process these newly "uploaded" files
+        document.getElementById('compare-btn').click();
+
         btn.innerText = "Demo Data Loaded";
 
     } catch (error) {
