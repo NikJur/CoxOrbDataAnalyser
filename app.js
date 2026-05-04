@@ -1646,6 +1646,20 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
         // Force a map resize
         setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(); }, 100);
 
+        // Automatically trigger the London overlays once the map has rendered
+        setTimeout(() => {
+            const togglesToActivate = ['toggle-bridges', 'toggle-buoys', 'toggle-fairway-limits'];
+            
+            togglesToActivate.forEach(id => {
+                const toggle = document.getElementById(id);
+                if (toggle && !toggle.checked) {
+                    toggle.checked = true;
+                    // Manually dispatch the change event to trigger the drawing functions
+                    toggle.dispatchEvent(new Event('change'));
+                }
+            });
+        }, 500);
+
         demoBtn.innerText = "Demo Data Loaded"; // Reset button text on success
 
     } catch (error) {
