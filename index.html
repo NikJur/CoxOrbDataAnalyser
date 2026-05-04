@@ -333,6 +333,17 @@
                                 <span class="slider round"></span>
                             </label>
                         </div>
+
+                        <div id="compare-speed-thresholds" class="hidden" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 5px;">
+                            <label style="font-size: 0.8rem; color: #d9534f; font-weight: 600;">Min (m:ss): 
+                                <input type="text" id="slow-split-input-b" placeholder="2:30" style="width: 50px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 4px; outline: none; text-align: center;">
+                            </label>
+                            <label style="font-size: 0.8rem; color: #5cb85c; font-weight: 600;">Max (m:ss): 
+                                <input type="text" id="fast-split-input-b" placeholder="1:45" style="width: 50px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 4px; outline: none; text-align: center;">
+                            </label>
+                            <button id="default-thresholds-btn-b" class="secondary-btn" title="Reset to global 5th and 95th Percentiles.">Defaults</button>
+                            <button id="color-blind-btn-b" class="secondary-btn" title="Toggle an accessible Blue-to-Yellow gradient">Colour Blind</button>
+                        </div>
                     </div>
 
                     <div id="compare-fairway-toggle-container" style="display: flex; flex-direction: column; justify-content: center; gap: 8px;">
