@@ -1,0 +1,4427 @@
+<?xml version="1.0"?>
+<gpx creator="CoxOrb http://www.active-tools.com/" version="1.0" xmlns="http://www.topografix.com/GPX/1/0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd"> 
+<trk>
+<trkseg> 
+<trkpt lat="+42.35257" lon="-071.10732"> 
+<time>2006-03-04T13:29:43Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.35257" lon="-071.10737"> 
+<time>2006-03-04T13:29:44Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.35258" lon="-071.10744"> 
+<time>2006-03-04T13:29:45Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.35258" lon="-071.10749"> 
+<time>2006-03-04T13:29:46Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.35257" lon="-071.10755"> 
+<time>2006-03-04T13:29:47Z</time>
+<speed>004.37</speed>
+</trkpt> 
+<trkpt lat="+42.35258" lon="-071.10761"> 
+<time>2006-03-04T13:29:48Z</time>
+<speed>004.37</speed>
+</trkpt> 
+<trkpt lat="+42.35258" lon="-071.10766"> 
+<time>2006-03-04T13:29:49Z</time>
+<speed>004.42</speed>
+</trkpt> 
+<trkpt lat="+42.35258" lon="-071.10772"> 
+<time>2006-03-04T13:29:50Z</time>
+<speed>004.42</speed>
+</trkpt> 
+<trkpt lat="+42.35258" lon="-071.10777"> 
+<time>2006-03-04T13:29:51Z</time>
+<speed>004.41</speed>
+</trkpt> 
+<trkpt lat="+42.35259" lon="-071.10782"> 
+<time>2006-03-04T13:29:52Z</time>
+<speed>004.41</speed>
+</trkpt> 
+<trkpt lat="+42.35259" lon="-071.10789"> 
+<time>2006-03-04T13:29:53Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.35260" lon="-071.10794"> 
+<time>2006-03-04T13:29:54Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.35261" lon="-071.10799"> 
+<time>2006-03-04T13:29:55Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.35262" lon="-071.10804"> 
+<time>2006-03-04T13:29:56Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.35263" lon="-071.10809"> 
+<time>2006-03-04T13:29:57Z</time>
+<speed>004.36</speed>
+</trkpt> 
+<trkpt lat="+42.35264" lon="-071.10814"> 
+<time>2006-03-04T13:29:58Z</time>
+<speed>004.36</speed>
+</trkpt> 
+<trkpt lat="+42.35264" lon="-071.10819"> 
+<time>2006-03-04T13:29:59Z</time>
+<speed>004.44</speed>
+</trkpt> 
+<trkpt lat="+42.35264" lon="-071.10824"> 
+<time>2006-03-04T13:30:00Z</time>
+<speed>004.44</speed>
+</trkpt> 
+<trkpt lat="+42.35264" lon="-071.10829"> 
+<time>2006-03-04T13:30:01Z</time>
+<speed>004.46</speed>
+</trkpt> 
+<trkpt lat="+42.35265" lon="-071.10834"> 
+<time>2006-03-04T13:30:02Z</time>
+<speed>004.46</speed>
+</trkpt> 
+<trkpt lat="+42.35265" lon="-071.10839"> 
+<time>2006-03-04T13:30:03Z</time>
+<speed>004.44</speed>
+</trkpt> 
+<trkpt lat="+42.35266" lon="-071.10844"> 
+<time>2006-03-04T13:30:04Z</time>
+<speed>004.44</speed>
+</trkpt> 
+<trkpt lat="+42.35267" lon="-071.10849"> 
+<time>2006-03-04T13:30:05Z</time>
+<speed>004.45</speed>
+</trkpt> 
+<trkpt lat="+42.35268" lon="-071.10855"> 
+<time>2006-03-04T13:30:06Z</time>
+<speed>004.45</speed>
+</trkpt> 
+<trkpt lat="+42.35269" lon="-071.10861"> 
+<time>2006-03-04T13:30:07Z</time>
+<speed>004.48</speed>
+</trkpt> 
+<trkpt lat="+42.35269" lon="-071.10867"> 
+<time>2006-03-04T13:30:08Z</time>
+<speed>004.48</speed>
+</trkpt> 
+<trkpt lat="+42.35269" lon="-071.10872"> 
+<time>2006-03-04T13:30:09Z</time>
+<speed>004.44</speed>
+</trkpt> 
+<trkpt lat="+42.35269" lon="-071.10878"> 
+<time>2006-03-04T13:30:10Z</time>
+<speed>004.44</speed>
+</trkpt> 
+<trkpt lat="+42.35270" lon="-071.10883"> 
+<time>2006-03-04T13:30:11Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.35271" lon="-071.10889"> 
+<time>2006-03-04T13:30:12Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.35271" lon="-071.10894"> 
+<time>2006-03-04T13:30:13Z</time>
+<speed>004.39</speed>
+</trkpt> 
+<trkpt lat="+42.35271" lon="-071.10899"> 
+<time>2006-03-04T13:30:14Z</time>
+<speed>004.39</speed>
+</trkpt> 
+<trkpt lat="+42.35271" lon="-071.10904"> 
+<time>2006-03-04T13:30:15Z</time>
+<speed>004.37</speed>
+</trkpt> 
+<trkpt lat="+42.35271" lon="-071.10909"> 
+<time>2006-03-04T13:30:16Z</time>
+<speed>004.37</speed>
+</trkpt> 
+<trkpt lat="+42.35272" lon="-071.10915"> 
+<time>2006-03-04T13:30:17Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.35272" lon="-071.10920"> 
+<time>2006-03-04T13:30:18Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.35272" lon="-071.10926"> 
+<time>2006-03-04T13:30:19Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.35272" lon="-071.10931"> 
+<time>2006-03-04T13:30:20Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.35272" lon="-071.10936"> 
+<time>2006-03-04T13:30:21Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.35272" lon="-071.10942"> 
+<time>2006-03-04T13:30:22Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.35272" lon="-071.10947"> 
+<time>2006-03-04T13:30:23Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35272" lon="-071.10952"> 
+<time>2006-03-04T13:30:24Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35272" lon="-071.10957"> 
+<time>2006-03-04T13:30:25Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35272" lon="-071.10963"> 
+<time>2006-03-04T13:30:26Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35272" lon="-071.10968"> 
+<time>2006-03-04T13:30:27Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35272" lon="-071.10973"> 
+<time>2006-03-04T13:30:28Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35272" lon="-071.10978"> 
+<time>2006-03-04T13:30:29Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35272" lon="-071.10983"> 
+<time>2006-03-04T13:30:30Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35273" lon="-071.10988"> 
+<time>2006-03-04T13:30:31Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35275" lon="-071.10992"> 
+<time>2006-03-04T13:30:32Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35277" lon="-071.10996"> 
+<time>2006-03-04T13:30:33Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35277" lon="-071.11002"> 
+<time>2006-03-04T13:30:34Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35277" lon="-071.11008"> 
+<time>2006-03-04T13:30:35Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35277" lon="-071.11014"> 
+<time>2006-03-04T13:30:36Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35277" lon="-071.11019"> 
+<time>2006-03-04T13:30:37Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35277" lon="-071.11024"> 
+<time>2006-03-04T13:30:38Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35277" lon="-071.11027"> 
+<time>2006-03-04T13:30:39Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35278" lon="-071.11031"> 
+<time>2006-03-04T13:30:40Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35279" lon="-071.11035"> 
+<time>2006-03-04T13:30:41Z</time>
+<speed>004.01</speed>
+</trkpt> 
+<trkpt lat="+42.35279" lon="-071.11039"> 
+<time>2006-03-04T13:30:42Z</time>
+<speed>004.01</speed>
+</trkpt> 
+<trkpt lat="+42.35282" lon="-071.11046"> 
+<time>2006-03-04T13:30:43Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35284" lon="-071.11051"> 
+<time>2006-03-04T13:30:44Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35284" lon="-071.11057"> 
+<time>2006-03-04T13:30:45Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.35284" lon="-071.11063"> 
+<time>2006-03-04T13:30:46Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.35284" lon="-071.11069"> 
+<time>2006-03-04T13:30:47Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.35285" lon="-071.11074"> 
+<time>2006-03-04T13:30:48Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.35287" lon="-071.11081"> 
+<time>2006-03-04T13:30:49Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.35289" lon="-071.11086"> 
+<time>2006-03-04T13:30:50Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.35289" lon="-071.11091"> 
+<time>2006-03-04T13:30:51Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35291" lon="-071.11096"> 
+<time>2006-03-04T13:30:52Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35291" lon="-071.11101"> 
+<time>2006-03-04T13:30:53Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35292" lon="-071.11106"> 
+<time>2006-03-04T13:30:54Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35292" lon="-071.11110"> 
+<time>2006-03-04T13:30:55Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35294" lon="-071.11116"> 
+<time>2006-03-04T13:30:56Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35294" lon="-071.11121"> 
+<time>2006-03-04T13:30:57Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.35295" lon="-071.11126"> 
+<time>2006-03-04T13:30:58Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.35296" lon="-071.11131"> 
+<time>2006-03-04T13:30:59Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.35297" lon="-071.11134"> 
+<time>2006-03-04T13:31:00Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.35299" lon="-071.11140"> 
+<time>2006-03-04T13:31:01Z</time>
+<speed>004.10</speed>
+</trkpt> 
+<trkpt lat="+42.35299" lon="-071.11146"> 
+<time>2006-03-04T13:31:02Z</time>
+<speed>004.10</speed>
+</trkpt> 
+<trkpt lat="+42.35300" lon="-071.11151"> 
+<time>2006-03-04T13:31:03Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.35301" lon="-071.11156"> 
+<time>2006-03-04T13:31:04Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.35302" lon="-071.11161"> 
+<time>2006-03-04T13:31:05Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.35304" lon="-071.11166"> 
+<time>2006-03-04T13:31:06Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.35305" lon="-071.11171"> 
+<time>2006-03-04T13:31:07Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.35307" lon="-071.11176"> 
+<time>2006-03-04T13:31:08Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.35309" lon="-071.11180"> 
+<time>2006-03-04T13:31:09Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.35310" lon="-071.11184"> 
+<time>2006-03-04T13:31:10Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.35312" lon="-071.11189"> 
+<time>2006-03-04T13:31:11Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.35314" lon="-071.11194"> 
+<time>2006-03-04T13:31:12Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.35316" lon="-071.11198"> 
+<time>2006-03-04T13:31:13Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.35318" lon="-071.11202"> 
+<time>2006-03-04T13:31:14Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.35319" lon="-071.11207"> 
+<time>2006-03-04T13:31:15Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.35321" lon="-071.11212"> 
+<time>2006-03-04T13:31:16Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.35322" lon="-071.11216"> 
+<time>2006-03-04T13:31:17Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.35324" lon="-071.11221"> 
+<time>2006-03-04T13:31:18Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.35325" lon="-071.11226"> 
+<time>2006-03-04T13:31:19Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.35326" lon="-071.11230"> 
+<time>2006-03-04T13:31:20Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35326" lon="-071.11234"> 
+<time>2006-03-04T13:31:21Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35328" lon="-071.11239"> 
+<time>2006-03-04T13:31:22Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35330" lon="-071.11244"> 
+<time>2006-03-04T13:31:23Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35331" lon="-071.11249"> 
+<time>2006-03-04T13:31:24Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.35333" lon="-071.11252"> 
+<time>2006-03-04T13:31:25Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.35334" lon="-071.11256"> 
+<time>2006-03-04T13:31:26Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.35335" lon="-071.11261"> 
+<time>2006-03-04T13:31:27Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.35337" lon="-071.11264"> 
+<time>2006-03-04T13:31:28Z</time>
+<speed>004.09</speed>
+</trkpt> 
+<trkpt lat="+42.35338" lon="-071.11269"> 
+<time>2006-03-04T13:31:29Z</time>
+<speed>004.09</speed>
+</trkpt> 
+<trkpt lat="+42.35339" lon="-071.11273"> 
+<time>2006-03-04T13:31:30Z</time>
+<speed>004.09</speed>
+</trkpt> 
+<trkpt lat="+42.35341" lon="-071.11278"> 
+<time>2006-03-04T13:31:31Z</time>
+<speed>004.09</speed>
+</trkpt> 
+<trkpt lat="+42.35342" lon="-071.11283"> 
+<time>2006-03-04T13:31:32Z</time>
+<speed>004.07</speed>
+</trkpt> 
+<trkpt lat="+42.35344" lon="-071.11288"> 
+<time>2006-03-04T13:31:33Z</time>
+<speed>004.07</speed>
+</trkpt> 
+<trkpt lat="+42.35345" lon="-071.11292"> 
+<time>2006-03-04T13:31:34Z</time>
+<speed>004.03</speed>
+</trkpt> 
+<trkpt lat="+42.35347" lon="-071.11296"> 
+<time>2006-03-04T13:31:35Z</time>
+<speed>004.03</speed>
+</trkpt> 
+<trkpt lat="+42.35350" lon="-071.11300"> 
+<time>2006-03-04T13:31:36Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35352" lon="-071.11304"> 
+<time>2006-03-04T13:31:37Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35354" lon="-071.11309"> 
+<time>2006-03-04T13:31:38Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35357" lon="-071.11314"> 
+<time>2006-03-04T13:31:39Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35358" lon="-071.11319"> 
+<time>2006-03-04T13:31:40Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.35360" lon="-071.11323"> 
+<time>2006-03-04T13:31:41Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.35361" lon="-071.11327"> 
+<time>2006-03-04T13:31:42Z</time>
+<speed>004.05</speed>
+</trkpt> 
+<trkpt lat="+42.35362" lon="-071.11331"> 
+<time>2006-03-04T13:31:43Z</time>
+<speed>004.05</speed>
+</trkpt> 
+<trkpt lat="+42.35364" lon="-071.11335"> 
+<time>2006-03-04T13:31:44Z</time>
+<speed>004.01</speed>
+</trkpt> 
+<trkpt lat="+42.35365" lon="-071.11339"> 
+<time>2006-03-04T13:31:45Z</time>
+<speed>004.01</speed>
+</trkpt> 
+<trkpt lat="+42.35366" lon="-071.11344"> 
+<time>2006-03-04T13:31:46Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35368" lon="-071.11349"> 
+<time>2006-03-04T13:31:47Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35370" lon="-071.11353"> 
+<time>2006-03-04T13:31:48Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35372" lon="-071.11357"> 
+<time>2006-03-04T13:31:49Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35374" lon="-071.11362"> 
+<time>2006-03-04T13:31:50Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35377" lon="-071.11366"> 
+<time>2006-03-04T13:31:51Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35380" lon="-071.11371"> 
+<time>2006-03-04T13:31:52Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35382" lon="-071.11376"> 
+<time>2006-03-04T13:31:53Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35384" lon="-071.11380"> 
+<time>2006-03-04T13:31:54Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.35387" lon="-071.11384"> 
+<time>2006-03-04T13:31:55Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.35389" lon="-071.11388"> 
+<time>2006-03-04T13:31:56Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.35391" lon="-071.11393"> 
+<time>2006-03-04T13:31:57Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.35393" lon="-071.11397"> 
+<time>2006-03-04T13:31:58Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.35395" lon="-071.11401"> 
+<time>2006-03-04T13:31:59Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.35397" lon="-071.11405"> 
+<time>2006-03-04T13:32:00Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.35399" lon="-071.11410"> 
+<time>2006-03-04T13:32:01Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.35402" lon="-071.11414"> 
+<time>2006-03-04T13:32:02Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.35403" lon="-071.11419"> 
+<time>2006-03-04T13:32:03Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.35405" lon="-071.11423"> 
+<time>2006-03-04T13:32:04Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.35407" lon="-071.11427"> 
+<time>2006-03-04T13:32:05Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.35410" lon="-071.11431"> 
+<time>2006-03-04T13:32:06Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35414" lon="-071.11436"> 
+<time>2006-03-04T13:32:07Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35417" lon="-071.11441"> 
+<time>2006-03-04T13:32:08Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.35419" lon="-071.11446"> 
+<time>2006-03-04T13:32:09Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.35422" lon="-071.11450"> 
+<time>2006-03-04T13:32:10Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.35424" lon="-071.11455"> 
+<time>2006-03-04T13:32:11Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.35427" lon="-071.11459"> 
+<time>2006-03-04T13:32:12Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.35429" lon="-071.11464"> 
+<time>2006-03-04T13:32:13Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.35432" lon="-071.11467"> 
+<time>2006-03-04T13:32:14Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.35434" lon="-071.11472"> 
+<time>2006-03-04T13:32:15Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.35435" lon="-071.11477"> 
+<time>2006-03-04T13:32:16Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35437" lon="-071.11481"> 
+<time>2006-03-04T13:32:17Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35439" lon="-071.11484"> 
+<time>2006-03-04T13:32:18Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.35442" lon="-071.11488"> 
+<time>2006-03-04T13:32:19Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.35445" lon="-071.11492"> 
+<time>2006-03-04T13:32:20Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.35448" lon="-071.11496"> 
+<time>2006-03-04T13:32:21Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.35450" lon="-071.11499"> 
+<time>2006-03-04T13:32:22Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.35452" lon="-071.11502"> 
+<time>2006-03-04T13:32:23Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.35455" lon="-071.11505"> 
+<time>2006-03-04T13:32:24Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.35459" lon="-071.11509"> 
+<time>2006-03-04T13:32:25Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.35462" lon="-071.11513"> 
+<time>2006-03-04T13:32:26Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35465" lon="-071.11517"> 
+<time>2006-03-04T13:32:27Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35467" lon="-071.11520"> 
+<time>2006-03-04T13:32:28Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.35471" lon="-071.11524"> 
+<time>2006-03-04T13:32:29Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.35473" lon="-071.11527"> 
+<time>2006-03-04T13:32:30Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.35475" lon="-071.11529"> 
+<time>2006-03-04T13:32:31Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.35478" lon="-071.11533"> 
+<time>2006-03-04T13:32:32Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.35479" lon="-071.11536"> 
+<time>2006-03-04T13:32:33Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.35482" lon="-071.11539"> 
+<time>2006-03-04T13:32:34Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.35484" lon="-071.11541"> 
+<time>2006-03-04T13:32:35Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.35487" lon="-071.11545"> 
+<time>2006-03-04T13:32:36Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.35490" lon="-071.11549"> 
+<time>2006-03-04T13:32:37Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.35494" lon="-071.11552"> 
+<time>2006-03-04T13:32:38Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.35497" lon="-071.11555"> 
+<time>2006-03-04T13:32:39Z</time>
+<speed>004.01</speed>
+</trkpt> 
+<trkpt lat="+42.35500" lon="-071.11559"> 
+<time>2006-03-04T13:32:40Z</time>
+<speed>004.01</speed>
+</trkpt> 
+<trkpt lat="+42.35504" lon="-071.11562"> 
+<time>2006-03-04T13:32:41Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.35507" lon="-071.11566"> 
+<time>2006-03-04T13:32:42Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.35510" lon="-071.11568"> 
+<time>2006-03-04T13:32:43Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35512" lon="-071.11571"> 
+<time>2006-03-04T13:32:44Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35516" lon="-071.11574"> 
+<time>2006-03-04T13:32:45Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35519" lon="-071.11576"> 
+<time>2006-03-04T13:32:46Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.35522" lon="-071.11578"> 
+<time>2006-03-04T13:32:47Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.35525" lon="-071.11581"> 
+<time>2006-03-04T13:32:48Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.35527" lon="-071.11583"> 
+<time>2006-03-04T13:32:49Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.35531" lon="-071.11585"> 
+<time>2006-03-04T13:32:50Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.35534" lon="-071.11588"> 
+<time>2006-03-04T13:32:51Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.35538" lon="-071.11590"> 
+<time>2006-03-04T13:32:52Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.35544" lon="-071.11592"> 
+<time>2006-03-04T13:32:53Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.35547" lon="-071.11594"> 
+<time>2006-03-04T13:32:54Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.35552" lon="-071.11597"> 
+<time>2006-03-04T13:32:55Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35556" lon="-071.11600"> 
+<time>2006-03-04T13:32:56Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.35559" lon="-071.11602"> 
+<time>2006-03-04T13:32:57Z</time>
+<speed>004.05</speed>
+</trkpt> 
+<trkpt lat="+42.35563" lon="-071.11604"> 
+<time>2006-03-04T13:32:58Z</time>
+<speed>004.05</speed>
+</trkpt> 
+<trkpt lat="+42.35567" lon="-071.11604"> 
+<time>2006-03-04T13:32:59Z</time>
+<speed>004.04</speed>
+</trkpt> 
+<trkpt lat="+42.35572" lon="-071.11606"> 
+<time>2006-03-04T13:33:00Z</time>
+<speed>004.04</speed>
+</trkpt> 
+<trkpt lat="+42.35575" lon="-071.11609"> 
+<time>2006-03-04T13:33:01Z</time>
+<speed>004.10</speed>
+</trkpt> 
+<trkpt lat="+42.35579" lon="-071.11611"> 
+<time>2006-03-04T13:33:02Z</time>
+<speed>004.10</speed>
+</trkpt> 
+<trkpt lat="+42.35582" lon="-071.11612"> 
+<time>2006-03-04T13:33:03Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.35586" lon="-071.11614"> 
+<time>2006-03-04T13:33:04Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.35589" lon="-071.11616"> 
+<time>2006-03-04T13:33:05Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.35594" lon="-071.11618"> 
+<time>2006-03-04T13:33:06Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.35597" lon="-071.11620"> 
+<time>2006-03-04T13:33:07Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35601" lon="-071.11622"> 
+<time>2006-03-04T13:33:08Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35605" lon="-071.11624"> 
+<time>2006-03-04T13:33:09Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.35609" lon="-071.11626"> 
+<time>2006-03-04T13:33:10Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.35614" lon="-071.11626"> 
+<time>2006-03-04T13:33:11Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.35617" lon="-071.11627"> 
+<time>2006-03-04T13:33:12Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.35620" lon="-071.11629"> 
+<time>2006-03-04T13:33:13Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35624" lon="-071.11630"> 
+<time>2006-03-04T13:33:14Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35627" lon="-071.11631"> 
+<time>2006-03-04T13:33:15Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.35631" lon="-071.11631"> 
+<time>2006-03-04T13:33:16Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.35635" lon="-071.11633"> 
+<time>2006-03-04T13:33:17Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.35639" lon="-071.11634"> 
+<time>2006-03-04T13:33:18Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.35644" lon="-071.11636"> 
+<time>2006-03-04T13:33:19Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35647" lon="-071.11637"> 
+<time>2006-03-04T13:33:20Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35651" lon="-071.11639"> 
+<time>2006-03-04T13:33:21Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35656" lon="-071.11640"> 
+<time>2006-03-04T13:33:22Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35659" lon="-071.11641"> 
+<time>2006-03-04T13:33:23Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35664" lon="-071.11642"> 
+<time>2006-03-04T13:33:24Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35667" lon="-071.11643"> 
+<time>2006-03-04T13:33:25Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35672" lon="-071.11644"> 
+<time>2006-03-04T13:33:26Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.35675" lon="-071.11646"> 
+<time>2006-03-04T13:33:27Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.35679" lon="-071.11646"> 
+<time>2006-03-04T13:33:28Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35682" lon="-071.11647"> 
+<time>2006-03-04T13:33:29Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35687" lon="-071.11648"> 
+<time>2006-03-04T13:33:30Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35691" lon="-071.11648"> 
+<time>2006-03-04T13:33:31Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35695" lon="-071.11649"> 
+<time>2006-03-04T13:33:32Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35699" lon="-071.11650"> 
+<time>2006-03-04T13:33:33Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35702" lon="-071.11650"> 
+<time>2006-03-04T13:33:34Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35706" lon="-071.11651"> 
+<time>2006-03-04T13:33:35Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35709" lon="-071.11651"> 
+<time>2006-03-04T13:33:36Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35714" lon="-071.11651"> 
+<time>2006-03-04T13:33:37Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35718" lon="-071.11652"> 
+<time>2006-03-04T13:33:38Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35722" lon="-071.11652"> 
+<time>2006-03-04T13:33:39Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.35726" lon="-071.11652"> 
+<time>2006-03-04T13:33:40Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.35730" lon="-071.11653"> 
+<time>2006-03-04T13:33:41Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.35734" lon="-071.11654"> 
+<time>2006-03-04T13:33:42Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.35738" lon="-071.11656"> 
+<time>2006-03-04T13:33:43Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.35741" lon="-071.11656"> 
+<time>2006-03-04T13:33:44Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.35745" lon="-071.11656"> 
+<time>2006-03-04T13:33:45Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.35749" lon="-071.11657"> 
+<time>2006-03-04T13:33:46Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.35752" lon="-071.11657"> 
+<time>2006-03-04T13:33:47Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.35756" lon="-071.11656"> 
+<time>2006-03-04T13:33:48Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.35759" lon="-071.11655"> 
+<time>2006-03-04T13:33:49Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35762" lon="-071.11654"> 
+<time>2006-03-04T13:33:50Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35766" lon="-071.11654"> 
+<time>2006-03-04T13:33:51Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.35769" lon="-071.11654"> 
+<time>2006-03-04T13:33:52Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.35773" lon="-071.11654"> 
+<time>2006-03-04T13:33:53Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.35777" lon="-071.11654"> 
+<time>2006-03-04T13:33:54Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.35781" lon="-071.11655"> 
+<time>2006-03-04T13:33:55Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.35784" lon="-071.11654"> 
+<time>2006-03-04T13:33:56Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.35788" lon="-071.11655"> 
+<time>2006-03-04T13:33:57Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.35792" lon="-071.11656"> 
+<time>2006-03-04T13:33:58Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.35796" lon="-071.11656"> 
+<time>2006-03-04T13:33:59Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.35800" lon="-071.11656"> 
+<time>2006-03-04T13:34:00Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.35804" lon="-071.11656"> 
+<time>2006-03-04T13:34:01Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35808" lon="-071.11656"> 
+<time>2006-03-04T13:34:02Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35812" lon="-071.11656"> 
+<time>2006-03-04T13:34:03Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35816" lon="-071.11657"> 
+<time>2006-03-04T13:34:04Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35819" lon="-071.11658"> 
+<time>2006-03-04T13:34:05Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.35822" lon="-071.11658"> 
+<time>2006-03-04T13:34:06Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.35826" lon="-071.11658"> 
+<time>2006-03-04T13:34:07Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35829" lon="-071.11657"> 
+<time>2006-03-04T13:34:08Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.35833" lon="-071.11657"> 
+<time>2006-03-04T13:34:09Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35836" lon="-071.11657"> 
+<time>2006-03-04T13:34:10Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.35840" lon="-071.11656"> 
+<time>2006-03-04T13:34:11Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.35844" lon="-071.11656"> 
+<time>2006-03-04T13:34:12Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.35849" lon="-071.11657"> 
+<time>2006-03-04T13:34:13Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.35852" lon="-071.11657"> 
+<time>2006-03-04T13:34:14Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.35857" lon="-071.11657"> 
+<time>2006-03-04T13:34:15Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.35861" lon="-071.11658"> 
+<time>2006-03-04T13:34:16Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.35864" lon="-071.11658"> 
+<time>2006-03-04T13:34:17Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.35868" lon="-071.11658"> 
+<time>2006-03-04T13:34:18Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.35872" lon="-071.11659"> 
+<time>2006-03-04T13:34:19Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35877" lon="-071.11659"> 
+<time>2006-03-04T13:34:20Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.35881" lon="-071.11659"> 
+<time>2006-03-04T13:34:21Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.35884" lon="-071.11659"> 
+<time>2006-03-04T13:34:22Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.35889" lon="-071.11659"> 
+<time>2006-03-04T13:34:23Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.35892" lon="-071.11659"> 
+<time>2006-03-04T13:34:24Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.35896" lon="-071.11658"> 
+<time>2006-03-04T13:34:25Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.35900" lon="-071.11658"> 
+<time>2006-03-04T13:34:26Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.35904" lon="-071.11659"> 
+<time>2006-03-04T13:34:27Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.35908" lon="-071.11659"> 
+<time>2006-03-04T13:34:28Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.35912" lon="-071.11659"> 
+<time>2006-03-04T13:34:29Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.35916" lon="-071.11660"> 
+<time>2006-03-04T13:34:30Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.35919" lon="-071.11661"> 
+<time>2006-03-04T13:34:31Z</time>
+<speed>004.32</speed>
+</trkpt> 
+<trkpt lat="+42.35922" lon="-071.11662"> 
+<time>2006-03-04T13:34:32Z</time>
+<speed>004.32</speed>
+</trkpt> 
+<trkpt lat="+42.35926" lon="-071.11662"> 
+<time>2006-03-04T13:34:33Z</time>
+<speed>004.35</speed>
+</trkpt> 
+<trkpt lat="+42.35929" lon="-071.11663"> 
+<time>2006-03-04T13:34:34Z</time>
+<speed>004.35</speed>
+</trkpt> 
+<trkpt lat="+42.35934" lon="-071.11663"> 
+<time>2006-03-04T13:34:35Z</time>
+<speed>004.35</speed>
+</trkpt> 
+<trkpt lat="+42.35937" lon="-071.11663"> 
+<time>2006-03-04T13:34:36Z</time>
+<speed>004.35</speed>
+</trkpt> 
+<trkpt lat="+42.35941" lon="-071.11663"> 
+<time>2006-03-04T13:34:37Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.35945" lon="-071.11664"> 
+<time>2006-03-04T13:34:38Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.35949" lon="-071.11663"> 
+<time>2006-03-04T13:34:39Z</time>
+<speed>004.32</speed>
+</trkpt> 
+<trkpt lat="+42.35954" lon="-071.11664"> 
+<time>2006-03-04T13:34:40Z</time>
+<speed>004.32</speed>
+</trkpt> 
+<trkpt lat="+42.35957" lon="-071.11663"> 
+<time>2006-03-04T13:34:41Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.35961" lon="-071.11663"> 
+<time>2006-03-04T13:34:42Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.35966" lon="-071.11663"> 
+<time>2006-03-04T13:34:43Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.35969" lon="-071.11663"> 
+<time>2006-03-04T13:34:44Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.35974" lon="-071.11662"> 
+<time>2006-03-04T13:34:45Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.35977" lon="-071.11662"> 
+<time>2006-03-04T13:34:46Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.35979" lon="-071.11663"> 
+<time>2006-03-04T13:34:47Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35983" lon="-071.11663"> 
+<time>2006-03-04T13:34:48Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35986" lon="-071.11663"> 
+<time>2006-03-04T13:34:49Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35989" lon="-071.11664"> 
+<time>2006-03-04T13:34:50Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35994" lon="-071.11665"> 
+<time>2006-03-04T13:34:51Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.35998" lon="-071.11666"> 
+<time>2006-03-04T13:34:52Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36002" lon="-071.11667"> 
+<time>2006-03-04T13:34:53Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.36006" lon="-071.11667"> 
+<time>2006-03-04T13:34:54Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.36009" lon="-071.11667"> 
+<time>2006-03-04T13:34:55Z</time>
+<speed>004.33</speed>
+</trkpt> 
+<trkpt lat="+42.36014" lon="-071.11667"> 
+<time>2006-03-04T13:34:56Z</time>
+<speed>004.33</speed>
+</trkpt> 
+<trkpt lat="+42.36017" lon="-071.11668"> 
+<time>2006-03-04T13:34:57Z</time>
+<speed>004.33</speed>
+</trkpt> 
+<trkpt lat="+42.36022" lon="-071.11669"> 
+<time>2006-03-04T13:34:58Z</time>
+<speed>004.33</speed>
+</trkpt> 
+<trkpt lat="+42.36026" lon="-071.11670"> 
+<time>2006-03-04T13:34:59Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36030" lon="-071.11670"> 
+<time>2006-03-04T13:35:00Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36033" lon="-071.11670"> 
+<time>2006-03-04T13:35:01Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.36037" lon="-071.11671"> 
+<time>2006-03-04T13:35:02Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.36040" lon="-071.11672"> 
+<time>2006-03-04T13:35:03Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36044" lon="-071.11672"> 
+<time>2006-03-04T13:35:04Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36048" lon="-071.11672"> 
+<time>2006-03-04T13:35:05Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.36052" lon="-071.11672"> 
+<time>2006-03-04T13:35:06Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.36055" lon="-071.11672"> 
+<time>2006-03-04T13:35:07Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.36059" lon="-071.11673"> 
+<time>2006-03-04T13:35:08Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.36064" lon="-071.11674"> 
+<time>2006-03-04T13:35:09Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36068" lon="-071.11675"> 
+<time>2006-03-04T13:35:10Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36072" lon="-071.11676"> 
+<time>2006-03-04T13:35:11Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36075" lon="-071.11676"> 
+<time>2006-03-04T13:35:12Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36079" lon="-071.11676"> 
+<time>2006-03-04T13:35:13Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36083" lon="-071.11676"> 
+<time>2006-03-04T13:35:14Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36087" lon="-071.11675"> 
+<time>2006-03-04T13:35:15Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.36090" lon="-071.11675"> 
+<time>2006-03-04T13:35:16Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.36094" lon="-071.11674"> 
+<time>2006-03-04T13:35:17Z</time>
+<speed>004.10</speed>
+</trkpt> 
+<trkpt lat="+42.36097" lon="-071.11673"> 
+<time>2006-03-04T13:35:18Z</time>
+<speed>004.10</speed>
+</trkpt> 
+<trkpt lat="+42.36101" lon="-071.11673"> 
+<time>2006-03-04T13:35:19Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36105" lon="-071.11673"> 
+<time>2006-03-04T13:35:20Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36109" lon="-071.11674"> 
+<time>2006-03-04T13:35:21Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.36111" lon="-071.11674"> 
+<time>2006-03-04T13:35:22Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.36114" lon="-071.11675"> 
+<time>2006-03-04T13:35:23Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36118" lon="-071.11675"> 
+<time>2006-03-04T13:35:24Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36122" lon="-071.11676"> 
+<time>2006-03-04T13:35:25Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.36126" lon="-071.11677"> 
+<time>2006-03-04T13:35:26Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.36129" lon="-071.11677"> 
+<time>2006-03-04T13:35:27Z</time>
+<speed>004.33</speed>
+</trkpt> 
+<trkpt lat="+42.36133" lon="-071.11677"> 
+<time>2006-03-04T13:35:28Z</time>
+<speed>004.33</speed>
+</trkpt> 
+<trkpt lat="+42.36137" lon="-071.11677"> 
+<time>2006-03-04T13:35:29Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36141" lon="-071.11675"> 
+<time>2006-03-04T13:35:30Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36146" lon="-071.11675"> 
+<time>2006-03-04T13:35:31Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.36150" lon="-071.11675"> 
+<time>2006-03-04T13:35:32Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.36154" lon="-071.11676"> 
+<time>2006-03-04T13:35:33Z</time>
+<speed>004.09</speed>
+</trkpt> 
+<trkpt lat="+42.36158" lon="-071.11677"> 
+<time>2006-03-04T13:35:34Z</time>
+<speed>004.09</speed>
+</trkpt> 
+<trkpt lat="+42.36162" lon="-071.11677"> 
+<time>2006-03-04T13:35:35Z</time>
+<speed>004.10</speed>
+</trkpt> 
+<trkpt lat="+42.36166" lon="-071.11675"> 
+<time>2006-03-04T13:35:36Z</time>
+<speed>004.10</speed>
+</trkpt> 
+<trkpt lat="+42.36169" lon="-071.11675"> 
+<time>2006-03-04T13:35:37Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.36173" lon="-071.11674"> 
+<time>2006-03-04T13:35:38Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.36177" lon="-071.11675"> 
+<time>2006-03-04T13:35:39Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36181" lon="-071.11675"> 
+<time>2006-03-04T13:35:40Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36184" lon="-071.11675"> 
+<time>2006-03-04T13:35:41Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.36187" lon="-071.11676"> 
+<time>2006-03-04T13:35:42Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.36191" lon="-071.11676"> 
+<time>2006-03-04T13:35:43Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.36195" lon="-071.11677"> 
+<time>2006-03-04T13:35:44Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.36199" lon="-071.11677"> 
+<time>2006-03-04T13:35:45Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.36202" lon="-071.11677"> 
+<time>2006-03-04T13:35:46Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.36207" lon="-071.11678"> 
+<time>2006-03-04T13:35:47Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.36211" lon="-071.11678"> 
+<time>2006-03-04T13:35:48Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.36214" lon="-071.11678"> 
+<time>2006-03-04T13:35:49Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36218" lon="-071.11678"> 
+<time>2006-03-04T13:35:50Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36222" lon="-071.11678"> 
+<time>2006-03-04T13:35:51Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.36226" lon="-071.11678"> 
+<time>2006-03-04T13:35:52Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.36230" lon="-071.11679"> 
+<time>2006-03-04T13:35:53Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36234" lon="-071.11678"> 
+<time>2006-03-04T13:35:54Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36239" lon="-071.11678"> 
+<time>2006-03-04T13:35:55Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.36242" lon="-071.11677"> 
+<time>2006-03-04T13:35:56Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.36246" lon="-071.11677"> 
+<time>2006-03-04T13:35:57Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36250" lon="-071.11677"> 
+<time>2006-03-04T13:35:58Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36254" lon="-071.11677"> 
+<time>2006-03-04T13:35:59Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36257" lon="-071.11677"> 
+<time>2006-03-04T13:36:00Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36261" lon="-071.11677"> 
+<time>2006-03-04T13:36:01Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36266" lon="-071.11677"> 
+<time>2006-03-04T13:36:02Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36269" lon="-071.11677"> 
+<time>2006-03-04T13:36:03Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.36272" lon="-071.11677"> 
+<time>2006-03-04T13:36:04Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.36276" lon="-071.11677"> 
+<time>2006-03-04T13:36:05Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36281" lon="-071.11679"> 
+<time>2006-03-04T13:36:06Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36284" lon="-071.11679"> 
+<time>2006-03-04T13:36:07Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.36289" lon="-071.11679"> 
+<time>2006-03-04T13:36:08Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.36292" lon="-071.11679"> 
+<time>2006-03-04T13:36:09Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36296" lon="-071.11679"> 
+<time>2006-03-04T13:36:10Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36300" lon="-071.11677"> 
+<time>2006-03-04T13:36:11Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36304" lon="-071.11677"> 
+<time>2006-03-04T13:36:12Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36307" lon="-071.11677"> 
+<time>2006-03-04T13:36:13Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36311" lon="-071.11677"> 
+<time>2006-03-04T13:36:14Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36315" lon="-071.11677"> 
+<time>2006-03-04T13:36:15Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.36319" lon="-071.11677"> 
+<time>2006-03-04T13:36:16Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.36322" lon="-071.11677"> 
+<time>2006-03-04T13:36:17Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36326" lon="-071.11678"> 
+<time>2006-03-04T13:36:18Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36330" lon="-071.11679"> 
+<time>2006-03-04T13:36:19Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.36333" lon="-071.11679"> 
+<time>2006-03-04T13:36:20Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.36337" lon="-071.11679"> 
+<time>2006-03-04T13:36:21Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.36341" lon="-071.11679"> 
+<time>2006-03-04T13:36:22Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.36345" lon="-071.11679"> 
+<time>2006-03-04T13:36:23Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36349" lon="-071.11679"> 
+<time>2006-03-04T13:36:24Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36352" lon="-071.11681"> 
+<time>2006-03-04T13:36:25Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.36356" lon="-071.11682"> 
+<time>2006-03-04T13:36:26Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.36359" lon="-071.11682"> 
+<time>2006-03-04T13:36:27Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.36364" lon="-071.11682"> 
+<time>2006-03-04T13:36:28Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.36367" lon="-071.11683"> 
+<time>2006-03-04T13:36:29Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.36372" lon="-071.11683"> 
+<time>2006-03-04T13:36:30Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.36376" lon="-071.11684"> 
+<time>2006-03-04T13:36:31Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36380" lon="-071.11684"> 
+<time>2006-03-04T13:36:32Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36384" lon="-071.11685"> 
+<time>2006-03-04T13:36:33Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.36388" lon="-071.11685"> 
+<time>2006-03-04T13:36:34Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.36392" lon="-071.11685"> 
+<time>2006-03-04T13:36:35Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36396" lon="-071.11686"> 
+<time>2006-03-04T13:36:36Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36399" lon="-071.11685"> 
+<time>2006-03-04T13:36:37Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.36403" lon="-071.11685"> 
+<time>2006-03-04T13:36:38Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.36406" lon="-071.11685"> 
+<time>2006-03-04T13:36:39Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.36410" lon="-071.11685"> 
+<time>2006-03-04T13:36:40Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.36414" lon="-071.11685"> 
+<time>2006-03-04T13:36:41Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36417" lon="-071.11685"> 
+<time>2006-03-04T13:36:42Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36420" lon="-071.11686"> 
+<time>2006-03-04T13:36:43Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36424" lon="-071.11686"> 
+<time>2006-03-04T13:36:44Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36429" lon="-071.11687"> 
+<time>2006-03-04T13:36:45Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36432" lon="-071.11687"> 
+<time>2006-03-04T13:36:46Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36437" lon="-071.11687"> 
+<time>2006-03-04T13:36:47Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36445" lon="-071.11687"> 
+<time>2006-03-04T13:36:48Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36452" lon="-071.11689"> 
+<time>2006-03-04T13:36:49Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.36453" lon="-071.11687"> 
+<time>2006-03-04T13:36:50Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36456" lon="-071.11687"> 
+<time>2006-03-04T13:36:51Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36459" lon="-071.11687"> 
+<time>2006-03-04T13:36:52Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36463" lon="-071.11686"> 
+<time>2006-03-04T13:36:53Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36466" lon="-071.11687"> 
+<time>2006-03-04T13:36:54Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.36469" lon="-071.11686"> 
+<time>2006-03-04T13:36:55Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.36474" lon="-071.11686"> 
+<time>2006-03-04T13:36:56Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.36477" lon="-071.11686"> 
+<time>2006-03-04T13:36:57Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.36481" lon="-071.11687"> 
+<time>2006-03-04T13:36:58Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.36484" lon="-071.11687"> 
+<time>2006-03-04T13:36:59Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.36488" lon="-071.11687"> 
+<time>2006-03-04T13:37:00Z</time>
+<speed>004.36</speed>
+</trkpt> 
+<trkpt lat="+42.36491" lon="-071.11687"> 
+<time>2006-03-04T13:37:01Z</time>
+<speed>004.36</speed>
+</trkpt> 
+<trkpt lat="+42.36494" lon="-071.11688"> 
+<time>2006-03-04T13:37:02Z</time>
+<speed>004.36</speed>
+</trkpt> 
+<trkpt lat="+42.36498" lon="-071.11689"> 
+<time>2006-03-04T13:37:03Z</time>
+<speed>004.36</speed>
+</trkpt> 
+<trkpt lat="+42.36502" lon="-071.11689"> 
+<time>2006-03-04T13:37:04Z</time>
+<speed>004.38</speed>
+</trkpt> 
+<trkpt lat="+42.36505" lon="-071.11689"> 
+<time>2006-03-04T13:37:05Z</time>
+<speed>004.38</speed>
+</trkpt> 
+<trkpt lat="+42.36509" lon="-071.11690"> 
+<time>2006-03-04T13:37:06Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.36512" lon="-071.11692"> 
+<time>2006-03-04T13:37:07Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.36516" lon="-071.11692"> 
+<time>2006-03-04T13:37:08Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.36520" lon="-071.11694"> 
+<time>2006-03-04T13:37:09Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.36524" lon="-071.11694"> 
+<time>2006-03-04T13:37:10Z</time>
+<speed>004.36</speed>
+</trkpt> 
+<trkpt lat="+42.36529" lon="-071.11695"> 
+<time>2006-03-04T13:37:11Z</time>
+<speed>004.36</speed>
+</trkpt> 
+<trkpt lat="+42.36532" lon="-071.11696"> 
+<time>2006-03-04T13:37:12Z</time>
+<speed>004.39</speed>
+</trkpt> 
+<trkpt lat="+42.36537" lon="-071.11696"> 
+<time>2006-03-04T13:37:13Z</time>
+<speed>004.39</speed>
+</trkpt> 
+<trkpt lat="+42.36541" lon="-071.11697"> 
+<time>2006-03-04T13:37:14Z</time>
+<speed>004.37</speed>
+</trkpt> 
+<trkpt lat="+42.36546" lon="-071.11697"> 
+<time>2006-03-04T13:37:15Z</time>
+<speed>004.37</speed>
+</trkpt> 
+<trkpt lat="+42.36549" lon="-071.11699"> 
+<time>2006-03-04T13:37:16Z</time>
+<speed>004.32</speed>
+</trkpt> 
+<trkpt lat="+42.36553" lon="-071.11699"> 
+<time>2006-03-04T13:37:17Z</time>
+<speed>004.32</speed>
+</trkpt> 
+<trkpt lat="+42.36557" lon="-071.11699"> 
+<time>2006-03-04T13:37:18Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.36560" lon="-071.11699"> 
+<time>2006-03-04T13:37:19Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.36564" lon="-071.11699"> 
+<time>2006-03-04T13:37:20Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36567" lon="-071.11699"> 
+<time>2006-03-04T13:37:21Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36571" lon="-071.11700"> 
+<time>2006-03-04T13:37:22Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36574" lon="-071.11700"> 
+<time>2006-03-04T13:37:23Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36577" lon="-071.11700"> 
+<time>2006-03-04T13:37:24Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36581" lon="-071.11701"> 
+<time>2006-03-04T13:37:25Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36585" lon="-071.11701"> 
+<time>2006-03-04T13:37:26Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.36589" lon="-071.11701"> 
+<time>2006-03-04T13:37:27Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.36592" lon="-071.11702"> 
+<time>2006-03-04T13:37:28Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36595" lon="-071.11702"> 
+<time>2006-03-04T13:37:29Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36599" lon="-071.11703"> 
+<time>2006-03-04T13:37:30Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36603" lon="-071.11704"> 
+<time>2006-03-04T13:37:31Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36606" lon="-071.11705"> 
+<time>2006-03-04T13:37:32Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.36611" lon="-071.11707"> 
+<time>2006-03-04T13:37:33Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.36614" lon="-071.11707"> 
+<time>2006-03-04T13:37:34Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.36617" lon="-071.11707"> 
+<time>2006-03-04T13:37:35Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.36622" lon="-071.11707"> 
+<time>2006-03-04T13:37:36Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36626" lon="-071.11708"> 
+<time>2006-03-04T13:37:37Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36630" lon="-071.11710"> 
+<time>2006-03-04T13:37:38Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36634" lon="-071.11712"> 
+<time>2006-03-04T13:37:39Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.36638" lon="-071.11712"> 
+<time>2006-03-04T13:37:40Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.36643" lon="-071.11714"> 
+<time>2006-03-04T13:37:41Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36646" lon="-071.11714"> 
+<time>2006-03-04T13:37:42Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36651" lon="-071.11715"> 
+<time>2006-03-04T13:37:43Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36654" lon="-071.11714"> 
+<time>2006-03-04T13:37:44Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36658" lon="-071.11715"> 
+<time>2006-03-04T13:37:45Z</time>
+<speed>004.33</speed>
+</trkpt> 
+<trkpt lat="+42.36661" lon="-071.11715"> 
+<time>2006-03-04T13:37:46Z</time>
+<speed>004.33</speed>
+</trkpt> 
+<trkpt lat="+42.36666" lon="-071.11716"> 
+<time>2006-03-04T13:37:47Z</time>
+<speed>004.32</speed>
+</trkpt> 
+<trkpt lat="+42.36668" lon="-071.11716"> 
+<time>2006-03-04T13:37:48Z</time>
+<speed>004.32</speed>
+</trkpt> 
+<trkpt lat="+42.36672" lon="-071.11717"> 
+<time>2006-03-04T13:37:49Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.36674" lon="-071.11718"> 
+<time>2006-03-04T13:37:50Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.36677" lon="-071.11719"> 
+<time>2006-03-04T13:37:51Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36682" lon="-071.11719"> 
+<time>2006-03-04T13:37:52Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36685" lon="-071.11719"> 
+<time>2006-03-04T13:37:53Z</time>
+<speed>004.33</speed>
+</trkpt> 
+<trkpt lat="+42.36689" lon="-071.11720"> 
+<time>2006-03-04T13:37:54Z</time>
+<speed>004.33</speed>
+</trkpt> 
+<trkpt lat="+42.36692" lon="-071.11720"> 
+<time>2006-03-04T13:37:55Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36694" lon="-071.11720"> 
+<time>2006-03-04T13:37:56Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36697" lon="-071.11722"> 
+<time>2006-03-04T13:37:57Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36699" lon="-071.11722"> 
+<time>2006-03-04T13:37:58Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36702" lon="-071.11724"> 
+<time>2006-03-04T13:37:59Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.36705" lon="-071.11725"> 
+<time>2006-03-04T13:38:00Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.36709" lon="-071.11726"> 
+<time>2006-03-04T13:38:01Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36712" lon="-071.11727"> 
+<time>2006-03-04T13:38:02Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36716" lon="-071.11727"> 
+<time>2006-03-04T13:38:03Z</time>
+<speed>004.36</speed>
+</trkpt> 
+<trkpt lat="+42.36717" lon="-071.11726"> 
+<time>2006-03-04T13:38:04Z</time>
+<speed>004.36</speed>
+</trkpt> 
+<trkpt lat="+42.36720" lon="-071.11727"> 
+<time>2006-03-04T13:38:05Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.36724" lon="-071.11729"> 
+<time>2006-03-04T13:38:06Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.36727" lon="-071.11730"> 
+<time>2006-03-04T13:38:07Z</time>
+<speed>004.41</speed>
+</trkpt> 
+<trkpt lat="+42.36731" lon="-071.11732"> 
+<time>2006-03-04T13:38:08Z</time>
+<speed>004.41</speed>
+</trkpt> 
+<trkpt lat="+42.36735" lon="-071.11734"> 
+<time>2006-03-04T13:38:09Z</time>
+<speed>004.35</speed>
+</trkpt> 
+<trkpt lat="+42.36740" lon="-071.11737"> 
+<time>2006-03-04T13:38:10Z</time>
+<speed>004.35</speed>
+</trkpt> 
+<trkpt lat="+42.36743" lon="-071.11739"> 
+<time>2006-03-04T13:38:11Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36747" lon="-071.11740"> 
+<time>2006-03-04T13:38:12Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36750" lon="-071.11742"> 
+<time>2006-03-04T13:38:13Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.36754" lon="-071.11744"> 
+<time>2006-03-04T13:38:14Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.36759" lon="-071.11746"> 
+<time>2006-03-04T13:38:15Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.36762" lon="-071.11748"> 
+<time>2006-03-04T13:38:16Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.36767" lon="-071.11749"> 
+<time>2006-03-04T13:38:17Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36770" lon="-071.11751"> 
+<time>2006-03-04T13:38:18Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36773" lon="-071.11753"> 
+<time>2006-03-04T13:38:19Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.36776" lon="-071.11755"> 
+<time>2006-03-04T13:38:20Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.36779" lon="-071.11757"> 
+<time>2006-03-04T13:38:21Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36783" lon="-071.11761"> 
+<time>2006-03-04T13:38:22Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36786" lon="-071.11764"> 
+<time>2006-03-04T13:38:23Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36789" lon="-071.11767"> 
+<time>2006-03-04T13:38:24Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36793" lon="-071.11769"> 
+<time>2006-03-04T13:38:25Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36797" lon="-071.11771"> 
+<time>2006-03-04T13:38:26Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36799" lon="-071.11774"> 
+<time>2006-03-04T13:38:27Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36802" lon="-071.11777"> 
+<time>2006-03-04T13:38:28Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36806" lon="-071.11779"> 
+<time>2006-03-04T13:38:29Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36809" lon="-071.11781"> 
+<time>2006-03-04T13:38:30Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.36812" lon="-071.11784"> 
+<time>2006-03-04T13:38:31Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.36815" lon="-071.11786"> 
+<time>2006-03-04T13:38:32Z</time>
+<speed>004.04</speed>
+</trkpt> 
+<trkpt lat="+42.36817" lon="-071.11789"> 
+<time>2006-03-04T13:38:33Z</time>
+<speed>004.04</speed>
+</trkpt> 
+<trkpt lat="+42.36819" lon="-071.11792"> 
+<time>2006-03-04T13:38:34Z</time>
+<speed>004.05</speed>
+</trkpt> 
+<trkpt lat="+42.36822" lon="-071.11797"> 
+<time>2006-03-04T13:38:35Z</time>
+<speed>004.05</speed>
+</trkpt> 
+<trkpt lat="+42.36826" lon="-071.11800"> 
+<time>2006-03-04T13:38:36Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36829" lon="-071.11804"> 
+<time>2006-03-04T13:38:37Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36831" lon="-071.11807"> 
+<time>2006-03-04T13:38:38Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36833" lon="-071.11810"> 
+<time>2006-03-04T13:38:39Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36836" lon="-071.11814"> 
+<time>2006-03-04T13:38:40Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36839" lon="-071.11817"> 
+<time>2006-03-04T13:38:41Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36841" lon="-071.11821"> 
+<time>2006-03-04T13:38:42Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.36842" lon="-071.11824"> 
+<time>2006-03-04T13:38:43Z</time>
+<speed>004.05</speed>
+</trkpt> 
+<trkpt lat="+42.36845" lon="-071.11826"> 
+<time>2006-03-04T13:38:44Z</time>
+<speed>004.05</speed>
+</trkpt> 
+<trkpt lat="+42.36847" lon="-071.11829"> 
+<time>2006-03-04T13:38:45Z</time>
+<speed>004.02</speed>
+</trkpt> 
+<trkpt lat="+42.36848" lon="-071.11833"> 
+<time>2006-03-04T13:38:46Z</time>
+<speed>004.02</speed>
+</trkpt> 
+<trkpt lat="+42.36849" lon="-071.11837"> 
+<time>2006-03-04T13:38:47Z</time>
+<speed>004.04</speed>
+</trkpt> 
+<trkpt lat="+42.36850" lon="-071.11841"> 
+<time>2006-03-04T13:38:48Z</time>
+<speed>004.04</speed>
+</trkpt> 
+<trkpt lat="+42.36852" lon="-071.11845"> 
+<time>2006-03-04T13:38:49Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36853" lon="-071.11849"> 
+<time>2006-03-04T13:38:50Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36854" lon="-071.11854"> 
+<time>2006-03-04T13:38:51Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.36856" lon="-071.11859"> 
+<time>2006-03-04T13:38:52Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.36857" lon="-071.11864"> 
+<time>2006-03-04T13:38:53Z</time>
+<speed>004.04</speed>
+</trkpt> 
+<trkpt lat="+42.36857" lon="-071.11869"> 
+<time>2006-03-04T13:38:54Z</time>
+<speed>004.04</speed>
+</trkpt> 
+<trkpt lat="+42.36857" lon="-071.11873"> 
+<time>2006-03-04T13:38:55Z</time>
+<speed>004.03</speed>
+</trkpt> 
+<trkpt lat="+42.36858" lon="-071.11879"> 
+<time>2006-03-04T13:38:56Z</time>
+<speed>004.03</speed>
+</trkpt> 
+<trkpt lat="+42.36859" lon="-071.11883"> 
+<time>2006-03-04T13:38:57Z</time>
+<speed>004.07</speed>
+</trkpt> 
+<trkpt lat="+42.36859" lon="-071.11888"> 
+<time>2006-03-04T13:38:58Z</time>
+<speed>004.07</speed>
+</trkpt> 
+<trkpt lat="+42.36860" lon="-071.11893"> 
+<time>2006-03-04T13:38:59Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.36860" lon="-071.11899"> 
+<time>2006-03-04T13:39:00Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.36860" lon="-071.11903"> 
+<time>2006-03-04T13:39:01Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.36860" lon="-071.11909"> 
+<time>2006-03-04T13:39:02Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.36860" lon="-071.11914"> 
+<time>2006-03-04T13:39:03Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36860" lon="-071.11919"> 
+<time>2006-03-04T13:39:04Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36861" lon="-071.11924"> 
+<time>2006-03-04T13:39:05Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.36860" lon="-071.11929"> 
+<time>2006-03-04T13:39:06Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.36860" lon="-071.11934"> 
+<time>2006-03-04T13:39:07Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.36861" lon="-071.11938"> 
+<time>2006-03-04T13:39:08Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36861" lon="-071.11942"> 
+<time>2006-03-04T13:39:09Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36861" lon="-071.11948"> 
+<time>2006-03-04T13:39:10Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.36862" lon="-071.11951"> 
+<time>2006-03-04T13:39:11Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.36863" lon="-071.11957"> 
+<time>2006-03-04T13:39:12Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36863" lon="-071.11961"> 
+<time>2006-03-04T13:39:13Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36863" lon="-071.11966"> 
+<time>2006-03-04T13:39:14Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36863" lon="-071.11971"> 
+<time>2006-03-04T13:39:15Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36864" lon="-071.11977"> 
+<time>2006-03-04T13:39:16Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36864" lon="-071.11983"> 
+<time>2006-03-04T13:39:17Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36864" lon="-071.11989"> 
+<time>2006-03-04T13:39:18Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.36865" lon="-071.11994"> 
+<time>2006-03-04T13:39:19Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.36865" lon="-071.11999"> 
+<time>2006-03-04T13:39:20Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36865" lon="-071.12004"> 
+<time>2006-03-04T13:39:21Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36866" lon="-071.12009"> 
+<time>2006-03-04T13:39:22Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36866" lon="-071.12013"> 
+<time>2006-03-04T13:39:23Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36866" lon="-071.12019"> 
+<time>2006-03-04T13:39:24Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.36866" lon="-071.12024"> 
+<time>2006-03-04T13:39:25Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.36865" lon="-071.12029"> 
+<time>2006-03-04T13:39:26Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36865" lon="-071.12034"> 
+<time>2006-03-04T13:39:27Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36865" lon="-071.12039"> 
+<time>2006-03-04T13:39:28Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36864" lon="-071.12044"> 
+<time>2006-03-04T13:39:29Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36864" lon="-071.12049"> 
+<time>2006-03-04T13:39:30Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.36864" lon="-071.12054"> 
+<time>2006-03-04T13:39:31Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.36864" lon="-071.12059"> 
+<time>2006-03-04T13:39:32Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.36864" lon="-071.12064"> 
+<time>2006-03-04T13:39:33Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.36865" lon="-071.12069"> 
+<time>2006-03-04T13:39:34Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.36865" lon="-071.12074"> 
+<time>2006-03-04T13:39:35Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.36866" lon="-071.12079"> 
+<time>2006-03-04T13:39:36Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.36867" lon="-071.12084"> 
+<time>2006-03-04T13:39:37Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.36867" lon="-071.12089"> 
+<time>2006-03-04T13:39:38Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.36867" lon="-071.12094"> 
+<time>2006-03-04T13:39:39Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.36868" lon="-071.12099"> 
+<time>2006-03-04T13:39:40Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.36869" lon="-071.12104"> 
+<time>2006-03-04T13:39:41Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.36870" lon="-071.12109"> 
+<time>2006-03-04T13:39:42Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.36870" lon="-071.12114"> 
+<time>2006-03-04T13:39:43Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.36870" lon="-071.12119"> 
+<time>2006-03-04T13:39:44Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36870" lon="-071.12124"> 
+<time>2006-03-04T13:39:45Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36870" lon="-071.12129"> 
+<time>2006-03-04T13:39:46Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36871" lon="-071.12134"> 
+<time>2006-03-04T13:39:47Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36870" lon="-071.12138"> 
+<time>2006-03-04T13:39:48Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.36870" lon="-071.12143"> 
+<time>2006-03-04T13:39:49Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.36870" lon="-071.12148"> 
+<time>2006-03-04T13:39:50Z</time>
+<speed>004.07</speed>
+</trkpt> 
+<trkpt lat="+42.36871" lon="-071.12154"> 
+<time>2006-03-04T13:39:51Z</time>
+<speed>004.04</speed>
+</trkpt> 
+<trkpt lat="+42.36871" lon="-071.12159"> 
+<time>2006-03-04T13:39:52Z</time>
+<speed>004.04</speed>
+</trkpt> 
+<trkpt lat="+42.36872" lon="-071.12164"> 
+<time>2006-03-04T13:39:53Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36872" lon="-071.12167"> 
+<time>2006-03-04T13:39:54Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36872" lon="-071.12173"> 
+<time>2006-03-04T13:39:55Z</time>
+<speed>004.10</speed>
+</trkpt> 
+<trkpt lat="+42.36872" lon="-071.12178"> 
+<time>2006-03-04T13:39:56Z</time>
+<speed>004.10</speed>
+</trkpt> 
+<trkpt lat="+42.36872" lon="-071.12184"> 
+<time>2006-03-04T13:39:57Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.36872" lon="-071.12189"> 
+<time>2006-03-04T13:39:58Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.36874" lon="-071.12194"> 
+<time>2006-03-04T13:39:59Z</time>
+<speed>004.04</speed>
+</trkpt> 
+<trkpt lat="+42.36874" lon="-071.12200"> 
+<time>2006-03-04T13:40:00Z</time>
+<speed>004.04</speed>
+</trkpt> 
+<trkpt lat="+42.36875" lon="-071.12206"> 
+<time>2006-03-04T13:40:01Z</time>
+<speed>004.07</speed>
+</trkpt> 
+<trkpt lat="+42.36875" lon="-071.12211"> 
+<time>2006-03-04T13:40:02Z</time>
+<speed>004.07</speed>
+</trkpt> 
+<trkpt lat="+42.36875" lon="-071.12217"> 
+<time>2006-03-04T13:40:03Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.36876" lon="-071.12221"> 
+<time>2006-03-04T13:40:04Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.36877" lon="-071.12226"> 
+<time>2006-03-04T13:40:05Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36877" lon="-071.12231"> 
+<time>2006-03-04T13:40:06Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36877" lon="-071.12236"> 
+<time>2006-03-04T13:40:07Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.36879" lon="-071.12241"> 
+<time>2006-03-04T13:40:08Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.36879" lon="-071.12246"> 
+<time>2006-03-04T13:40:09Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.36880" lon="-071.12251"> 
+<time>2006-03-04T13:40:10Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.36880" lon="-071.12256"> 
+<time>2006-03-04T13:40:11Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36881" lon="-071.12261"> 
+<time>2006-03-04T13:40:12Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36881" lon="-071.12266"> 
+<time>2006-03-04T13:40:13Z</time>
+<speed>004.07</speed>
+</trkpt> 
+<trkpt lat="+42.36882" lon="-071.12271"> 
+<time>2006-03-04T13:40:14Z</time>
+<speed>004.07</speed>
+</trkpt> 
+<trkpt lat="+42.36882" lon="-071.12276"> 
+<time>2006-03-04T13:40:15Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36883" lon="-071.12281"> 
+<time>2006-03-04T13:40:16Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36884" lon="-071.12286"> 
+<time>2006-03-04T13:40:17Z</time>
+<speed>004.07</speed>
+</trkpt> 
+<trkpt lat="+42.36885" lon="-071.12290"> 
+<time>2006-03-04T13:40:18Z</time>
+<speed>004.07</speed>
+</trkpt> 
+<trkpt lat="+42.36885" lon="-071.12294"> 
+<time>2006-03-04T13:40:19Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.36887" lon="-071.12299"> 
+<time>2006-03-04T13:40:20Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36887" lon="-071.12302"> 
+<time>2006-03-04T13:40:21Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36889" lon="-071.12307"> 
+<time>2006-03-04T13:40:22Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36892" lon="-071.12314"> 
+<time>2006-03-04T13:40:23Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36897" lon="-071.12319"> 
+<time>2006-03-04T13:40:24Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36902" lon="-071.12323"> 
+<time>2006-03-04T13:40:25Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36905" lon="-071.12328"> 
+<time>2006-03-04T13:40:26Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36907" lon="-071.12332"> 
+<time>2006-03-04T13:40:27Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36909" lon="-071.12336"> 
+<time>2006-03-04T13:40:28Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36911" lon="-071.12341"> 
+<time>2006-03-04T13:40:29Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36914" lon="-071.12345"> 
+<time>2006-03-04T13:40:30Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36917" lon="-071.12350"> 
+<time>2006-03-04T13:40:31Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36919" lon="-071.12354"> 
+<time>2006-03-04T13:40:32Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36922" lon="-071.12357"> 
+<time>2006-03-04T13:40:33Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.36926" lon="-071.12361"> 
+<time>2006-03-04T13:40:34Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.36929" lon="-071.12364"> 
+<time>2006-03-04T13:40:35Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.36932" lon="-071.12367"> 
+<time>2006-03-04T13:40:36Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.36935" lon="-071.12370"> 
+<time>2006-03-04T13:40:37Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.36938" lon="-071.12374"> 
+<time>2006-03-04T13:40:38Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36942" lon="-071.12377"> 
+<time>2006-03-04T13:40:39Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36944" lon="-071.12380"> 
+<time>2006-03-04T13:40:40Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.36948" lon="-071.12384"> 
+<time>2006-03-04T13:40:41Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.36950" lon="-071.12387"> 
+<time>2006-03-04T13:40:42Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36953" lon="-071.12390"> 
+<time>2006-03-04T13:40:43Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36955" lon="-071.12394"> 
+<time>2006-03-04T13:40:44Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.36957" lon="-071.12399"> 
+<time>2006-03-04T13:40:45Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.36960" lon="-071.12402"> 
+<time>2006-03-04T13:40:46Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36963" lon="-071.12406"> 
+<time>2006-03-04T13:40:47Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36966" lon="-071.12409"> 
+<time>2006-03-04T13:40:48Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.36969" lon="-071.12412"> 
+<time>2006-03-04T13:40:49Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.36973" lon="-071.12415"> 
+<time>2006-03-04T13:40:50Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.36974" lon="-071.12417"> 
+<time>2006-03-04T13:40:51Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.36977" lon="-071.12421"> 
+<time>2006-03-04T13:40:52Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36979" lon="-071.12424"> 
+<time>2006-03-04T13:40:53Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36981" lon="-071.12426"> 
+<time>2006-03-04T13:40:54Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36984" lon="-071.12429"> 
+<time>2006-03-04T13:40:55Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36986" lon="-071.12432"> 
+<time>2006-03-04T13:40:56Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.36989" lon="-071.12435"> 
+<time>2006-03-04T13:40:57Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.36992" lon="-071.12438"> 
+<time>2006-03-04T13:40:58Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36996" lon="-071.12441"> 
+<time>2006-03-04T13:40:59Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36999" lon="-071.12444"> 
+<time>2006-03-04T13:41:00Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.37002" lon="-071.12448"> 
+<time>2006-03-04T13:41:01Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.37005" lon="-071.12450"> 
+<time>2006-03-04T13:41:02Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.37009" lon="-071.12454"> 
+<time>2006-03-04T13:41:03Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.37012" lon="-071.12456"> 
+<time>2006-03-04T13:41:04Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.37015" lon="-071.12459"> 
+<time>2006-03-04T13:41:05Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.37018" lon="-071.12462"> 
+<time>2006-03-04T13:41:06Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.37021" lon="-071.12466"> 
+<time>2006-03-04T13:41:07Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.37024" lon="-071.12467"> 
+<time>2006-03-04T13:41:08Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.37026" lon="-071.12471"> 
+<time>2006-03-04T13:41:09Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37029" lon="-071.12474"> 
+<time>2006-03-04T13:41:10Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37031" lon="-071.12477"> 
+<time>2006-03-04T13:41:11Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.37033" lon="-071.12480"> 
+<time>2006-03-04T13:41:12Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.37036" lon="-071.12483"> 
+<time>2006-03-04T13:41:13Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37039" lon="-071.12486"> 
+<time>2006-03-04T13:41:14Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37044" lon="-071.12489"> 
+<time>2006-03-04T13:41:15Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.37047" lon="-071.12491"> 
+<time>2006-03-04T13:41:16Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.37050" lon="-071.12494"> 
+<time>2006-03-04T13:41:17Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.37052" lon="-071.12496"> 
+<time>2006-03-04T13:41:18Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.37057" lon="-071.12498"> 
+<time>2006-03-04T13:41:19Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.37059" lon="-071.12500"> 
+<time>2006-03-04T13:41:20Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.37064" lon="-071.12502"> 
+<time>2006-03-04T13:41:21Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.37069" lon="-071.12506"> 
+<time>2006-03-04T13:41:22Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.37074" lon="-071.12509"> 
+<time>2006-03-04T13:41:23Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.37077" lon="-071.12512"> 
+<time>2006-03-04T13:41:24Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.37080" lon="-071.12515"> 
+<time>2006-03-04T13:41:25Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37084" lon="-071.12517"> 
+<time>2006-03-04T13:41:26Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37087" lon="-071.12520"> 
+<time>2006-03-04T13:41:27Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.37091" lon="-071.12523"> 
+<time>2006-03-04T13:41:28Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.37094" lon="-071.12526"> 
+<time>2006-03-04T13:41:29Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37097" lon="-071.12529"> 
+<time>2006-03-04T13:41:30Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37100" lon="-071.12531"> 
+<time>2006-03-04T13:41:31Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.37103" lon="-071.12534"> 
+<time>2006-03-04T13:41:32Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.37107" lon="-071.12536"> 
+<time>2006-03-04T13:41:33Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37111" lon="-071.12540"> 
+<time>2006-03-04T13:41:34Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37114" lon="-071.12542"> 
+<time>2006-03-04T13:41:35Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37117" lon="-071.12545"> 
+<time>2006-03-04T13:41:36Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37119" lon="-071.12548"> 
+<time>2006-03-04T13:41:37Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.37122" lon="-071.12551"> 
+<time>2006-03-04T13:41:38Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.37124" lon="-071.12554"> 
+<time>2006-03-04T13:41:39Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.37128" lon="-071.12556"> 
+<time>2006-03-04T13:41:40Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.37131" lon="-071.12559"> 
+<time>2006-03-04T13:41:41Z</time>
+<speed>004.07</speed>
+</trkpt> 
+<trkpt lat="+42.37135" lon="-071.12562"> 
+<time>2006-03-04T13:41:42Z</time>
+<speed>004.07</speed>
+</trkpt> 
+<trkpt lat="+42.37138" lon="-071.12565"> 
+<time>2006-03-04T13:41:43Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.37141" lon="-071.12567"> 
+<time>2006-03-04T13:41:44Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.37144" lon="-071.12571"> 
+<time>2006-03-04T13:41:45Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.37148" lon="-071.12574"> 
+<time>2006-03-04T13:41:46Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.37152" lon="-071.12577"> 
+<time>2006-03-04T13:41:47Z</time>
+<speed>004.32</speed>
+</trkpt> 
+<trkpt lat="+42.37155" lon="-071.12580"> 
+<time>2006-03-04T13:41:48Z</time>
+<speed>004.32</speed>
+</trkpt> 
+<trkpt lat="+42.37158" lon="-071.12583"> 
+<time>2006-03-04T13:41:49Z</time>
+<speed>004.39</speed>
+</trkpt> 
+<trkpt lat="+42.37161" lon="-071.12585"> 
+<time>2006-03-04T13:41:50Z</time>
+<speed>004.39</speed>
+</trkpt> 
+<trkpt lat="+42.37164" lon="-071.12587"> 
+<time>2006-03-04T13:41:51Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.37167" lon="-071.12590"> 
+<time>2006-03-04T13:41:52Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.37172" lon="-071.12593"> 
+<time>2006-03-04T13:41:53Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.37175" lon="-071.12596"> 
+<time>2006-03-04T13:41:54Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.37178" lon="-071.12599"> 
+<time>2006-03-04T13:41:55Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.37181" lon="-071.12602"> 
+<time>2006-03-04T13:41:56Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.37184" lon="-071.12604"> 
+<time>2006-03-04T13:41:57Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.37185" lon="-071.12608"> 
+<time>2006-03-04T13:41:58Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.37187" lon="-071.12611"> 
+<time>2006-03-04T13:41:59Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.37190" lon="-071.12614"> 
+<time>2006-03-04T13:42:00Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37193" lon="-071.12617"> 
+<time>2006-03-04T13:42:01Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37195" lon="-071.12621"> 
+<time>2006-03-04T13:42:02Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.37199" lon="-071.12624"> 
+<time>2006-03-04T13:42:03Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.37202" lon="-071.12627"> 
+<time>2006-03-04T13:42:04Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.37205" lon="-071.12630"> 
+<time>2006-03-04T13:42:05Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.37209" lon="-071.12633"> 
+<time>2006-03-04T13:42:06Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.37212" lon="-071.12635"> 
+<time>2006-03-04T13:42:07Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.37215" lon="-071.12638"> 
+<time>2006-03-04T13:42:08Z</time>
+<speed>004.10</speed>
+</trkpt> 
+<trkpt lat="+42.37217" lon="-071.12641"> 
+<time>2006-03-04T13:42:09Z</time>
+<speed>004.10</speed>
+</trkpt> 
+<trkpt lat="+42.37219" lon="-071.12644"> 
+<time>2006-03-04T13:42:10Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.37224" lon="-071.12647"> 
+<time>2006-03-04T13:42:11Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.37226" lon="-071.12650"> 
+<time>2006-03-04T13:42:12Z</time>
+<speed>004.09</speed>
+</trkpt> 
+<trkpt lat="+42.37229" lon="-071.12654"> 
+<time>2006-03-04T13:42:13Z</time>
+<speed>004.09</speed>
+</trkpt> 
+<trkpt lat="+42.37232" lon="-071.12656"> 
+<time>2006-03-04T13:42:14Z</time>
+<speed>004.02</speed>
+</trkpt> 
+<trkpt lat="+42.37234" lon="-071.12659"> 
+<time>2006-03-04T13:42:15Z</time>
+<speed>004.02</speed>
+</trkpt> 
+<trkpt lat="+42.37237" lon="-071.12662"> 
+<time>2006-03-04T13:42:16Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.37240" lon="-071.12665"> 
+<time>2006-03-04T13:42:17Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.37243" lon="-071.12667"> 
+<time>2006-03-04T13:42:18Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.37246" lon="-071.12671"> 
+<time>2006-03-04T13:42:19Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.37250" lon="-071.12674"> 
+<time>2006-03-04T13:42:20Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.37256" lon="-071.12677"> 
+<time>2006-03-04T13:42:21Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.37259" lon="-071.12681"> 
+<time>2006-03-04T13:42:22Z</time>
+<speed>004.07</speed>
+</trkpt> 
+<trkpt lat="+42.37263" lon="-071.12684"> 
+<time>2006-03-04T13:42:23Z</time>
+<speed>004.07</speed>
+</trkpt> 
+<trkpt lat="+42.37266" lon="-071.12687"> 
+<time>2006-03-04T13:42:24Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.37269" lon="-071.12691"> 
+<time>2006-03-04T13:42:25Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.37272" lon="-071.12694"> 
+<time>2006-03-04T13:42:26Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37274" lon="-071.12697"> 
+<time>2006-03-04T13:42:27Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37277" lon="-071.12699"> 
+<time>2006-03-04T13:42:28Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37279" lon="-071.12702"> 
+<time>2006-03-04T13:42:29Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37282" lon="-071.12706"> 
+<time>2006-03-04T13:42:30Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37282" lon="-071.12709"> 
+<time>2006-03-04T13:42:31Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37283" lon="-071.12712"> 
+<time>2006-03-04T13:42:32Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.37284" lon="-071.12716"> 
+<time>2006-03-04T13:42:33Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.37286" lon="-071.12719"> 
+<time>2006-03-04T13:42:34Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.37287" lon="-071.12723"> 
+<time>2006-03-04T13:42:35Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.37290" lon="-071.12726"> 
+<time>2006-03-04T13:42:36Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.37292" lon="-071.12731"> 
+<time>2006-03-04T13:42:37Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37296" lon="-071.12734"> 
+<time>2006-03-04T13:42:38Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37299" lon="-071.12737"> 
+<time>2006-03-04T13:42:39Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.37300" lon="-071.12741"> 
+<time>2006-03-04T13:42:40Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.37302" lon="-071.12744"> 
+<time>2006-03-04T13:42:41Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.37304" lon="-071.12748"> 
+<time>2006-03-04T13:42:42Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.37307" lon="-071.12752"> 
+<time>2006-03-04T13:42:43Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.37309" lon="-071.12756"> 
+<time>2006-03-04T13:42:44Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.37312" lon="-071.12759"> 
+<time>2006-03-04T13:42:45Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37314" lon="-071.12763"> 
+<time>2006-03-04T13:42:46Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37317" lon="-071.12767"> 
+<time>2006-03-04T13:42:47Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37319" lon="-071.12771"> 
+<time>2006-03-04T13:42:48Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37322" lon="-071.12776"> 
+<time>2006-03-04T13:42:49Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.37324" lon="-071.12780"> 
+<time>2006-03-04T13:42:50Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.37326" lon="-071.12784"> 
+<time>2006-03-04T13:42:51Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37329" lon="-071.12788"> 
+<time>2006-03-04T13:42:52Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37330" lon="-071.12792"> 
+<time>2006-03-04T13:42:53Z</time>
+<speed>004.33</speed>
+</trkpt> 
+<trkpt lat="+42.37333" lon="-071.12796"> 
+<time>2006-03-04T13:42:54Z</time>
+<speed>004.33</speed>
+</trkpt> 
+<trkpt lat="+42.37335" lon="-071.12799"> 
+<time>2006-03-04T13:42:55Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.37337" lon="-071.12802"> 
+<time>2006-03-04T13:42:56Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.37341" lon="-071.12805"> 
+<time>2006-03-04T13:42:57Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.37344" lon="-071.12809"> 
+<time>2006-03-04T13:42:58Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.37347" lon="-071.12813"> 
+<time>2006-03-04T13:42:59Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.37349" lon="-071.12816"> 
+<time>2006-03-04T13:43:00Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.37351" lon="-071.12821"> 
+<time>2006-03-04T13:43:01Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37353" lon="-071.12825"> 
+<time>2006-03-04T13:43:02Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37356" lon="-071.12829"> 
+<time>2006-03-04T13:43:03Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37358" lon="-071.12833"> 
+<time>2006-03-04T13:43:04Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37360" lon="-071.12837"> 
+<time>2006-03-04T13:43:05Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.37362" lon="-071.12841"> 
+<time>2006-03-04T13:43:06Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.37364" lon="-071.12846"> 
+<time>2006-03-04T13:43:07Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37366" lon="-071.12850"> 
+<time>2006-03-04T13:43:08Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37369" lon="-071.12855"> 
+<time>2006-03-04T13:43:09Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.37370" lon="-071.12859"> 
+<time>2006-03-04T13:43:10Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.37372" lon="-071.12864"> 
+<time>2006-03-04T13:43:11Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37374" lon="-071.12868"> 
+<time>2006-03-04T13:43:12Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37375" lon="-071.12872"> 
+<time>2006-03-04T13:43:13Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.37376" lon="-071.12878"> 
+<time>2006-03-04T13:43:14Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.37377" lon="-071.12883"> 
+<time>2006-03-04T13:43:15Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.37378" lon="-071.12889"> 
+<time>2006-03-04T13:43:16Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.37379" lon="-071.12894"> 
+<time>2006-03-04T13:43:17Z</time>
+<speed>004.09</speed>
+</trkpt> 
+<trkpt lat="+42.37379" lon="-071.12898"> 
+<time>2006-03-04T13:43:18Z</time>
+<speed>004.09</speed>
+</trkpt> 
+<trkpt lat="+42.37380" lon="-071.12902"> 
+<time>2006-03-04T13:43:19Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.37381" lon="-071.12906"> 
+<time>2006-03-04T13:43:20Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37382" lon="-071.12911"> 
+<time>2006-03-04T13:43:21Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37382" lon="-071.12916"> 
+<time>2006-03-04T13:43:22Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37383" lon="-071.12919"> 
+<time>2006-03-04T13:43:23Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37384" lon="-071.12924"> 
+<time>2006-03-04T13:43:24Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.37386" lon="-071.12929"> 
+<time>2006-03-04T13:43:25Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.37387" lon="-071.12934"> 
+<time>2006-03-04T13:43:26Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.37388" lon="-071.12939"> 
+<time>2006-03-04T13:43:27Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.37389" lon="-071.12944"> 
+<time>2006-03-04T13:43:28Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37389" lon="-071.12949"> 
+<time>2006-03-04T13:43:29Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37389" lon="-071.12954"> 
+<time>2006-03-04T13:43:30Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.37389" lon="-071.12960"> 
+<time>2006-03-04T13:43:31Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.37389" lon="-071.12966"> 
+<time>2006-03-04T13:43:32Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.37389" lon="-071.12971"> 
+<time>2006-03-04T13:43:33Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.12976"> 
+<time>2006-03-04T13:43:34Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.37391" lon="-071.12981"> 
+<time>2006-03-04T13:43:35Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.37391" lon="-071.12986"> 
+<time>2006-03-04T13:43:36Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37391" lon="-071.12991"> 
+<time>2006-03-04T13:43:37Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37391" lon="-071.12996"> 
+<time>2006-03-04T13:43:38Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13001"> 
+<time>2006-03-04T13:43:39Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13007"> 
+<time>2006-03-04T13:43:40Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13013"> 
+<time>2006-03-04T13:43:41Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13017"> 
+<time>2006-03-04T13:43:42Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13022"> 
+<time>2006-03-04T13:43:43Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13027"> 
+<time>2006-03-04T13:43:44Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37391" lon="-071.13033"> 
+<time>2006-03-04T13:43:45Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13037"> 
+<time>2006-03-04T13:43:46Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13042"> 
+<time>2006-03-04T13:43:47Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13047"> 
+<time>2006-03-04T13:43:48Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13052"> 
+<time>2006-03-04T13:43:49Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13057"> 
+<time>2006-03-04T13:43:50Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13063"> 
+<time>2006-03-04T13:43:51Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13068"> 
+<time>2006-03-04T13:43:52Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13076"> 
+<time>2006-03-04T13:43:53Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13081"> 
+<time>2006-03-04T13:43:54Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13087"> 
+<time>2006-03-04T13:43:55Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.37389" lon="-071.13092"> 
+<time>2006-03-04T13:43:56Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.37389" lon="-071.13098"> 
+<time>2006-03-04T13:43:57Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.37389" lon="-071.13103"> 
+<time>2006-03-04T13:43:58Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13111"> 
+<time>2006-03-04T13:43:59Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.37391" lon="-071.13117"> 
+<time>2006-03-04T13:44:00Z</time>
+<speed>004.06</speed>
+</trkpt> 
+<trkpt lat="+42.37391" lon="-071.13123"> 
+<time>2006-03-04T13:44:01Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.37390" lon="-071.13128"> 
+<time>2006-03-04T13:44:02Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.37389" lon="-071.13133"> 
+<time>2006-03-04T13:44:03Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.37389" lon="-071.13138"> 
+<time>2006-03-04T13:44:04Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.37388" lon="-071.13142"> 
+<time>2006-03-04T13:44:05Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.37386" lon="-071.13146"> 
+<time>2006-03-04T13:44:06Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.37384" lon="-071.13150"> 
+<time>2006-03-04T13:44:07Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.37382" lon="-071.13154"> 
+<time>2006-03-04T13:44:08Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.37379" lon="-071.13157"> 
+<time>2006-03-04T13:44:09Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.37377" lon="-071.13161"> 
+<time>2006-03-04T13:44:10Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.37374" lon="-071.13166"> 
+<time>2006-03-04T13:44:11Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37371" lon="-071.13169"> 
+<time>2006-03-04T13:44:12Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37368" lon="-071.13174"> 
+<time>2006-03-04T13:44:13Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.37366" lon="-071.13179"> 
+<time>2006-03-04T13:44:14Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.37364" lon="-071.13183"> 
+<time>2006-03-04T13:44:15Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.37362" lon="-071.13187"> 
+<time>2006-03-04T13:44:16Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.37360" lon="-071.13192"> 
+<time>2006-03-04T13:44:17Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37358" lon="-071.13196"> 
+<time>2006-03-04T13:44:18Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37356" lon="-071.13200"> 
+<time>2006-03-04T13:44:19Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37354" lon="-071.13204"> 
+<time>2006-03-04T13:44:20Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37352" lon="-071.13207"> 
+<time>2006-03-04T13:44:21Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37349" lon="-071.13210"> 
+<time>2006-03-04T13:44:22Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37347" lon="-071.13214"> 
+<time>2006-03-04T13:44:23Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37345" lon="-071.13216"> 
+<time>2006-03-04T13:44:24Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37342" lon="-071.13219"> 
+<time>2006-03-04T13:44:25Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37340" lon="-071.13222"> 
+<time>2006-03-04T13:44:26Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37337" lon="-071.13225"> 
+<time>2006-03-04T13:44:27Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37335" lon="-071.13229"> 
+<time>2006-03-04T13:44:28Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37334" lon="-071.13232"> 
+<time>2006-03-04T13:44:29Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37332" lon="-071.13236"> 
+<time>2006-03-04T13:44:30Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37330" lon="-071.13239"> 
+<time>2006-03-04T13:44:31Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37328" lon="-071.13244"> 
+<time>2006-03-04T13:44:32Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37325" lon="-071.13247"> 
+<time>2006-03-04T13:44:33Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37323" lon="-071.13250"> 
+<time>2006-03-04T13:44:34Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37321" lon="-071.13254"> 
+<time>2006-03-04T13:44:35Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37319" lon="-071.13257"> 
+<time>2006-03-04T13:44:36Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37316" lon="-071.13259"> 
+<time>2006-03-04T13:44:37Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37313" lon="-071.13262"> 
+<time>2006-03-04T13:44:38Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37311" lon="-071.13265"> 
+<time>2006-03-04T13:44:39Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37308" lon="-071.13268"> 
+<time>2006-03-04T13:44:40Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37305" lon="-071.13271"> 
+<time>2006-03-04T13:44:41Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37302" lon="-071.13273"> 
+<time>2006-03-04T13:44:42Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37299" lon="-071.13276"> 
+<time>2006-03-04T13:44:43Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37296" lon="-071.13279"> 
+<time>2006-03-04T13:44:44Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37294" lon="-071.13281"> 
+<time>2006-03-04T13:44:45Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37290" lon="-071.13282"> 
+<time>2006-03-04T13:44:46Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37287" lon="-071.13284"> 
+<time>2006-03-04T13:44:47Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37283" lon="-071.13286"> 
+<time>2006-03-04T13:44:48Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37279" lon="-071.13291"> 
+<time>2006-03-04T13:44:49Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37274" lon="-071.13292"> 
+<time>2006-03-04T13:44:50Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37271" lon="-071.13294"> 
+<time>2006-03-04T13:44:51Z</time>
+<speed>004.04</speed>
+</trkpt> 
+<trkpt lat="+42.37267" lon="-071.13296"> 
+<time>2006-03-04T13:44:52Z</time>
+<speed>004.04</speed>
+</trkpt> 
+<trkpt lat="+42.37264" lon="-071.13297"> 
+<time>2006-03-04T13:44:53Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37261" lon="-071.13298"> 
+<time>2006-03-04T13:44:54Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37259" lon="-071.13301"> 
+<time>2006-03-04T13:44:55Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37255" lon="-071.13302"> 
+<time>2006-03-04T13:44:56Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.37251" lon="-071.13302"> 
+<time>2006-03-04T13:44:57Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.37247" lon="-071.13303"> 
+<time>2006-03-04T13:44:58Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.37243" lon="-071.13302"> 
+<time>2006-03-04T13:44:59Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.37239" lon="-071.13302"> 
+<time>2006-03-04T13:45:00Z</time>
+<speed>004.37</speed>
+</trkpt> 
+<trkpt lat="+42.37234" lon="-071.13302"> 
+<time>2006-03-04T13:45:01Z</time>
+<speed>004.37</speed>
+</trkpt> 
+<trkpt lat="+42.37231" lon="-071.13302"> 
+<time>2006-03-04T13:45:02Z</time>
+<speed>004.38</speed>
+</trkpt> 
+<trkpt lat="+42.37227" lon="-071.13302"> 
+<time>2006-03-04T13:45:03Z</time>
+<speed>004.38</speed>
+</trkpt> 
+<trkpt lat="+42.37223" lon="-071.13301"> 
+<time>2006-03-04T13:45:04Z</time>
+<speed>004.35</speed>
+</trkpt> 
+<trkpt lat="+42.37219" lon="-071.13301"> 
+<time>2006-03-04T13:45:05Z</time>
+<speed>004.35</speed>
+</trkpt> 
+<trkpt lat="+42.37216" lon="-071.13300"> 
+<time>2006-03-04T13:45:06Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37214" lon="-071.13299"> 
+<time>2006-03-04T13:45:07Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37211" lon="-071.13298"> 
+<time>2006-03-04T13:45:08Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.37207" lon="-071.13297"> 
+<time>2006-03-04T13:45:09Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.37204" lon="-071.13296"> 
+<time>2006-03-04T13:45:10Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37201" lon="-071.13295"> 
+<time>2006-03-04T13:45:11Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37198" lon="-071.13294"> 
+<time>2006-03-04T13:45:12Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.37195" lon="-071.13292"> 
+<time>2006-03-04T13:45:13Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.37192" lon="-071.13291"> 
+<time>2006-03-04T13:45:14Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.37189" lon="-071.13289"> 
+<time>2006-03-04T13:45:15Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37185" lon="-071.13288"> 
+<time>2006-03-04T13:45:16Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.37182" lon="-071.13286"> 
+<time>2006-03-04T13:45:17Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.37179" lon="-071.13285"> 
+<time>2006-03-04T13:45:18Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.37174" lon="-071.13284"> 
+<time>2006-03-04T13:45:19Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.37172" lon="-071.13279"> 
+<time>2006-03-04T13:45:20Z</time>
+<speed>004.11</speed>
+</trkpt> 
+<trkpt lat="+42.37167" lon="-071.13274"> 
+<time>2006-03-04T13:45:21Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37166" lon="-071.13272"> 
+<time>2006-03-04T13:45:22Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37163" lon="-071.13270"> 
+<time>2006-03-04T13:45:23Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37159" lon="-071.13269"> 
+<time>2006-03-04T13:45:24Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37155" lon="-071.13267"> 
+<time>2006-03-04T13:45:25Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37150" lon="-071.13266"> 
+<time>2006-03-04T13:45:26Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37146" lon="-071.13264"> 
+<time>2006-03-04T13:45:27Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37142" lon="-071.13263"> 
+<time>2006-03-04T13:45:28Z</time>
+<speed>004.18</speed>
+</trkpt> 
+<trkpt lat="+42.37138" lon="-071.13262"> 
+<time>2006-03-04T13:45:29Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37134" lon="-071.13261"> 
+<time>2006-03-04T13:45:30Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37131" lon="-071.13260"> 
+<time>2006-03-04T13:45:31Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.37127" lon="-071.13258"> 
+<time>2006-03-04T13:45:32Z</time>
+<speed>004.15</speed>
+</trkpt> 
+<trkpt lat="+42.37124" lon="-071.13257"> 
+<time>2006-03-04T13:45:33Z</time>
+<speed>004.09</speed>
+</trkpt> 
+<trkpt lat="+42.37120" lon="-071.13256"> 
+<time>2006-03-04T13:45:34Z</time>
+<speed>004.09</speed>
+</trkpt> 
+<trkpt lat="+42.37116" lon="-071.13254"> 
+<time>2006-03-04T13:45:35Z</time>
+<speed>004.10</speed>
+</trkpt> 
+<trkpt lat="+42.37112" lon="-071.13252"> 
+<time>2006-03-04T13:45:36Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37109" lon="-071.13251"> 
+<time>2006-03-04T13:45:37Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.37105" lon="-071.13250"> 
+<time>2006-03-04T13:45:38Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.37102" lon="-071.13248"> 
+<time>2006-03-04T13:45:39Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.37099" lon="-071.13246"> 
+<time>2006-03-04T13:45:40Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.37095" lon="-071.13245"> 
+<time>2006-03-04T13:45:41Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.37091" lon="-071.13243"> 
+<time>2006-03-04T13:45:42Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.37087" lon="-071.13241"> 
+<time>2006-03-04T13:45:43Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.37083" lon="-071.13240"> 
+<time>2006-03-04T13:45:44Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.37079" lon="-071.13239"> 
+<time>2006-03-04T13:45:45Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.37076" lon="-071.13237"> 
+<time>2006-03-04T13:45:46Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.37072" lon="-071.13237"> 
+<time>2006-03-04T13:45:47Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.37067" lon="-071.13236"> 
+<time>2006-03-04T13:45:48Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.37064" lon="-071.13234"> 
+<time>2006-03-04T13:45:49Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.37060" lon="-071.13233"> 
+<time>2006-03-04T13:45:50Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.37055" lon="-071.13232"> 
+<time>2006-03-04T13:45:51Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.37052" lon="-071.13231"> 
+<time>2006-03-04T13:45:52Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.37047" lon="-071.13230"> 
+<time>2006-03-04T13:45:53Z</time>
+<speed>004.23</speed>
+</trkpt> 
+<trkpt lat="+42.37043" lon="-071.13230"> 
+<time>2006-03-04T13:45:54Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.37039" lon="-071.13229"> 
+<time>2006-03-04T13:45:55Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37035" lon="-071.13229"> 
+<time>2006-03-04T13:45:56Z</time>
+<speed>004.25</speed>
+</trkpt> 
+<trkpt lat="+42.37031" lon="-071.13229"> 
+<time>2006-03-04T13:45:57Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.37027" lon="-071.13229"> 
+<time>2006-03-04T13:45:58Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.37023" lon="-071.13230"> 
+<time>2006-03-04T13:45:59Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.37019" lon="-071.13231"> 
+<time>2006-03-04T13:46:00Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.37014" lon="-071.13231"> 
+<time>2006-03-04T13:46:01Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.37010" lon="-071.13231"> 
+<time>2006-03-04T13:46:02Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.37007" lon="-071.13232"> 
+<time>2006-03-04T13:46:03Z</time>
+<speed>004.49</speed>
+</trkpt> 
+<trkpt lat="+42.37003" lon="-071.13232"> 
+<time>2006-03-04T13:46:04Z</time>
+<speed>004.49</speed>
+</trkpt> 
+<trkpt lat="+42.36999" lon="-071.13232"> 
+<time>2006-03-04T13:46:05Z</time>
+<speed>004.41</speed>
+</trkpt> 
+<trkpt lat="+42.36996" lon="-071.13232"> 
+<time>2006-03-04T13:46:06Z</time>
+<speed>004.41</speed>
+</trkpt> 
+<trkpt lat="+42.36992" lon="-071.13232"> 
+<time>2006-03-04T13:46:07Z</time>
+<speed>004.36</speed>
+</trkpt> 
+<trkpt lat="+42.36989" lon="-071.13232"> 
+<time>2006-03-04T13:46:08Z</time>
+<speed>004.36</speed>
+</trkpt> 
+<trkpt lat="+42.36985" lon="-071.13233"> 
+<time>2006-03-04T13:46:09Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36981" lon="-071.13233"> 
+<time>2006-03-04T13:46:10Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36978" lon="-071.13233"> 
+<time>2006-03-04T13:46:11Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.36974" lon="-071.13233"> 
+<time>2006-03-04T13:46:12Z</time>
+<speed>004.14</speed>
+</trkpt> 
+<trkpt lat="+42.36971" lon="-071.13234"> 
+<time>2006-03-04T13:46:13Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36967" lon="-071.13234"> 
+<time>2006-03-04T13:46:14Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36963" lon="-071.13236"> 
+<time>2006-03-04T13:46:15Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36959" lon="-071.13238"> 
+<time>2006-03-04T13:46:16Z</time>
+<speed>004.08</speed>
+</trkpt> 
+<trkpt lat="+42.36955" lon="-071.13239"> 
+<time>2006-03-04T13:46:17Z</time>
+<speed>004.19</speed>
+</trkpt> 
+<trkpt lat="+42.36951" lon="-071.13241"> 
+<time>2006-03-04T13:46:18Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.36949" lon="-071.13243"> 
+<time>2006-03-04T13:46:19Z</time>
+<speed>004.20</speed>
+</trkpt> 
+<trkpt lat="+42.36945" lon="-071.13246"> 
+<time>2006-03-04T13:46:20Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36942" lon="-071.13249"> 
+<time>2006-03-04T13:46:21Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36938" lon="-071.13251"> 
+<time>2006-03-04T13:46:22Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36935" lon="-071.13255"> 
+<time>2006-03-04T13:46:23Z</time>
+<speed>004.22</speed>
+</trkpt> 
+<trkpt lat="+42.36932" lon="-071.13259"> 
+<time>2006-03-04T13:46:24Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.36928" lon="-071.13261"> 
+<time>2006-03-04T13:46:25Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.36925" lon="-071.13264"> 
+<time>2006-03-04T13:46:26Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36922" lon="-071.13266"> 
+<time>2006-03-04T13:46:27Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36919" lon="-071.13269"> 
+<time>2006-03-04T13:46:28Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.36915" lon="-071.13271"> 
+<time>2006-03-04T13:46:29Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.36912" lon="-071.13275"> 
+<time>2006-03-04T13:46:30Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.36909" lon="-071.13278"> 
+<time>2006-03-04T13:46:31Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.36906" lon="-071.13281"> 
+<time>2006-03-04T13:46:32Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36902" lon="-071.13284"> 
+<time>2006-03-04T13:46:33Z</time>
+<speed>004.24</speed>
+</trkpt> 
+<trkpt lat="+42.36899" lon="-071.13288"> 
+<time>2006-03-04T13:46:34Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.36896" lon="-071.13292"> 
+<time>2006-03-04T13:46:35Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.36893" lon="-071.13296"> 
+<time>2006-03-04T13:46:36Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36890" lon="-071.13299"> 
+<time>2006-03-04T13:46:37Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.36887" lon="-071.13302"> 
+<time>2006-03-04T13:46:38Z</time>
+<speed>004.34</speed>
+</trkpt> 
+<trkpt lat="+42.36885" lon="-071.13306"> 
+<time>2006-03-04T13:46:39Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36882" lon="-071.13309"> 
+<time>2006-03-04T13:46:40Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36880" lon="-071.13313"> 
+<time>2006-03-04T13:46:41Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36877" lon="-071.13317"> 
+<time>2006-03-04T13:46:42Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36874" lon="-071.13321"> 
+<time>2006-03-04T13:46:43Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36872" lon="-071.13326"> 
+<time>2006-03-04T13:46:44Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36869" lon="-071.13329"> 
+<time>2006-03-04T13:46:45Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36866" lon="-071.13333"> 
+<time>2006-03-04T13:46:46Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36864" lon="-071.13337"> 
+<time>2006-03-04T13:46:47Z</time>
+<speed>004.32</speed>
+</trkpt> 
+<trkpt lat="+42.36862" lon="-071.13341"> 
+<time>2006-03-04T13:46:48Z</time>
+<speed>004.36</speed>
+</trkpt> 
+<trkpt lat="+42.36859" lon="-071.13344"> 
+<time>2006-03-04T13:46:49Z</time>
+<speed>004.36</speed>
+</trkpt> 
+<trkpt lat="+42.36857" lon="-071.13349"> 
+<time>2006-03-04T13:46:50Z</time>
+<speed>004.41</speed>
+</trkpt> 
+<trkpt lat="+42.36853" lon="-071.13352"> 
+<time>2006-03-04T13:46:51Z</time>
+<speed>004.41</speed>
+</trkpt> 
+<trkpt lat="+42.36850" lon="-071.13356"> 
+<time>2006-03-04T13:46:52Z</time>
+<speed>004.44</speed>
+</trkpt> 
+<trkpt lat="+42.36849" lon="-071.13360"> 
+<time>2006-03-04T13:46:53Z</time>
+<speed>004.44</speed>
+</trkpt> 
+<trkpt lat="+42.36846" lon="-071.13364"> 
+<time>2006-03-04T13:46:54Z</time>
+<speed>004.43</speed>
+</trkpt> 
+<trkpt lat="+42.36844" lon="-071.13368"> 
+<time>2006-03-04T13:46:55Z</time>
+<speed>004.43</speed>
+</trkpt> 
+<trkpt lat="+42.36842" lon="-071.13372"> 
+<time>2006-03-04T13:46:56Z</time>
+<speed>004.37</speed>
+</trkpt> 
+<trkpt lat="+42.36839" lon="-071.13377"> 
+<time>2006-03-04T13:46:57Z</time>
+<speed>004.37</speed>
+</trkpt> 
+<trkpt lat="+42.36837" lon="-071.13381"> 
+<time>2006-03-04T13:46:58Z</time>
+<speed>004.31</speed>
+</trkpt> 
+<trkpt lat="+42.36835" lon="-071.13385"> 
+<time>2006-03-04T13:46:59Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36833" lon="-071.13390"> 
+<time>2006-03-04T13:47:00Z</time>
+<speed>004.28</speed>
+</trkpt> 
+<trkpt lat="+42.36831" lon="-071.13395"> 
+<time>2006-03-04T13:47:01Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.36829" lon="-071.13399"> 
+<time>2006-03-04T13:47:02Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.36826" lon="-071.13404"> 
+<time>2006-03-04T13:47:03Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.36824" lon="-071.13409"> 
+<time>2006-03-04T13:47:04Z</time>
+<speed>004.30</speed>
+</trkpt> 
+<trkpt lat="+42.36822" lon="-071.13414"> 
+<time>2006-03-04T13:47:05Z</time>
+<speed>004.36</speed>
+</trkpt> 
+<trkpt lat="+42.36820" lon="-071.13417"> 
+<time>2006-03-04T13:47:06Z</time>
+<speed>004.36</speed>
+</trkpt> 
+<trkpt lat="+42.36819" lon="-071.13421"> 
+<time>2006-03-04T13:47:07Z</time>
+<speed>004.38</speed>
+</trkpt> 
+<trkpt lat="+42.36817" lon="-071.13425"> 
+<time>2006-03-04T13:47:08Z</time>
+<speed>004.38</speed>
+</trkpt> 
+<trkpt lat="+42.36815" lon="-071.13429"> 
+<time>2006-03-04T13:47:09Z</time>
+<speed>004.36</speed>
+</trkpt> 
+<trkpt lat="+42.36814" lon="-071.13433"> 
+<time>2006-03-04T13:47:10Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36812" lon="-071.13437"> 
+<time>2006-03-04T13:47:11Z</time>
+<speed>004.27</speed>
+</trkpt> 
+<trkpt lat="+42.36811" lon="-071.13441"> 
+<time>2006-03-04T13:47:12Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.36808" lon="-071.13446"> 
+<time>2006-03-04T13:47:13Z</time>
+<speed>004.26</speed>
+</trkpt> 
+<trkpt lat="+42.36804" lon="-071.13450"> 
+<time>2006-03-04T13:47:14Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.36802" lon="-071.13454"> 
+<time>2006-03-04T13:47:15Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.36799" lon="-071.13459"> 
+<time>2006-03-04T13:47:16Z</time>
+<speed>004.35</speed>
+</trkpt> 
+<trkpt lat="+42.36797" lon="-071.13463"> 
+<time>2006-03-04T13:47:17Z</time>
+<speed>004.35</speed>
+</trkpt> 
+<trkpt lat="+42.36795" lon="-071.13467"> 
+<time>2006-03-04T13:47:18Z</time>
+<speed>004.33</speed>
+</trkpt> 
+<trkpt lat="+42.36794" lon="-071.13472"> 
+<time>2006-03-04T13:47:19Z</time>
+<speed>004.33</speed>
+</trkpt> 
+<trkpt lat="+42.36791" lon="-071.13476"> 
+<time>2006-03-04T13:47:20Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.36789" lon="-071.13481"> 
+<time>2006-03-04T13:47:21Z</time>
+<speed>004.29</speed>
+</trkpt> 
+<trkpt lat="+42.36786" lon="-071.13484"> 
+<time>2006-03-04T13:47:22Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.36783" lon="-071.13488"> 
+<time>2006-03-04T13:47:23Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36780" lon="-071.13492"> 
+<time>2006-03-04T13:47:24Z</time>
+<speed>004.17</speed>
+</trkpt> 
+<trkpt lat="+42.36777" lon="-071.13496"> 
+<time>2006-03-04T13:47:25Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.36774" lon="-071.13499"> 
+<time>2006-03-04T13:47:26Z</time>
+<speed>004.12</speed>
+</trkpt> 
+<trkpt lat="+42.36772" lon="-071.13502"> 
+<time>2006-03-04T13:47:27Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.36769" lon="-071.13507"> 
+<time>2006-03-04T13:47:28Z</time>
+<speed>004.13</speed>
+</trkpt> 
+<trkpt lat="+42.36767" lon="-071.13510"> 
+<time>2006-03-04T13:47:29Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.36764" lon="-071.13514"> 
+<time>2006-03-04T13:47:30Z</time>
+<speed>004.16</speed>
+</trkpt> 
+<trkpt lat="+42.36761" lon="-071.13517"> 
+<time>2006-03-04T13:47:31Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.36759" lon="-071.13521"> 
+<time>2006-03-04T13:47:32Z</time>
+<speed>004.21</speed>
+</trkpt> 
+<trkpt lat="+42.36757" lon="-071.13525"> 
+<time>2006-03-04T13:47:33Z</time>
+<speed>004.32</speed>
+</trkpt> 
+<trkpt lat="+42.36754" lon="-071.13529"> 
+<time>2006-03-04T13:47:34Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.36752" lon="-071.13533"> 
+<time>2006-03-04T13:47:35Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.36749" lon="-071.13537"> 
+<time>2006-03-04T13:47:36Z</time>
+<speed>004.42</speed>
+</trkpt> 
+<trkpt lat="+42.36747" lon="-071.13542"> 
+<time>2006-03-04T13:47:37Z</time>
+<speed>004.42</speed>
+</trkpt> 
+<trkpt lat="+42.36745" lon="-071.13546"> 
+<time>2006-03-04T13:47:38Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.36742" lon="-071.13550"> 
+<time>2006-03-04T13:47:39Z</time>
+<speed>004.40</speed>
+</trkpt> 
+<trkpt lat="+42.36739" lon="-071.13554"> 
+<time>2006-03-04T13:47:40Z</time>
+<speed>004.42</speed>
+</trkpt> 
+<trkpt lat="+42.36737" lon="-071.13559"> 
+<time>2006-03-04T13:47:41Z</time>
+<speed>004.46</speed>
+</trkpt> 
+<trkpt lat="+42.36734" lon="-071.13564"> 
+<time>2006-03-04T13:47:42Z</time>
+<speed>004.46</speed>
+</trkpt> 
+<trkpt lat="+42.36731" lon="-071.13568"> 
+<time>2006-03-04T13:47:43Z</time>
+<speed>004.53</speed>
+</trkpt> 
+<trkpt lat="+42.36727" lon="-071.13572"> 
+<time>2006-03-04T13:47:44Z</time>
+<speed>004.53</speed>
+</trkpt> 
+<trkpt lat="+42.36724" lon="-071.13577"> 
+<time>2006-03-04T13:47:45Z</time>
+<speed>004.58</speed>
+</trkpt> 
+<trkpt lat="+42.36720" lon="-071.13582"> 
+<time>2006-03-04T13:47:46Z</time>
+<speed>004.58</speed>
+</trkpt> 
+<trkpt lat="+42.36717" lon="-071.13586"> 
+<time>2006-03-04T13:47:47Z</time>
+<speed>004.67</speed>
+</trkpt> 
+<trkpt lat="+42.36716" lon="-071.13591"> 
+<time>2006-03-04T13:47:48Z</time>
+<speed>004.68</speed>
+</trkpt> 
+<trkpt lat="+42.36713" lon="-071.13594"> 
+<time>2006-03-04T13:47:49Z</time>
+<speed>004.68</speed>
+</trkpt> 
+<trkpt lat="+42.36710" lon="-071.13599"> 
+<time>2006-03-04T13:47:50Z</time>
+<speed>004.68</speed>
+</trkpt> 
+<trkpt lat="+42.36707" lon="-071.13603"> 
+<time>2006-03-04T13:47:51Z</time>
+<speed>004.68</speed>
+</trkpt> 
+<trkpt lat="+42.36705" lon="-071.13607"> 
+<time>2006-03-04T13:47:52Z</time>
+<speed>004.64</speed>
+</trkpt> 
+<trkpt lat="+42.36702" lon="-071.13612"> 
+<time>2006-03-04T13:47:53Z</time>
+<speed>004.61</speed>
+</trkpt> 
+<trkpt lat="+42.36700" lon="-071.13616"> 
+<time>2006-03-04T13:47:54Z</time>
+<speed>004.61</speed>
+</trkpt> 
+<trkpt lat="+42.36698" lon="-071.13621"> 
+<time>2006-03-04T13:47:55Z</time>
+<speed>004.62</speed>
+</trkpt> 
+<trkpt lat="+42.36696" lon="-071.13624"> 
+<time>2006-03-04T13:47:56Z</time>
+<speed>004.62</speed>
+</trkpt> 
+<trkpt lat="+42.36693" lon="-071.13629"> 
+<time>2006-03-04T13:47:57Z</time>
+<speed>004.64</speed>
+</trkpt> 
+<trkpt lat="+42.36691" lon="-071.13634"> 
+<time>2006-03-04T13:47:58Z</time>
+<speed>004.64</speed>
+</trkpt> 
+<trkpt lat="+42.36688" lon="-071.13639"> 
+<time>2006-03-04T13:47:59Z</time>
+<speed>004.67</speed>
+</trkpt> 
+<trkpt lat="+42.36685" lon="-071.13644"> 
+<time>2006-03-04T13:48:00Z</time>
+<speed>004.68</speed>
+</trkpt> 
+<trkpt lat="+42.36682" lon="-071.13648"> 
+<time>2006-03-04T13:48:01Z</time>
+<speed>004.68</speed>
+</trkpt> 
+<trkpt lat="+42.36679" lon="-071.13654"> 
+<time>2006-03-04T13:48:02Z</time>
+<speed>004.70</speed>
+</trkpt> 
+<trkpt lat="+42.36677" lon="-071.13658"> 
+<time>2006-03-04T13:48:03Z</time>
+<speed>004.70</speed>
+</trkpt> 
+<trkpt lat="+42.36674" lon="-071.13662"> 
+<time>2006-03-04T13:48:04Z</time>
+<speed>004.68</speed>
+</trkpt> 
+<trkpt lat="+42.36672" lon="-071.13666"> 
+<time>2006-03-04T13:48:05Z</time>
+<speed>004.68</speed>
+</trkpt> 
+<trkpt lat="+42.36670" lon="-071.13669"> 
+<time>2006-03-04T13:48:06Z</time>
+<speed>004.68</speed>
+</trkpt> 
+<trkpt lat="+42.36669" lon="-071.13672"> 
+<time>2006-03-04T13:48:07Z</time>
+<speed>004.47</speed>
+</trkpt> 
+</trkseg>
+</trk> 
+</gpx> 

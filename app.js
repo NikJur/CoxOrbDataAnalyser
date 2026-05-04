@@ -138,6 +138,7 @@ document.getElementById('process-btn').addEventListener('click', async () => {
             document.getElementById('buoys-toggle-container')?.classList.remove('hidden');
             document.getElementById('isis-toggle-container')?.classList.remove('hidden');
             document.getElementById('bridges-toggle-container')?.classList.remove('hidden');
+            document.getElementById('hocr-bridges-toggle-container')?.classList.remove('hidden');
 
             // Ensure metric-dependent UI elements remain hidden so they don't show blank/broken numbers
             document.getElementById('dashboard')?.classList.add('hidden');
@@ -228,6 +229,7 @@ document.getElementById('process-btn').addEventListener('click', async () => {
         document.getElementById('buoys-toggle-container')?.classList.remove('hidden');
         document.getElementById('isis-toggle-container')?.classList.remove('hidden');
         document.getElementById('bridges-toggle-container')?.classList.remove('hidden');
+        document.getElementById('hocr-bridges-toggle-container')?.classList.remove('hidden');
 
         calculateSmartThresholds();
         initChart(mergedData);
@@ -1598,6 +1600,7 @@ document.getElementById('demo-btn').addEventListener('click', async (e) => {
         document.getElementById('speed-toggle-container')?.classList.remove('hidden');
         document.getElementById('audio-container')?.classList.remove('hidden');
         document.getElementById('bridges-toggle-container')?.classList.remove('hidden');
+        document.getElementById('hocr-bridges-toggle-container')?.classList.remove('hidden');
 
         calculateSmartThresholds();
 
@@ -2008,6 +2011,8 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
     if (processBtn) processBtn.innerText = "Process & Merge Data";
     const demoBtn = document.getElementById('demo-btn');
     if (demoBtn) demoBtn.innerText = "Load Demo Data";
+    const loadHocrBtn = document.getElementById('load-hocr-btn');
+    if (loadHocrBtn) loadHocrBtn.innerText = "Load HOCR Example Line";
 
     // Reset the virtual audio loop state to prevent math errors on future uploads
     isVirtualAudioLoop = false;
@@ -2070,6 +2075,13 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
         mapInstance.removeLayer(bridgesLayer);
     }
 
+    // Resets the HOCR Bridges toggle and removes the markers
+    const toggleHocrBridgesEl = document.getElementById('toggle-hocr-bridges');
+    if (toggleHocrBridgesEl) toggleHocrBridgesEl.checked = false;
+    if (typeof hocrBridgesLayer !== 'undefined' && hocrBridgesLayer && mapInstance) {
+        mapInstance.removeLayer(hocrBridgesLayer);
+    }
+    
     // Hide the visualization containers again
     replaySection.classList.add('hidden');
     audioContainer.classList.add('hidden');
@@ -2847,6 +2859,73 @@ if (toggleBridges) {
             bridgesLayer.addTo(mapInstance);
         } else {
             mapInstance.removeLayer(bridgesLayer);
+        }
+    });
+}
+
+/**
+ * Logic: HOCR Bridges Overlay
+ * Plots distinct markers for the key Charles River bridges. 
+ * Injects local images into custom HTML tooltips that appear on hover.
+ */
+
+let hocrBridgesLayer = L.featureGroup();
+let hocrBridgesLoaded = false;
+
+// The exact GPS coordinates for the Head of the Charles bridges
+const hocrBridges = [
+    { name: "Longfellow Bridge", lat: 42.3615350, lon: -71.0754380, img: "HOCR_bridges/Longfellow_bridge.png" },
+    { name: "Boston University Bridge", lat: 42.3527256, lon: -71.1105626, img: "HOCR_bridges/Boston_university_bridge.png" },
+    { name: "River Street Bridge", lat: 42.3612472, lon: -71.1167492, img: "HOCR_bridges/River_street_bridge.png" },
+    { name: "Western Avenue Bridge", lat: 42.3642467, lon: -71.1168987, img: "HOCR_bridges/Western_avenue_bridge.png" },
+    { name: "Weeks Footbridge", lat: 42.3684618, lon: -71.1181508, img: "HOCR_bridges/Weeks_footbridge.png" },
+    { name: "Anderson Memorial Bridge", lat: 42.3689537, lon: -71.1231868, img: "HOCR_bridges/Anderson_memorial_bridge_cropped.png" },
+    { name: "Eliot Bridge", lat: 42.3717340, lon: -71.1329087, img: "HOCR_bridges/Eliot_bridge.png" }
+];
+
+function buildHocrBridgesLayer() {
+    if (hocrBridgesLoaded) return; 
+    
+    hocrBridges.forEach(bridge => {
+        const marker = L.circleMarker([bridge.lat, bridge.lon], {
+            radius: 7,
+            fillColor: '#ffffff',
+            color: '#25476D', 
+            weight: 3,
+            fillOpacity: 1,
+            zIndexOffset: 500
+        });
+
+        const popupHTML = `
+            <div class="bridge-image-content">
+                <b>${bridge.name}</b>
+                <img src="${bridge.img}" alt="${bridge.name}">
+            </div>
+        `;
+
+        marker.bindTooltip(popupHTML, {
+            className: 'bridge-image-tooltip',
+            direction: 'top',
+            offset: [0, -10], 
+        });
+
+        marker.addTo(hocrBridgesLayer);
+    });
+
+    hocrBridgesLoaded = true;
+}
+
+// Attach the Event Listener to the HTML Toggle Switch
+const toggleHocrBridges = document.getElementById('toggle-hocr-bridges');
+if (toggleHocrBridges) {
+    toggleHocrBridges.addEventListener('change', (e) => {
+        if (!mapInstance) return;
+        
+        if (e.target.checked) {
+            buildHocrBridgesLayer();
+            hocrBridgesLayer.addTo(mapInstance);
+        } else {
+            mapInstance.removeLayer(hocrBridgesLayer);
         }
     });
 }
@@ -3940,6 +4019,71 @@ if (loadIsisBtn) {
         setTimeout(() => mapInstance.invalidateSize(), 100);
     });
 }
+
+
+//=================================================
+//HOCR SECTION: (spoofs HOCR as input so don't need seperate button for comparison demo since it's just a GPX file)
+
+/**
+ * Event Listener: Load HOCR Route Button
+ * Fetches a static HOCR GPX file from the server.
+ * Injects it into the primary file input and triggers the master processing engine.
+ */
+const loadHocrBtn = document.getElementById('load-hocr-btn');
+if (loadHocrBtn) {
+    loadHocrBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        loadHocrBtn.innerText = "Loading HOCR...";
+
+        try {
+            // Fetches the HOCR GPX file from the local directory
+            const response = await fetch('demo_data/demo_HOCR/HOCR.GPX');
+            if (!response.ok) throw new Error("Could not locate the HOCR demo file on the server.");
+            
+            const gpxText = await response.text();
+            
+            // Spoofs a user file upload using the DataTransfer API
+            const dt = new DataTransfer();
+            const file = new File([gpxText], "HOCR_demo.gpx", { type: "application/gpx+xml" });
+            dt.items.add(file);
+            
+            // Injects the file into the primary GPX HTML input
+            const gpxInput = document.getElementById('gpx-upload');
+            if (gpxInput) gpxInput.files = dt.files;
+            
+            // Ensures the CSV and Audio inputs are completely empty so it forces GPX-only mode
+            const csvInput = document.getElementById('csv-upload');
+            if (csvInput) csvInput.value = '';
+            
+            const audioInput = document.getElementById('audio-upload');
+            if (audioInput) audioInput.value = '';
+
+            // Unhides the HOCR specific bridge toggle
+            document.getElementById('hocr-bridges-toggle-container')?.classList.remove('hidden');
+
+            // Commands the master render engine to process this newly "uploaded" file
+            document.getElementById('process-btn').click();
+
+            // Wait a fraction of a second for the async map engine to finish building the canvas
+            setTimeout(() => {
+                const hocrToggle = document.getElementById('toggle-hocr-bridges');
+                if (hocrToggle) {
+                    hocrToggle.checked = true;
+                    // Manually triggers the event listener to draw the HOCR markers
+                    hocrToggle.dispatchEvent(new Event('change'));
+                }
+            }, 500);
+
+            loadHocrBtn.innerText = "HOCR Line Loaded";
+            
+        } catch (error) {
+            console.error("HOCR Demo failed:", error);
+            alert(`Error loading HOCR demo data: ${error.message}`);
+            loadHocrBtn.innerText = "Load HOCR Example Line";
+        }
+    });
+}
+//=====================HOCR close================
 
 
 /**

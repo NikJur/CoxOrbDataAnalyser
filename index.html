@@ -96,6 +96,8 @@
                 <button id="demo-btn" class="demo-btn">Load Demo Data</button>
                 <span class="or-divider">or</span>
                 <button id="load-isis-btn" class="process-btn" style="margin-left: 5px;">Load Isis Race Line</button>
+                <span class="or-divider">or</span>
+                <button id="load-hocr-btn" class="demo-btn">Load HOCR Example Line</button>
                 <button id="clear-primary-btn" class="clear-btn">Clear</button>
             </div>
         </section>
@@ -175,6 +177,19 @@
                         </div>
                          <label class="toggle-switch">
                             <input type="checkbox" id="toggle-isis-line">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="hocr-bridges-toggle-container" style="display: flex; flex-direction: column; justify-content: center; gap: 8px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 15px;">
+                        <div style="text-align: left; display: flex; flex-direction: column;">
+                            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Show HOCR Bridges</span>
+                            <span style="font-size: 0.7rem; color: #6c757d;">Hover over bridge markers to view reference drawings.</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-hocr-bridges">
                             <span class="slider round"></span>
                         </label>
                     </div>
