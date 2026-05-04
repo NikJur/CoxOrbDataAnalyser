@@ -2008,6 +2008,8 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
     if (processBtn) processBtn.innerText = "Process & Merge Data";
     const demoBtn = document.getElementById('demo-btn');
     if (demoBtn) demoBtn.innerText = "Load Demo Data";
+    const loadHocrBtn = document.getElementById('load-hocr-btn');
+    if (loadHocrBtn) loadHocrBtn.innerText = "Load HOCR Example Line";
 
     // Reset the virtual audio loop state to prevent math errors on future uploads
     isVirtualAudioLoop = false;
@@ -3940,6 +3942,58 @@ if (loadIsisBtn) {
         setTimeout(() => mapInstance.invalidateSize(), 100);
     });
 }
+
+
+//=================================================
+//HOCR SECTION: (spoofs HOCR as input so don't need seperate button for comparison demo since it's just a GPX file)
+
+/**
+ * Event Listener: Load HOCR Route Button
+ * Fetches a static HOCR GPX file from the server.
+ * Injects it into the primary file input and triggers the master processing engine.
+ */
+const loadHocrBtn = document.getElementById('load-hocr-btn');
+if (loadHocrBtn) {
+    loadHocrBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        loadHocrBtn.innerText = "Loading HOCR...";
+
+        try {
+            // Fetches the HOCR GPX file from the local directory
+            const response = await fetch('demo_data/demo_HOCR/HOCR.GPX');
+            if (!response.ok) throw new Error("Could not locate the HOCR demo file on the server.");
+            
+            const gpxText = await response.text();
+            
+            // Spoofs a user file upload using the DataTransfer API
+            const dt = new DataTransfer();
+            const file = new File([gpxText], "HOCR_demo.gpx", { type: "application/gpx+xml" });
+            dt.items.add(file);
+            
+            // Injects the file into the primary GPX HTML input
+            const gpxInput = document.getElementById('gpx-upload');
+            if (gpxInput) gpxInput.files = dt.files;
+            
+            // Ensures the CSV and Audio inputs are completely empty so it forces GPX-only mode
+            const csvInput = document.getElementById('csv-upload');
+            if (csvInput) csvInput.value = '';
+            
+            const audioInput = document.getElementById('audio-upload');
+            if (audioInput) audioInput.value = '';
+
+            // Commands the master render engine to process this newly "uploaded" file
+            document.getElementById('process-btn').click();
+
+            loadHocrBtn.innerText = "HOCR Line Loaded";
+            
+        } catch (error) {
+            console.error("HOCR Demo failed:", error);
+            alert(`Error loading HOCR demo data: ${error.message}`);
+            loadHocrBtn.innerText = "Load HOCR Example Line";
+        }
+    });
+}
+//=====================HOCR close================
 
 
 /**
