@@ -2124,6 +2124,11 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
             compareMapInstance.removeLayer(compareBridgesLayer);
     }
 
+    // clear HOCR bridge drawings if they exist
+    if (typeof compareHocrBridgesLayer !== 'undefined' && compareHocrBridgesLayer) {
+        if (compareMapInstance) compareMapInstance.removeLayer(compareHocrBridgesLayer);
+    }
+
     // Reset the independent fairway toggle
     document.getElementById('toggle-compare-fairway').checked = false;
 
@@ -2157,6 +2162,10 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
 
     // Un-hide the extra overlays panel if it was minimized
     document.getElementById('compare-extra-toggles')?.classList.remove('hidden');
+
+    // Reset the independent HOCR Bridges toggle
+    const toggleCompareHocrBridgesEl = document.getElementById('toggle-compare-hocr-bridges');
+    if (toggleCompareHocrBridgesEl) toggleCompareHocrBridgesEl.checked = false;
     
     // Reset the tiny button icon back to minus
     const miniToggleBtn = document.getElementById('mini-toggle-ui-btn');
@@ -2926,6 +2935,62 @@ if (toggleHocrBridges) {
             hocrBridgesLayer.addTo(mapInstance);
         } else {
             mapInstance.removeLayer(hocrBridgesLayer);
+        }
+    });
+}
+
+/**
+ * Logic: Section B HOCR Bridges Overlay
+ * A dedicated layer for the comparison map to prevent Leaflet cross-contamination.
+ */
+let compareHocrBridgesLayer = L.featureGroup();
+let compareHocrBridgesLoaded = false;
+
+function buildCompareHocrBridgesLayer() {
+    if (compareHocrBridgesLoaded) return; 
+    
+    // Reusing the hocrBridges array from Section A
+    hocrBridges.forEach(bridge => {
+        const marker = L.circleMarker([bridge.lat, bridge.lon], {
+            radius: 7,
+            fillColor: '#ffffff',
+            color: '#25476D', // CoxOrb Navy
+            weight: 3,
+            fillOpacity: 1,
+            zIndexOffset: 500
+        });
+
+        const popupHTML = `
+            <div class="bridge-image-content">
+                <b>${bridge.name}</b>
+                <img src="${bridge.img}" alt="${bridge.name}">
+            </div>
+        `;
+
+        // Bind the tooltip to trigger on hover
+        marker.bindTooltip(popupHTML, {
+            className: 'bridge-image-tooltip',
+            direction: 'top',
+            offset: [0, -10], // Shifts it slightly above the user's cursor
+        });
+
+        marker.addTo(compareHocrBridgesLayer);
+    });
+
+    compareHocrBridgesLoaded = true;
+}
+
+// Attach the Event Listener to the Section B Toggle Switch
+const toggleCompareHocrBridges = document.getElementById('toggle-compare-hocr-bridges');
+if (toggleCompareHocrBridges) {
+    toggleCompareHocrBridges.addEventListener('change', (e) => {
+        if (!compareMapInstance) return; // Prevent crashes if the map isn't rendered yet
+        
+        if (e.target.checked) {
+            buildCompareHocrBridgesLayer();
+            compareHocrBridgesLayer.addTo(compareMapInstance);
+        } else {
+            compareMapInstance.removeLayer(compareHocrBridgesLayer);
         }
     });
 }
