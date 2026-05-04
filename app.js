@@ -4064,6 +4064,16 @@ if (loadHocrBtn) {
             // Commands the master render engine to process this newly "uploaded" file
             document.getElementById('process-btn').click();
 
+            // Wait a fraction of a second for the async map engine to finish building the canvas
+            setTimeout(() => {
+                const hocrToggle = document.getElementById('toggle-hocr-bridges');
+                if (hocrToggle) {
+                    hocrToggle.checked = true;
+                    // Manually triggers the event listener to draw the HOCR markers
+                    hocrToggle.dispatchEvent(new Event('change'));
+                }
+            }, 500);
+
             loadHocrBtn.innerText = "HOCR Line Loaded";
             
         } catch (error) {
