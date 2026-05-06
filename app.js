@@ -3471,22 +3471,27 @@ document.getElementById('process-btn-c')?.addEventListener('click', async (e) =>
     }
 });
 
+/**
+ * Event Listener: Section C Comparison Demo Button
+ * Fetches Boat 1 and Boat 2 demo files from the server.
+ * Spoofs manual file uploads using the DataTransfer API to utilise the master Process engine.
+ */
 document.getElementById('demo-btn-c')?.addEventListener('click', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('demo-btn-c');
     btn.innerText = "Loading Demo...";
 
     try {
-        // Fetch Boat 1 files from the original demo folder
-        const resGpx1 = await fetch('demo_data/example.GPX');
-        const resCsv1 = await fetch('demo_data/example_GRAPH.CSV');
-        
-        // Fetch Boat 2 files from the WEHoRR folder
-        const resGpx2 = await fetch('demo_data/demo_wehorr/gps_wehorr.GPX');
-        const resCsv2 = await fetch('demo_data/demo_wehorr/data_wehorr.CSV');
+        // Fetch Boat 1 and Boat 2 files simultaneously
+        const [resGpx1, resCsv1, resGpx2, resCsv2] = await Promise.all([
+            fetch('demo_data/example.GPX'),
+            fetch('demo_data/example_GRAPH.CSV'),
+            fetch('demo_data/demo_wehorr/gps_wehorr.GPX'),
+            fetch('demo_data/demo_wehorr/data_wehorr.CSV')
+        ]);
 
         if (!resGpx1.ok || !resCsv1.ok || !resGpx2.ok || !resCsv2.ok) {
-            throw new Error("Could not locate demo files on the server.");
+            throw new Error("Could not locate all comparison demo files on the server.");
         }
 
         const txtGpx1 = await resGpx1.text();
@@ -3494,71 +3499,28 @@ document.getElementById('demo-btn-c')?.addEventListener('click', async (e) => {
         const txtGpx2 = await resGpx2.text();
         const txtCsv2 = await resCsv2.text();
 
-        // Parse the data for both boats
-        const gpxData1 = parseGPX(txtGpx1);
-        const parsedCsv1 = parseCSV(txtCsv1);
-        
-        const gpxData2 = parseGPX(txtGpx2);
-        const parsedCsv2 = parseCSV(txtCsv2);
+        // Helper function to spoof file uploads securely into the DOM
+        const loadIntoSlot = (text, inputId, filename, mimeType) => {
+            const dt = new DataTransfer();
+            const file = new File([text], filename, { type: mimeType });
+            dt.items.add(file);
+            const fileInput = document.getElementById(inputId);
+            if (fileInput) fileInput.files = dt.files;
+        };
 
-        mergedDataC1 = mergeAsOf(gpxData1, parsedCsv1, 5);
-        mergedDataC2 = mergeAsOf(gpxData2, parsedCsv2, 5);
+        // Inject the fetched text files into the 4 physical comparison inputs
+        loadIntoSlot(txtGpx1, 'gpx-file-1', "boat1_route.gpx", "application/gpx+xml");
+        loadIntoSlot(txtCsv1, 'csv-file-1', "boat1_metrics.csv", "text/csv");
+        loadIntoSlot(txtGpx2, 'gpx-file-2', "boat2_route.gpx", "application/gpx+xml");
+        loadIntoSlot(txtCsv2, 'csv-file-2', "boat2_metrics.csv", "text/csv");
 
-        // Captures the backup master arrays for trimming
-        masterMergedDataC1 = [...mergedDataC1];
-        masterMergedDataC2 = [...mergedDataC2];
+        // Command the master render engine to process these newly "uploaded" files
+        document.getElementById('process-btn-c').click();
 
-        // Configures Boat 1 Sliders
-        const tMin1 = document.getElementById('trim-slider-min-c1');
-        const tMax1 = document.getElementById('trim-slider-max-c1');
-        if (tMin1 && tMax1 && masterMergedDataC1.length > 0) {
-            tMin1.max = masterMergedDataC1.length - 1;
-            tMax1.max = masterMergedDataC1.length - 1;
-            tMin1.value = 0;
-            tMax1.value = masterMergedDataC1.length - 1;
-        }
-
-        // Configures Boat 2 Sliders
-        const tMin2 = document.getElementById('trim-slider-min-c2');
-        const tMax2 = document.getElementById('trim-slider-max-c2');
-        if (tMin2 && tMax2 && masterMergedDataC2.length > 0) {
-            tMin2.max = masterMergedDataC2.length - 1;
-            tMax2.max = masterMergedDataC2.length - 1;
-            tMin2.value = 0;
-            tMax2.value = masterMergedDataC2.length - 1;
-        }
-        
-        // Unhides the new slider container alongside the others
-        document.getElementById('trim-sliders-container-c').classList.remove('hidden');
-
-        // Unhide the comparative UI elements
-        document.getElementById('dashboard-c').classList.remove('hidden');
-        document.getElementById('map-container-c').classList.remove('hidden');
-        document.getElementById('controls-c').classList.remove('hidden');
-
-        // Unhide the Master Wrapper (which automatically displays the chart and sliders inside it)
-        const wrapperC = document.getElementById('fullscreen-wrapper-c');
-        if (wrapperC) wrapperC.classList.remove('hidden');
-
-        // Configure the master timeline slider to track total physical distance
-        const maxDistC1 = mergedDataC1.length > 0 ? (mergedDataC1[mergedDataC1.length - 1]['Distance'] || 0) - (mergedDataC1[0]['Distance'] || 0) : 0;
-        const maxDistC2 = mergedDataC2.length > 0 ? (mergedDataC2[mergedDataC2.length - 1]['Distance'] || 0) - (mergedDataC2[0]['Distance'] || 0) : 0;
-        
-        // Configure the master timeline slider to a 0.0% to 100.0% scale
-        const slider = document.getElementById('time-slider-c');
-        if (slider) {
-            slider.max = 1000; 
-            slider.value = 0;
-        }
-
-        // Delayed execution ensures the containers physically exist on screen
+        // Delay resetting the button text slightly so the master engine has time to finish
         setTimeout(() => {
-            initMapC(mergedDataC1, mergedDataC2);
-            initChartC(mergedDataC1, mergedDataC2);
-            updateUIC(0);
-        }, 150); 
-
-        btn.innerText = "Comparison Demo Loaded";
+            btn.innerText = "Comparison Demo Loaded";
+        }, 500);
 
     } catch (error) {
         console.error("Comparison Demo failed:", error);
