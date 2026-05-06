@@ -1536,134 +1536,85 @@ function calculateSmartThresholds() {
 }
 
 /**
- * Fetches pre-uploaded demo data from the repository and initialises the application.
- * Uses the native Fetch API to retrieve files directly from the demo_data directory.
- * @param {Event} e - The click event object to prevent default page jumping.
+ * Event Listener: Section A Primary Demo Button
+ * Fetches GPX, CSV, and Audio files from the server.
+ * Spoofs a manual file upload using the DataTransfer API to utilise the master Process engine.
  */
-document.getElementById('demo-btn').addEventListener('click', async (e) => {
+document.getElementById('demo-btn')?.addEventListener('click', async (e) => {
     e.preventDefault(); 
     const demoBtn = document.getElementById('demo-btn');
     demoBtn.innerText = "Loading Demo...";
 
     try {
-        // --- RESET UI FROM POTENTIAL STRAVA STATE ---
-        document.getElementById('chart-wrap-a')?.classList.remove('hidden');
-        document.getElementById('fullscreen-chart-a')?.classList.remove('hidden');
-        document.getElementById('playback-buttons')?.classList.remove('hidden');
-        document.getElementById('volume-controls')?.classList.remove('hidden');
-        
-        const resetLabel = document.getElementById('timeline-label');
-        if (resetLabel) resetLabel.innerText = "Coxswain Audio Recording";
-        
-        const resetUpload = document.getElementById('audio-upload');
-        if (resetUpload) resetUpload.disabled = false;
-        // --------------------------------------------
+        // Fetch all three demo files simultaneously
+        const [gpxRes, csvRes, audioRes] = await Promise.all([
+            fetch('demo_data/example.GPX'),
+            fetch('demo_data/example_GRAPH.CSV'),
+            fetch('demo_data/example_recording.m4a')
+        ]);
 
-        // Retrieve raw file data from the server directories
-        const gpxResponse = await fetch('demo_data/example.GPX');
-        const csvResponse = await fetch('demo_data/example_GRAPH.CSV');
-
-        if (!gpxResponse.ok || !csvResponse.ok) {
+        if (!gpxRes.ok || !csvRes.ok || !audioRes.ok) {
             throw new Error("Could not locate demo files on the server.");
         }
 
-        const gpxText = await gpxResponse.text();
-        const csvText = await csvResponse.text();
+        // Parse text for data files, but extract binary Blob for the audio file
+        const gpxText = await gpxRes.text();
+        const csvText = await csvRes.text();
+        const audioBlob = await audioRes.blob();
 
-        // Parse extracted text into data arrays
-        gpxData = parseGPX(gpxText);
-        csvData = parseCSV(csvText);
+        // Spoof GPX Upload
+        const dtGpx = new DataTransfer();
+        dtGpx.items.add(new File([gpxText], "demo_route.gpx", { type: "application/gpx+xml" }));
+        const gpxInput = document.getElementById('gpx-upload');
+        if (gpxInput) gpxInput.files = dtGpx.files;
 
-        // Merge temporal datasets
-        mergedData = mergeAsOf(gpxData, csvData, 5);
-        masterMergedData = [...mergedData]; // Captures the master copy
+        // Spoof CSV Upload
+        const dtCsv = new DataTransfer();
+        dtCsv.items.add(new File([csvText], "demo_metrics.csv", { type: "text/csv" }));
+        const csvInput = document.getElementById('csv-upload');
+        if (csvInput) csvInput.files = dtCsv.files;
 
-        // Configure the trimming sliders to match the array length
-        const trimMin = document.getElementById('trim-slider-min');
-        const trimMax = document.getElementById('trim-slider-max');
-        if (trimMin && trimMax) {
-            trimMin.max = masterMergedData.length - 1;
-            trimMax.max = masterMergedData.length - 1;
-            trimMin.value = 0;
-            trimMax.value = masterMergedData.length - 1;
-            document.getElementById('trim-slider-container').classList.remove('hidden');
-        }
+        // Spoof Audio Upload
+        const dtAudio = new DataTransfer();
+        dtAudio.items.add(new File([audioBlob], "demo_audio.m4a", { type: "audio/mp4" }));
+        const audioInput = document.getElementById('audio-upload');
+        if (audioInput) audioInput.files = dtAudio.files;
 
-        if (mergedData.length === 0) {
-            throw new Error("Could not align GPX and CSV timestamps.");
-        }
+        // Command the master render engine to process these "uploaded" files
+        document.getElementById('process-btn').click();
 
-        // UI
-        document.getElementById('replay-section')?.classList.remove('hidden');
-        document.getElementById('fullscreen-wrapper-a')?.classList.remove('hidden');
-        document.getElementById('dashboard')?.classList.remove('hidden');
-        document.getElementById('speed-toggle-container')?.classList.remove('hidden');
-        document.getElementById('audio-container')?.classList.remove('hidden');
-        document.getElementById('bridges-toggle-container')?.classList.remove('hidden');
-        document.getElementById('hocr-bridges-toggle-container')?.classList.remove('hidden');
-
-        calculateSmartThresholds();
-
-        // Render visualisations
-        initMap(mergedData);
-        initChart(mergedData);
-
-        // Safely expose all analytical UI elements including the speed toggle
-        if (typeof toggleAnalyticalUI === 'function') {
-            toggleAnalyticalUI(true);
-        }
-        
-        // Configure the audio player with the looped demo recording
-        const audioPlayer = document.getElementById('audio-player');
-        if (audioPlayer) {
-            audioPlayer.src = 'demo_data/example_recording.m4a';
-            audioPlayer.loop = true; // Instructs the browser to seamlessly restart the audio
-            
-            // -Force Audio UI to appear for demo audio
-            const timelineLabel = document.getElementById('timeline-label');
-            const playbackBtns = document.getElementById('playback-buttons');
-            const volumeBtns = document.getElementById('volume-controls');
-            if (timelineLabel) timelineLabel.innerText = "Coxswain Audio Recording";
-            if (playbackBtns) playbackBtns.style.display = 'flex';
-            if (volumeBtns) volumeBtns.style.display = 'flex';
-
-            // Reset virtual timeline trackers
-            isVirtualAudioLoop = true;
-            virtualLoopCount = 0;
-            lastPlaybackTime = 0;
-            
-            // Capture the exact duration of the track once the browser loads the file metadata
-            audioPlayer.onloadedmetadata = () => {
-                baseAudioDuration = audioPlayer.duration;
-            };
-        }
-        
-        const timeSlider = document.getElementById('time-slider');
-        if (timeSlider) {
-            timeSlider.max = mergedData.length - 1;
-        }
-
-        // Force a map resize
-        setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(); }, 100);
-
-        // Automatically trigger the London overlays once the map has rendered
+        // Wait a fraction of a second for the master engine to finish charting and rendering
         setTimeout(() => {
+            // The master engine sets audio to play once. For the demo, we force it to loop.
+            const audioPlayer = document.getElementById('audio-player');
+            if (audioPlayer) {
+                audioPlayer.loop = true;
+                isVirtualAudioLoop = true;
+                virtualLoopCount = 0;
+                lastPlaybackTime = 0;
+                
+                // Recalculate duration for the virtual timeline maths
+                baseAudioDuration = audioPlayer.duration || 0;
+                audioPlayer.onloadedmetadata = () => {
+                    baseAudioDuration = audioPlayer.duration;
+                };
+            }
+
+            // Automatically trigger the London context toggles for a better demo experience
             const togglesToActivate = ['toggle-bridges', 'toggle-buoys', 'toggle-fairway-limits'];
-            
             togglesToActivate.forEach(id => {
                 const toggle = document.getElementById(id);
                 if (toggle && !toggle.checked) {
                     toggle.checked = true;
-                    // Manually dispatch the change event to trigger the drawing functions
-                    toggle.dispatchEvent(new Event('change'));
+                    toggle.dispatchEvent(new Event('change')); // Triggers the physical drawing
                 }
             });
-        }, 500);
 
-        demoBtn.innerText = "Demo Data Loaded"; // Reset button text on success
+            demoBtn.innerText = "Demo Data Loaded";
+        }, 600); 
 
     } catch (error) {
-        console.error(error);
+        console.error("Demo Load Error:", error);
         alert(`Error loading demo data: ${error.message}`);
         demoBtn.innerText = "Load Demo Data";
     }
