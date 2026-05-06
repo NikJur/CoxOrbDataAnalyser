@@ -3932,6 +3932,18 @@ if (loadIsisBtn) {
         document.getElementById('audio-container')?.classList.remove('hidden');
         document.getElementById('time-slider')?.classList.remove('hidden');
 
+        // Unhide all interactive map overlays
+        const mapToggles = [
+            'fairway-toggle-container',
+            'buoys-toggle-container',
+            'isis-toggle-container',
+            'bridges-toggle-container',
+            'hocr-bridges-toggle-container'
+        ];
+        mapToggles.forEach(id => {
+            document.getElementById(id)?.classList.remove('hidden');
+        });
+
         // Hide the chart since there are no stroke metrics
         document.getElementById('chart-wrap-a')?.classList.add('hidden');
         document.getElementById('fullscreen-chart-a')?.classList.add('hidden');
