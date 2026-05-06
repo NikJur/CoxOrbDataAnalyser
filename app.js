@@ -182,6 +182,9 @@ document.getElementById('process-btn').addEventListener('click', async () => {
             // Draw the map using just the spatial data and stop execution here
             initMap(mergedData);
             setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(); }, 100);
+
+            // Forces the trim engine to calculate the initial distance
+            if (typeof updateTrimWindow === 'function') updateTrimWindow();
             
             processBtn.innerText = "GPS Route Loaded";
             return; // HALT execution here so it doesn't try to load charts/audio!
@@ -269,6 +272,9 @@ document.getElementById('process-btn').addEventListener('click', async () => {
         
         // Force map resize to ensure tiles load correctly after unhiding the container
         setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(); }, 100);
+
+        // Forces the trim engine to calculate the initial 100% piece stats
+        if (typeof updateTrimWindow === 'function') updateTrimWindow();
         
         processBtn.innerText = "Data Processed & Merged";
 
