@@ -3452,6 +3452,9 @@ document.getElementById('process-btn-c')?.addEventListener('click', async (e) =>
             initChartC(mergedDataC1, mergedDataC2);
             updateUIC(0);
 
+            // Forces the comparative trim bar engine to calculate the initial metrics
+            if (typeof updateTrimWindowsC === 'function') updateTrimWindowsC();
+
             // Forces Leaflet to confirm its grid size now that it is safely on screen
             if (mapInstanceC) {
                 mapInstanceC.invalidateSize();
