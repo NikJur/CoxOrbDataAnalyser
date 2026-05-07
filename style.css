@@ -1102,8 +1102,9 @@ audio, #audio-player {
 }
 
 
-/* Custom Modal Overlay */
-#strava-warning-modal {
+/* Custom Modal Overlays */
+#strava-warning-modal, 
+#custom-video-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -1118,7 +1119,8 @@ audio, #audio-player {
 }
 
 /* Hide the modal when not in use */
-#strava-warning-modal.hidden {
+#strava-warning-modal.hidden,
+#custom-video-modal.hidden {
     display: none !important;
 }
 

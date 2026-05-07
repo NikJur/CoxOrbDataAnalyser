@@ -199,8 +199,21 @@
 
             <div id="map-ui-wrapper" style="position: relative; width: 100%;">
 
-                <div id="map-container">
-                    <div id="map"></div>
+                <!-- Master Wrapper for the Split Screen -->
+                <div id="spatial-media-wrapper" style="display: flex; gap: 15px; width: 100%; transition: all 0.3s ease;">
+                    
+                    <div id="map-container" style="flex: 1; height: 60vh; min-height: 400px; position: relative;">
+                        <div id="map" style="height: 100%; width: 100%; border-radius: 8px; z-index: 1;"></div>
+                    </div>
+
+                    <!-- Video Container (Hidden by default) -->
+                    <div id="video-container" class="hidden" style="flex: 1; height: 60vh; min-height: 400px; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <video id="course-video" width="100%" height="100%" controls preload="metadata" style="object-fit: cover;">
+                            <source src="demo_data/demo_isis/City_Bumps_noSound_compressed.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+
                 </div>
 
                 <div class="controls">
@@ -632,6 +645,19 @@
             <p class="modal-body">This GPX file is missing timestamp data (this is very common with Strava exports).</p>
             <p class="modal-subtext">We will plot your steering route on the map, but we cannot sync stroke metrics (CSV) or audio without time data.</p>
             <button id="close-modal-btn" class="process-btn" style="width: 100%; margin-top: 15px;">Understood</button>
+        </div>
+    </div>
+
+    <div id="custom-video-modal" class="hidden">
+        <div class="modal-content">
+            <h3 class="modal-title">Load Video Course?</h3>
+            <p class="modal-body">Would you like to load the interactive video course alongside the map?</p>
+            <p class="modal-subtext">This will split the screen to show synced footage next to the GPS route.</p>
+            
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button id="modal-btn-no" class="demo-btn">No, Map Only</button>
+                <button id="modal-btn-yes" class="process-btn" style="flex: 1; margin-top: 0;">Yes, Load Video</button>
+            </div>
         </div>
     </div>
 

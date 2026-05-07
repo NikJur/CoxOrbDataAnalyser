@@ -2052,6 +2052,16 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
     if (typeof hocrBridgesLayer !== 'undefined' && hocrBridgesLayer && mapInstance) {
         mapInstance.removeLayer(hocrBridgesLayer);
     }
+
+    // Re-hide the video container to restore the map to 100% width
+    document.getElementById('video-container')?.classList.add('hidden');
+    
+    // Pause the video and reset its timeline if it was playing
+    const videoPlayer = document.getElementById('course-video');
+    if (videoPlayer) {
+        videoPlayer.pause();
+        videoPlayer.currentTime = 0;
+    }
     
     // Hide the visualization containers again
     replaySection.classList.add('hidden');
@@ -3829,6 +3839,31 @@ document.getElementById('trim-dist-c2')?.addEventListener('change', () => applyT
 
 
 /**
+ * Prompts the user with a custom HTML modal styled via CoxOrb classes.
+ * Returns a Promise that resolves to true (Yes) or false (No).
+ */
+function askVideoPreference() {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('custom-video-modal');
+        
+        // Simply remove the hidden class and let the CSS handle the display
+        modal.classList.remove('hidden');
+
+        // Resolves true and hides modal
+        document.getElementById('modal-btn-yes').onclick = () => {
+            modal.classList.add('hidden');
+            resolve(true);
+        };
+
+        // Resolves false and hides modal
+        document.getElementById('modal-btn-no').onclick = () => {
+            modal.classList.add('hidden');
+            resolve(false);
+        };
+    });
+}
+
+/**
  * Logic: Oxford Isis Race Line Overlay
  * Fetches, parses, and draws the static Isis Bumps course from a KML file.
  * Includes support for LineString trajectories and Point-based placemarks (Start/Finish).
@@ -3920,116 +3955,162 @@ if (toggleIsisLine) {
 
 /**
  * Isis Component 2: The Interactive "Demo" Button
+ * Triggers a native browser confirmation dialog.
+ * YES: Splits the screen, loads GPX, loads Video, and mathematically syncs them.
+ * NO: Loads the static purple map line.
  */
 const loadIsisBtn = document.getElementById('load-isis-btn');
 if (loadIsisBtn) {
     loadIsisBtn.addEventListener('click', async (e) => {
         e.preventDefault();
         
-        // Reveal Primary UI and Initialise Blank Map
-        document.getElementById('replay-section')?.classList.remove('hidden');
-        document.getElementById('map-container').style.display = 'block';
-        document.getElementById('audio-container')?.classList.remove('hidden');
-        document.getElementById('time-slider')?.classList.remove('hidden');
+        // Trigger the custom pop-up question and wait for the response
+        const wantsVideo = await askVideoPreference();
 
-        // Unhide all interactive map overlays
-        const mapToggles = [
-            'fairway-toggle-container',
-            'buoys-toggle-container',
-            'isis-toggle-container',
-            'bridges-toggle-container',
-            'hocr-bridges-toggle-container'
-        ];
-        mapToggles.forEach(id => {
-            document.getElementById(id)?.classList.remove('hidden');
-        });
-
-        // Hide the chart since there are no stroke metrics
-        document.getElementById('chart-wrap-a')?.classList.add('hidden');
-        document.getElementById('fullscreen-chart-a')?.classList.add('hidden');
-        document.getElementById('dashboard')?.classList.add('hidden');
-        document.getElementById('speed-toggle-container')?.classList.add('hidden');
-        document.getElementById('trim-slider-container')?.classList.add('hidden');
-        
-        // Hide audio controls and rename the timeline
-        document.getElementById('playback-buttons')?.classList.add('hidden');
-        document.getElementById('volume-controls')?.classList.add('hidden');
-        
-        const timelineLabel = document.getElementById('timeline-label');
-        if (timelineLabel) timelineLabel.innerText = "Route Progress";
-        
-        const audioUpload = document.getElementById('audio-upload');
-        if (audioUpload) audioUpload.disabled = true;
-
-        if (!mapInstance) {
-            mapInstance = L.map('map').setView([51.737, -1.245], 14);
-            mapInstance.addControl(new L.Control.Fullscreen());
-
+        if (!wantsVideo) {
             // ==========================================
-            // MAP LAYERS CONFIGURATION i.e. satellite vs standard
+            // SCENARIO A: STATIC ISIS LINE (User clicked Cancel)
             // ==========================================
-            const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors',
-                maxZoom: 19
-            });
+            loadIsisBtn.innerText = "Loading...";
+            document.getElementById('replay-section')?.classList.remove('hidden');
+            document.getElementById('map-container').style.display = 'block';
             
-            const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                attribution: 'Tiles © Esri',
-                maxZoom: 19
+            // Hide analytical and video UI
+            document.getElementById('video-container')?.classList.add('hidden');
+            document.getElementById('chart-wrap-a')?.classList.add('hidden');
+            document.getElementById('dashboard')?.classList.add('hidden');
+            
+            if (!mapInstance) {
+                mapInstance = L.map('map').setView([51.737, -1.245], 14);
+                mapInstance.addControl(new L.Control.Fullscreen());
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapInstance);
+            }
+
+            await fetchIsisData();
+            isisLineLayer.addTo(mapInstance);
+            mapInstance.fitBounds(isisLineLayer.getBounds());
+            
+            if (toggleIsisLine) toggleIsisLine.checked = true;
+
+            // Unhide all interactive map overlays
+            ['fairway-toggle-container', 'buoys-toggle-container', 'isis-toggle-container', 'bridges-toggle-container', 'hocr-bridges-toggle-container'].forEach(id => {
+                document.getElementById(id)?.classList.remove('hidden');
             });
 
-            osmLayer.addTo(mapInstance);
+            loadIsisBtn.innerText = "Isis Line Loaded";
+            setTimeout(() => mapInstance.invalidateSize(), 100);
 
-            const baseMaps = {
-                "Standard Map": osmLayer,
-                "Satellite View": satelliteLayer
-            };
-            L.control.layers(baseMaps, null, { position: 'topleft' }).addTo(mapInstance);
-
-            // Listen for layer changes to toggle the orange UI typography in fullscreen
-            mapInstance.on('baselayerchange', function (e) {
-                const wrapper = document.getElementById('map-ui-wrapper');
-                if (!wrapper) return;
+        } else {
+            // ==========================================
+            // SCENARIO B: SPLIT-SCREEN VIDEO SYNC (User clicked OK)
+            // ==========================================
+            loadIsisBtn.innerText = "Loading Video Engine...";
+            
+            try {
+                // Fetch and Parse the GPX Route
+                const res = await fetch('demo_data/demo_isis/city_bumps.gpx');
+                if (!res.ok) throw new Error("Could not retrieve the city_bumps.gpx file.");
+                const gpxText = await res.text();
                 
-                if (e.name === "Satellite View") {
-                    wrapper.classList.add('satellite-active');
-                } else {
-                    wrapper.classList.remove('satellite-active');
+                mergedData = parseGPX(gpxText);
+                masterMergedData = [...mergedData];
+
+                // Adjust HTML Layout to 50/50 Split
+                document.getElementById('video-container')?.classList.remove('hidden');
+                document.getElementById('replay-section')?.classList.remove('hidden');
+                document.getElementById('time-slider')?.classList.remove('hidden');
+                
+                // Hide metric UI and standard audio UI
+                document.getElementById('chart-wrap-a')?.classList.add('hidden');
+                document.getElementById('dashboard')?.classList.add('hidden');
+                document.getElementById('playback-buttons')?.classList.add('hidden');
+                document.getElementById('volume-controls')?.classList.add('hidden');
+                
+                const timelineLabel = document.getElementById('timeline-label');
+                if (timelineLabel) timelineLabel.innerText = "Video & GPS Synchronization";
+
+                // Render the Map
+                initMap(mergedData);
+                
+                // Fetch and overlay the static purple Isis Line
+                await fetchIsisData();
+                if (mapInstance) isisLineLayer.addTo(mapInstance);
+                if (toggleIsisLine) toggleIsisLine.checked = true; // Visually syncs the toggle switch
+
+                setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(); }, 150);
+
+                // Configure the Sync Variables
+                const video = document.getElementById('course-video');
+                const timeSlider = document.getElementById('time-slider');
+                
+                if (timeSlider) {
+                    timeSlider.max = mergedData.length - 1;
+                    timeSlider.value = 0;
                 }
-            });
-            // ==========================================
 
-        }
+                let isScrubbing = false; // Prevents the slider and video from fighting each other
 
-        // Fetch Data and Add Layer
-        loadIsisBtn.innerText = "Loading...";
-        await fetchIsisData();
-        
-        isisLineLayer.addTo(mapInstance);
-        mapInstance.fitBounds(isisLineLayer.getBounds());
-        
-        // Visually sync the toggle switch so the UI matches the map state
-        if (toggleIsisLine) toggleIsisLine.checked = true;
+                // Sync Rule A: Video playback drives the map marker and the slider
+                video.addEventListener('timeupdate', () => {
+                    if (isScrubbing || isNaN(video.duration) || mergedData.length === 0) return;
 
-        // Spawn the Interactive Boat & Configure Slider
-        if (isisRoutePoints.length > 0) {
-            if (boatMarker) boatMarker.remove(); 
-            
-            boatMarker = L.circleMarker(isisRoutePoints[0], {
-                radius: 7, fillColor: 'red', color: '#ffffff', weight: 2, fillOpacity: 1, zIndexOffset: 1000
-            }).addTo(mapInstance);
+                    // Extract the exact physical time of the video
+                    const currentVideoTime = video.currentTime;
 
-            boatMarker.bringToFront();
+                    // Scan the GPX array for the point that matches (or just barely exceeds) the video clock
+                    let targetIndex = mergedData.findIndex(pt => (pt.seconds_elapsed || 0) >= currentVideoTime);
 
-            const timeSlider = document.getElementById('time-slider');
-            if (timeSlider) {
-                timeSlider.max = isisRoutePoints.length - 1;
-                timeSlider.value = 0;
+                    // Failsafe: If the video somehow runs longer than the GPS data, anchor the marker to the finish line
+                    if (targetIndex === -1) targetIndex = mergedData.length - 1;
+
+                    // Move map marker
+                    if (boatMarker && mergedData[targetIndex]) {
+                        boatMarker.setLatLng([mergedData[targetIndex].lat, mergedData[targetIndex].lon]);
+                    }
+
+                    // Move slider visually
+                    if (timeSlider) timeSlider.value = targetIndex;
+                });
+
+                // Sync Rule B: User dragging the slider drives the video timestamp
+                if (timeSlider) {
+                    timeSlider.addEventListener('input', (e) => {
+                        isScrubbing = true;
+                        const index = parseInt(e.target.value, 10);
+
+                        if (mergedData[index]) {
+                            // Move map marker instantly
+                            if (boatMarker) boatMarker.setLatLng([mergedData[index].lat, mergedData[index].lon]);
+
+                            // Extract the exact physical elapsed time from the GPS row
+                            if (!isNaN(video.duration)) {
+                                const targetTime = mergedData[index].seconds_elapsed || 0;
+                                
+                                // Push the time to the video player, capping it so it doesn't break if the GPS runs longer than the footage
+                                video.currentTime = Math.min(targetTime, video.duration);
+                            }
+                        }
+                    });
+
+                    // Release the lock when the user stops dragging
+                    timeSlider.addEventListener('change', () => {
+                        isScrubbing = false;
+                    });
+                }
+
+                // Unhide the context toggles
+                ['fairway-toggle-container', 'buoys-toggle-container', 'isis-toggle-container', 'bridges-toggle-container', 'hocr-bridges-toggle-container'].forEach(id => {
+                    document.getElementById(id)?.classList.remove('hidden');
+                });
+
+                loadIsisBtn.innerText = "Video Course Loaded";
+
+            } catch (error) {
+                console.error("Video Sync Error:", error);
+                alert(`Error loading interactive video: ${error.message}`);
+                loadIsisBtn.innerText = "Load Isis Race Line";
             }
         }
-        
-        loadIsisBtn.innerText = "Isis Line Loaded";
-        setTimeout(() => mapInstance.invalidateSize(), 100);
     });
 }
 
