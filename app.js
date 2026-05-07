@@ -76,10 +76,30 @@ if (menuToggle && navLinks) {
 
 
 /**
+ * HelperFunction: resetVideoLayout
+ * Collapses the split-screen layout, hides the video container, 
+ * and resets the HTML5 video player to prevent background audio playback.
+ */
+function resetVideoLayout() {
+    document.getElementById('video-container')?.classList.add('hidden');
+    document.getElementById('spatial-media-wrapper')?.classList.remove('video-active-wrapper');
+    
+    const videoPlayer = document.getElementById('course-video');
+    if (videoPlayer) {
+        videoPlayer.pause();
+        videoPlayer.currentTime = 0;
+    }
+}
+
+
+/**
  * Event Listener for the main processing button.
  * Triggers the parsing of uploaded files.
  */
 document.getElementById('process-btn').addEventListener('click', async () => {
+    // Resets the video layout in case the user previously had the split-screen open
+    resetVideoLayout();
+
     const gpxFile = document.getElementById('gpx-upload').files[0];
     const csvFile = document.getElementById('csv-upload').files[0];
     const processBtn = document.getElementById('process-btn');
@@ -2054,8 +2074,7 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
     }
 
     // Re-hide the video and shrink the wrapper back to normal website width
-    document.getElementById('video-container')?.classList.add('hidden');
-    document.getElementById('spatial-media-wrapper')?.classList.remove('video-active-wrapper');
+    resetVideoLayout();
     
     // Pause the video and reset its timeline if it was playing
     const videoPlayer = document.getElementById('course-video');
@@ -3972,6 +3991,8 @@ if (loadIsisBtn) {
             // ==========================================
             // SCENARIO A: STATIC ISIS LINE (User clicked Cancel)
             // ==========================================
+            resetVideoLayout(); // Collapses the layout before redrawing the map in case we had the video open previously
+
             loadIsisBtn.innerText = "Loading...";
             document.getElementById('replay-section')?.classList.remove('hidden');
             document.getElementById('map-container').style.display = 'block';
