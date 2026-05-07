@@ -4001,6 +4001,12 @@ if (loadIsisBtn) {
             document.getElementById('video-container')?.classList.add('hidden');
             document.getElementById('chart-wrap-a')?.classList.add('hidden');
             document.getElementById('dashboard')?.classList.add('hidden');
+
+            // Hide the sliders since there is no GPS data to scrub or trim
+            document.getElementById('time-slider')?.classList.add('hidden');
+            document.getElementById('trim-slider-container')?.classList.add('hidden');
+            document.getElementById('audio-container')?.classList.add('hidden');
+            document.getElementById('playback-buttons')?.classList.add('hidden');
             
             if (!mapInstance) {
                 mapInstance = L.map('map').setView([51.737, -1.245], 14);
