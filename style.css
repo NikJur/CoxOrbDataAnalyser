@@ -1102,8 +1102,9 @@ audio, #audio-player {
 }
 
 
-/* Custom Modal Overlay */
-#strava-warning-modal {
+/* Custom Modal Overlays */
+#strava-warning-modal, 
+#custom-video-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -1118,7 +1119,8 @@ audio, #audio-player {
 }
 
 /* Hide the modal when not in use */
-#strava-warning-modal.hidden {
+#strava-warning-modal.hidden,
+#custom-video-modal.hidden {
     display: none !important;
 }
 
@@ -1159,4 +1161,19 @@ audio, #audio-player {
 @keyframes modalPop {
     from { transform: scale(0.95); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
+}
+
+
+/* Edge-to-Edge Full Screen Breakout for Video Mode */
+.video-active-wrapper {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    padding: 0 15px; /* Adds a tiny bit of breathing room on the edges */
+    box-sizing: border-box;
+    transition: all 0.4s ease-in-out; /* Smooth expansion animation */
 }
