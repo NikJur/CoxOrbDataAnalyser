@@ -2053,8 +2053,9 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
         mapInstance.removeLayer(hocrBridgesLayer);
     }
 
-    // Re-hide the video container to restore the map to 100% width
+    // Re-hide the video and shrink the wrapper back to normal website width
     document.getElementById('video-container')?.classList.add('hidden');
+    document.getElementById('spatial-media-wrapper')?.classList.remove('video-active-wrapper');
     
     // Pause the video and reset its timeline if it was playing
     const videoPlayer = document.getElementById('course-video');
@@ -4015,7 +4016,10 @@ if (loadIsisBtn) {
                 mergedData = parseGPX(gpxText);
                 masterMergedData = [...mergedData];
 
-                // Adjust HTML Layout to 50/50 Split
+                // Adjust HTML Layout to 50/50 Split and expand to screen edge
+                const mediaWrapper = document.getElementById('spatial-media-wrapper');
+                if (mediaWrapper) mediaWrapper.classList.add('video-active-wrapper');
+
                 document.getElementById('video-container')?.classList.remove('hidden');
                 document.getElementById('replay-section')?.classList.remove('hidden');
                 document.getElementById('time-slider')?.classList.remove('hidden');
