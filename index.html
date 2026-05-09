@@ -207,11 +207,19 @@
                     </div>
 
                     <!-- Video Container (Hidden by default) -->
-                    <div id="video-container" class="hidden" style="flex: 1; height: 60vh; min-height: 400px; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <div id="video-container" class="hidden" style="flex: 1; height: 60vh; min-height: 400px; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);; position: relative;">
                         <video id="course-video" width="100%" height="100%" controls preload="metadata" style="object-fit: cover;">
                             <source src="demo_data/demo_isis/City_Bumps_noSound_compressed.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
+                    </div>
+
+                    <div class="sync-helper-wrapper">
+                        <div class="sync-helper-icon">?</div>
+                        <div class="sync-helper-tooltip">
+                            <strong>1:1 Sync Active</strong><br>
+                            Play or scrub through the video timeline to see the boat marker move to the exact GPS position on the map!
+                        </div>
                     </div>
 
                 </div>

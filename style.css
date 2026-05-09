@@ -1185,3 +1185,77 @@ audio, #audio-player {
     box-sizing: border-box;
     transition: all 0.4s ease-in-out; 
 }
+
+
+/* ==========================================
+   Video Sync Helper Tooltip
+   ========================================== */
+.sync-helper-wrapper {
+    position: absolute;
+    bottom: 60px; /* Sits just above the native video progress bar */
+    right: 15px;  /* Tucked into the bottom right corner */
+    z-index: 10;
+}
+
+.sync-helper-icon {
+    width: 28px;
+    height: 28px;
+    background-color: rgba(37, 71, 109, 0.85); /* Frosted CoxOrb Navy */
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: help;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    transition: all 0.2s ease;
+}
+
+.sync-helper-wrapper:hover .sync-helper-icon {
+    background-color: #FF6B00; /* Pops to Orange on hover */
+    border-color: white;
+}
+
+/* The Hidden Text Box */
+.sync-helper-tooltip {
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    margin-bottom: 10px;
+    width: 220px;
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    pointer-events: none; /* Prevents the tooltip itself from interfering with mouse clicks */
+    
+    /* Hidden by default */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(5px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* The little downward pointing arrow on the tooltip */
+.sync-helper-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    right: 10px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
+}
+
+/* Reveal the tooltip on hover */
+.sync-helper-wrapper:hover .sync-helper-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
