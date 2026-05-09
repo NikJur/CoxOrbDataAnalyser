@@ -1259,3 +1259,15 @@ audio, #audio-player {
     visibility: visible;
     transform: translateY(0);
 }
+
+/* Programmatic Onboarding State (Mimics Hover) */
+.sync-helper-wrapper.force-show .sync-helper-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.sync-helper-wrapper.force-show .sync-helper-icon {
+    background-color: #FF6B00; /* Keeps the icon orange while the tooltip is forced open */
+    border-color: white;
+}

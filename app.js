@@ -4136,6 +4136,18 @@ if (loadIsisBtn) {
 
                 loadIsisBtn.innerText = "Video Course Loaded";
 
+                // --- ONBOARDING ANIMATION ---
+                // Force the helper tooltip to show for 5 seconds so the user sees it
+                const helperWrapper = document.querySelector('.sync-helper-wrapper');
+                if (helperWrapper) {
+                    helperWrapper.classList.add('force-show');
+                    
+                    // Remove the class after 5000 milliseconds, returning it to standard hover behaviour
+                    setTimeout(() => {
+                        helperWrapper.classList.remove('force-show');
+                    }, 5000);
+                }
+
             } catch (error) {
                 console.error("Video Sync Error:", error);
                 alert(`Error loading interactive video: ${error.message}`);
