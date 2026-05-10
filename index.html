@@ -63,7 +63,11 @@
     </nav>
 
     <header>
-        <img src="./logo.png" alt="CoxOrb Data Visualiser Logo" class="banner-logo">
+        <img src="./logo.png" 
+             alt="CoxOrb Data Visualiser Logo" 
+             class="banner-logo"
+             onerror="this.onerror=null; setTimeout(() => { this.src = './logo.png?retry=' + Date.now(); }, 200);">
+             
         <p>This tool processes and visualises CoxOrb rowing data. Whether you are preparing for the HoRR, WEHoRR, HOCR, or Isis Bumps, this tool helps you compare CoxOrb data and Strava GPS natively.
             All computations occur locally within the browser, ensuring that your team's data remains entirely private and is never transmitted to any external server.
             It aligns GPS data with stroke-by-stroke performance metrics and audio recordings for synchronised spatial analysis, allowing users to evaluate individual outings or compare multiple steering lines against established Tideway/Isis/Charles boundaries.
