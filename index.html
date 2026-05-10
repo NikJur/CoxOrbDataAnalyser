@@ -71,7 +71,22 @@
     </header>
     <main>
         <section class="panel" id="interactive-section">
-            <h2>A: Interactive Analysis</h2>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                <h2 style="margin: 0;">A: Interactive Analysis</h2>
+                
+                <div class="inline-helper-wrapper">
+                    <div class="sync-helper-icon">?</div>
+                    <div class="sync-helper-tooltip header-guide-tooltip">
+                        <ul style="margin: 8px 0 0 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px;">
+                            <li><strong style="color: #FF6B00;">Process & Merge:</strong> Load your own GPX route, alongside optional CSV (stroke metrics) and audio files. Strava and Garmin GPX exports are supported, though they may lack split and rate data.</li>                            
+                            <li><strong style="color: #FF6B00;">London Tideway Demo:</strong> Loads sample race telemetry on the Championship Course. This includes fairway limits, buoys, and other navigational aids.</li>
+                            <li><strong style="color: #FF6B00;">Isis Race Line:</strong> Loads the Oxford Bumps course with an optional 1:1 video sync mode.</li>
+                            <li><strong style="color: #FF6B00;">HOCR Line:</strong> Loads the Charles River course example with interactive steering bridge directions.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <div class="upload-grid">
                 <div>
                     <label>GPX File (Route)</br></label>
@@ -207,11 +222,19 @@
                     </div>
 
                     <!-- Video Container (Hidden by default) -->
-                    <div id="video-container" class="hidden" style="flex: 1; height: 60vh; min-height: 400px; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <div id="video-container" class="hidden" style="flex: 1; height: 60vh; min-height: 400px; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);; position: relative;">
                         <video id="course-video" width="100%" height="100%" controls preload="metadata" style="object-fit: cover;">
                             <source src="demo_data/demo_isis/City_Bumps_noSound_compressed.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
+                    </div>
+
+                    <div class="sync-helper-wrapper">
+                        <div class="sync-helper-icon">?</div>
+                        <div class="sync-helper-tooltip">
+                            <strong>1:1 Sync Active</strong><br>
+                            Play or scrub through the video timeline to see the boat marker move to the exact GPS position on the map!
+                        </div>
                     </div>
 
                 </div>
