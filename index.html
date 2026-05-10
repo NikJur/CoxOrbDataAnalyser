@@ -306,7 +306,19 @@
         </section>
 
         <section class="panel" id="compare-section">
-            <h2>B: Compare Routes</h2>
+
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                <h2 style="margin: 0;">B: Compare Routes</h2>
+                
+                <div class="inline-helper-wrapper">
+                    <div class="sync-helper-icon">?</div>
+                    <div class="sync-helper-tooltip header-guide-tooltip" style="padding: 15px;">
+                        <strong style="color: #FF6B00; font-size: 0.85rem; display: block; margin-bottom: 8px;">Multi-Upload Analysis</strong>
+                        <span style="color: #fff; line-height: 1.4;">Load multiple separate GPX files simultaneously to overlay their paths on a single map. Visually compare the exact lines taken by different coxes, or compare your own line across two different outings.</span>
+                    </div>
+                </div>
+            </div>
+
             <p>Upload up to 5 GPX files to compare steering lines side-by-side. Use the toggles to show or hide them individually.</p>
             
             <div id="compare-inputs" class="upload-grid" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.0rem;">
