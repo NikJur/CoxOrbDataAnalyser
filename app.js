@@ -84,6 +84,9 @@ function resetVideoLayout() {
     document.getElementById('video-container')?.classList.add('hidden');
     document.getElementById('spatial-media-wrapper')?.classList.remove('video-active-wrapper');
     
+    // Force the tooltip to hide when the video closes
+    document.getElementById('video-sync-tooltip')?.classList.add('hidden');
+
     const videoPlayer = document.getElementById('course-video');
     if (videoPlayer) {
         videoPlayer.pause();
@@ -4050,6 +4053,9 @@ if (loadIsisBtn) {
                 document.getElementById('video-container')?.classList.remove('hidden');
                 document.getElementById('replay-section')?.classList.remove('hidden');
                 document.getElementById('time-slider')?.classList.remove('hidden');
+
+                // Show the tooltip only when the video loads
+                document.getElementById('video-sync-tooltip')?.classList.remove('hidden');
                 
                 // Hide metric UI and standard audio UI
                 document.getElementById('chart-wrap-a')?.classList.add('hidden');
