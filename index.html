@@ -79,13 +79,16 @@
                     <div class="sync-helper-tooltip header-guide-tooltip">
                         <ul style="margin: 8px 0 0 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px;">
                             <li><strong style="color: #FF6B00;">Process & Merge:</strong> Load your own GPX route, alongside optional CSV (stroke metrics) and audio files. Strava and Garmin GPX exports are supported, though they may lack split and rate data.</li>                            
-                            <li><strong style="color: #FF6B00;">London Tideway Demo:</strong> Loads sample race telemetry on the Championship Course. This includes fairway limits, buoys, and other navigational aids.</li>
+                            <li><strong style="color: #FF6B00;">London Tideway Demo:</strong> Loads sample race telemetry on the Championship Course. This includes fairway limits, buoys, and other navigational aids, as well as a synchronised audio recording.</li>
                             <li><strong style="color: #FF6B00;">Isis Race Line:</strong> Loads the Oxford Bumps course with an optional 1:1 video sync mode.</li>
                             <li><strong style="color: #FF6B00;">HOCR Line:</strong> Loads the Charles River course example with interactive steering bridge directions.</li>
                         </ul>
                     </div>
                 </div>
             </div>
+
+            <p>Upload and (optionally) synchronise your GPX routes with stroke metrics (CSV) and audio recordings (MP3/WAV) for detailed analysis.</p>
+
 
             <div class="upload-grid">
                 <div>
@@ -95,7 +98,7 @@
                 <div>
                     <label>
                         CSV File (Metrics/Optional) 
-                        <span style="display: block; font-size: 0.8em; font-weight: normal; color: #6c757d;">GRAPH.csv > SPLIT.csv</span>
+                        <span style="display: block; font-size: 0.8em; font-weight: normal; color: #6c757d;">Use GRAPH.csv not SPLIT.csv</span>
                     </label>
                     <input type="file" id="csv-upload" accept=".csv">
                 </div>
@@ -306,7 +309,19 @@
         </section>
 
         <section class="panel" id="compare-section">
-            <h2>B: Compare Routes</h2>
+
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                <h2 style="margin: 0;">B: Compare Routes</h2>
+                
+                <div class="inline-helper-wrapper">
+                    <div class="sync-helper-icon">?</div>
+                    <div class="sync-helper-tooltip header-guide-tooltip" style="padding: 15px;">
+                        <strong style="color: #FF6B00; font-size: 0.85rem; display: block; margin-bottom: 8px;">Multi-Upload Analysis</strong>
+                        <span style="color: #fff; line-height: 1.4;">Load multiple separate GPX files simultaneously to overlay their paths on a single map. Visually compare the exact lines taken by different coxes, or compare your own line across two different outings.</span>
+                    </div>
+                </div>
+            </div>
+
             <p>Upload up to 5 GPX files to compare steering lines side-by-side. Use the toggles to show or hide them individually.</p>
             
             <div id="compare-inputs" class="upload-grid" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.0rem;">
@@ -477,7 +492,21 @@
         </section>
 
         <section class="panel" id="metric-compare-section">
-            <h2>C: Compare Sessions</h2>
+
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                <h2 style="margin: 0;">C: Compare Sessions</h2>
+
+                <div class="inline-helper-wrapper">
+                    <div class="sync-helper-icon">?</div>
+                    <div class="sync-helper-tooltip header-guide-tooltip">
+                        <ul style="margin: 8px 0 0 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px;">
+                            <li><strong style="color: #FF6B00;">Stroke Data Comparison</strong> Upload a GPX and CSV file for two separate boats or sessions to compare their steering lines, stroke rates, and split times side-by-side.</li>
+                            <li><strong style="color: #FF6B00;">Alignment Controls</strong> Use the interactive trim bars below the map to align the start and finish points of both boats. This allows you to perfectly synchronize their telemetry data regardless of when each GPS device actually started recording.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <p>Upload a GPX and CSV file for two separate boats or sessions to compare their steering lines, stroke rates, and split times side-by-side.</p>
 
             <div class="upload-grid" style="grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
