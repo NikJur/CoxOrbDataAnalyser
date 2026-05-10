@@ -1271,3 +1271,48 @@ audio, #audio-player {
     background-color: #FF6B00; /* Keeps the icon orange while the tooltip is forced open */
     border-color: white;
 }
+
+
+/* ==========================================
+   Inline Helper Tooltip (For ? in section A buttons)
+     - Inherits the same styling and behaviour as the video sync helper tooltip, but with custom positioning and sizing for the Dashboard Guide list.
+   ========================================== */
+.inline-helper-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Inherits the hover behaviour from the video tooltip engine */
+.inline-helper-wrapper:hover .sync-helper-icon {
+    background-color: #FF6B00;
+    border-color: white;
+}
+
+.inline-helper-wrapper:hover .sync-helper-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Custom sizing and left-alignment for the Header Guide list */
+.header-guide-tooltip {
+    width: 360px;       
+    bottom: 130%;       
+    left: 0;            /* Anchors it to the left side of the ? icon */
+    margin-left: -15px; /* Tiny nudge so it looks perfectly padded */
+}
+
+/* Reposition the little downward arrow to sit directly over the ? icon */
+.header-guide-tooltip::after {
+    left: 29px;         /* Points down exactly at the icon */
+    right: auto;
+}
+
+/* Targeted shrink rule only for the Header/Dashboard guide "?" icon */
+.inline-helper-wrapper .sync-helper-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+}
