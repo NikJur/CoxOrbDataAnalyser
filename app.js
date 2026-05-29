@@ -628,7 +628,7 @@ function drawPrimaryRoute(useSpeedColors) {
 }
 
 /**
- * Initializes the Leaflet map, draws the polyline path, and adds the boat marker.
+ * Initialises the Leaflet map, draws the polyline path, and adds the boat marker.
  * Implements a ResizeObserver to automatically redraw the map canvas when the user 
  * manually drags the bottom-right corner to change the container size.
  * @param {Array<Object>} data - Merged dataset containing latitudes and longitudes.
@@ -716,6 +716,9 @@ function initMap(data) {
         }
     });
     
+    // Attaches the zoom listener to dynamically scale the Isis channel
+    mapInstance.on('zoomend', updateChannelWidth);
+
     // Start watching the container
     resizeObserver.observe(mapContainer);
 }
@@ -3896,6 +3899,7 @@ function askVideoPreference() {
 let isisLineLayer = L.featureGroup();
 let compareIsisLineLayer = L.featureGroup(); // Dedicated layer for Section B
 let isisDataLoaded = false;
+let channelBands = []; // Array holds the background bands for dynamic scaling
 
 async function fetchIsisData() {
     if (isisDataLoaded) return; // Prevent duplicate network requests
@@ -3917,8 +3921,17 @@ async function fetchIsisData() {
                     const parts = coord.split(',');
                     return [parseFloat(parts[1]), parseFloat(parts[0])];
                 });
-                
+
+                // Defines the underlying translucent channel band
+                const channelBandStyle = { color: '#9B59B6', weight: 20, opacity: 0.2, lineCap: 'round', lineJoin: 'round' };
+                // Adds the background band to Section A and B first so it renders at the bottom
+                const channelBand1 = L.polyline(isisRoutePoints, channelBandStyle).addTo(isisLineLayer);
+                const channelBand2 = L.polyline(isisRoutePoints, channelBandStyle).addTo(compareIsisLineLayer);
+                channelBands.push(channelBand1, channelBand2);
+
+                // Defines the primary dashed racing line
                 const lineStyle = { color: '#9B59B6', weight: 4, dashArray: '5, 8', opacity: 0.9 }; // Line style for the Isis route
+                // Adds the primary dashed line on top of the band
                 L.polyline(isisRoutePoints, lineStyle).addTo(isisLineLayer); // Add to Section A
                 L.polyline(isisRoutePoints, lineStyle).addTo(compareIsisLineLayer); // Add to Section B
             }
@@ -3953,10 +3966,40 @@ async function fetchIsisData() {
                 }
             }
         }
+        // Triggers the initial width calculation immediately after drawing
+        updateChannelWidth();
         isisDataLoaded = true;
     } catch (error) {
         console.error("Isis Line Parsing Error:", error);
     }
+}
+
+/**
+ * Logic: Dynamic Scale Calculation
+ * Calculates the correct pixel width for a ~4m channel at the current zoom level.
+ * Safely handles both automatic map zoom events and manual initialisation calls.
+ */
+function updateChannelWidth(e) {
+    // Determine the active map: use the zoom event target, or fallback to the global map instances
+    const activeMap = (e && e.target) ? e.target : (mapInstance || compareMapInstance);
+    
+    // Safety check in case the map hasn't rendered yet
+    if (!activeMap) return;
+
+    // If triggered automatically by a zoom event, abort if the Isis layers aren't visible.
+    // If triggered manually (e is undefined) during first load, bypass this check to set the initial size.
+    if (e && !activeMap.hasLayer(isisLineLayer) && !activeMap.hasLayer(compareIsisLineLayer)) return;
+
+    const currentZoom = activeMap.getZoom();
+    const baseZoom = 15;
+    const baseWidth = 2.7; // Base pixel width at zoom level 15
+    
+    const scaledWeight = baseWidth * Math.pow(2, currentZoom - baseZoom);
+    
+    // Applies the dynamically calculated weight to all bands
+    channelBands.forEach(band => {
+        if (band) band.setStyle({ weight: scaledWeight });
+    });
 }
 
 /**
@@ -4011,10 +4054,14 @@ if (loadIsisBtn) {
             document.getElementById('audio-container')?.classList.add('hidden');
             document.getElementById('playback-buttons')?.classList.add('hidden');
             
+            // creates the fallback map
             if (!mapInstance) {
                 mapInstance = L.map('map').setView([51.737, -1.245], 14);
                 mapInstance.addControl(new L.Control.Fullscreen());
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapInstance);
+
+                // Attach the dynamic scaling listener to this blank map
+                mapInstance.on('zoomend', updateChannelWidth);
             }
 
             await fetchIsisData();
