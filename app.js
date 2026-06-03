@@ -2581,15 +2581,38 @@ if (toggleCompareFairway) {
  */
 const toggleCompareIsis = document.getElementById('toggle-compare-isis');
 if (toggleCompareIsis) {
-    toggleCompareIsis.addEventListener('change', (e) => {
+    toggleCompareIsis.addEventListener('change', async (e) => {
         if (!compareMapInstance) return;
         
+        const compareClearanceContainer = document.getElementById('compare-clearance-toggle-container');
+        const toggleCompareClearance = document.getElementById('toggle-compare-clearance');
+
         if (e.target.checked) {
-            fetchIsisData().then(() => {
-                compareIsisLineLayer.addTo(compareMapInstance);
-            });
+            await fetchIsisData();
+            compareIsisLineLayer.addTo(compareMapInstance);
+            
+            if (compareClearanceContainer) compareClearanceContainer.classList.remove('hidden');
+            if (toggleCompareClearance && toggleCompareClearance.checked) {
+                compareIsisClearanceLayer.addTo(compareMapInstance);
+            }
         } else {
             compareMapInstance.removeLayer(compareIsisLineLayer);
+            compareMapInstance.removeLayer(compareIsisClearanceLayer);
+            if (compareClearanceContainer) compareClearanceContainer.classList.add('hidden');
+        }
+    });
+}
+
+// The independent sub-toggle for Section B Clearance Zones
+const toggleCompareClearance = document.getElementById('toggle-compare-clearance');
+if (toggleCompareClearance) {
+    toggleCompareClearance.addEventListener('change', (e) => {
+        if (!compareMapInstance) return;
+        
+        if (e.target.checked && toggleCompareIsis && toggleCompareIsis.checked) {
+            compareIsisClearanceLayer.addTo(compareMapInstance);
+        } else {
+            compareMapInstance.removeLayer(compareIsisClearanceLayer);
         }
     });
 }
@@ -3903,6 +3926,9 @@ let isisLineLayer = L.featureGroup();
 let compareIsisLineLayer = L.featureGroup(); // Dedicated layer for Section B
 let isisDataLoaded = false;
 let channelBands = []; // Array holds the background bands for dynamic scaling
+// Dedicated layers exclusively for the red clearance zones
+let isisClearanceLayer = L.featureGroup();
+let compareIsisClearanceLayer = L.featureGroup();
 
 async function fetchIsisData() {
     if (isisDataLoaded) return; // Prevent duplicate network requests
@@ -4021,12 +4047,9 @@ async function fetchIsisData() {
             // Merges the base style with the specific pattern ID for the current zone
             const zoneStyle = { ...baseClearanceStyle, fillColor: zone.patternId };
             
-            L.polygon(zone.coords, zoneStyle).addTo(isisLineLayer);
-            L.polygon(zone.coords, zoneStyle).addTo(compareIsisLineLayer);
+            L.polygon(zone.coords, zoneStyle).addTo(isisClearanceLayer);
+            L.polygon(zone.coords, zoneStyle).addTo(compareIsisClearanceLayer);
         });
-
-        L.polygon(clearanceBhiCoords, clearanceStyle).addTo(isisLineLayer);
-        L.polygon(clearanceBhiCoords, clearanceStyle).addTo(compareIsisLineLayer);
 
         // Parse Permanent Markers
         const placemarks = xmlDoc.getElementsByTagName("Placemark");
@@ -4108,11 +4131,39 @@ if (toggleIsisLine) {
     toggleIsisLine.addEventListener('change', async (e) => {
         if (!mapInstance) return;
         
+        const clearanceContainer = document.getElementById('clearance-toggle-container');
+        const toggleClearance = document.getElementById('toggle-clearance-zones');
+
         if (e.target.checked) {
             await fetchIsisData();
             isisLineLayer.addTo(mapInstance);
+            
+            // Reveal the sub-toggle UI
+            if (clearanceContainer) clearanceContainer.classList.remove('hidden');
+            
+            // Add the clearance zones immediately if the sub-toggle was left checked
+            if (toggleClearance && toggleClearance.checked) {
+                isisClearanceLayer.addTo(mapInstance);
+            }
         } else {
+            // Remove both layers and hide the sub-toggle UI
             mapInstance.removeLayer(isisLineLayer);
+            mapInstance.removeLayer(isisClearanceLayer);
+            if (clearanceContainer) clearanceContainer.classList.add('hidden');
+        }
+    });
+}
+
+// The independent sub-toggle for Section A Clearance Zones
+const toggleClearanceZones = document.getElementById('toggle-clearance-zones');
+if (toggleClearanceZones) {
+    toggleClearanceZones.addEventListener('change', (e) => {
+        if (!mapInstance) return;
+        
+        if (e.target.checked && toggleIsisLine && toggleIsisLine.checked) {
+            isisClearanceLayer.addTo(mapInstance);
+        } else {
+            mapInstance.removeLayer(isisClearanceLayer);
         }
     });
 }
@@ -4168,6 +4219,10 @@ if (loadIsisBtn) {
             
             if (toggleIsisLine) toggleIsisLine.checked = true;
 
+            // Reveal the sub-menu and draw the clearance zones if the sub-box was left checked
+            document.getElementById('clearance-toggle-container')?.classList.remove('hidden');
+            if (document.getElementById('toggle-clearance-zones')?.checked) isisClearanceLayer.addTo(mapInstance);
+
             // Unhide all interactive map overlays
             ['fairway-toggle-container', 'buoys-toggle-container', 'isis-toggle-container', 'bridges-toggle-container', 'hocr-bridges-toggle-container'].forEach(id => {
                 document.getElementById(id)?.classList.remove('hidden');
@@ -4214,10 +4269,16 @@ if (loadIsisBtn) {
                 // Render the Map
                 initMap(mergedData);
                 
-                // Fetch and overlay the static purple Isis Line
+                // Fetch and overlay the static green Isis Line
                 await fetchIsisData();
                 if (mapInstance) isisLineLayer.addTo(mapInstance);
                 if (toggleIsisLine) toggleIsisLine.checked = true; // Visually syncs the toggle switch
+
+                // unhide the sub-menu and add the clearance zones (since mapInstance safely exists)
+                document.getElementById('clearance-toggle-container')?.classList.remove('hidden');
+                if (document.getElementById('toggle-clearance-zones')?.checked) {
+                    isisClearanceLayer.addTo(mapInstance);
+                }
 
                 setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(); }, 150);
 
