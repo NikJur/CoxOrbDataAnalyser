@@ -103,6 +103,13 @@ document.getElementById('process-btn').addEventListener('click', async () => {
     // Resets the video layout in case the user previously had the split-screen open
     resetVideoLayout();
 
+    // Force map overlays to default OFF state so the new map starts clean
+    const toggleIsis = document.getElementById('toggle-isis-line');
+    if (toggleIsis) toggleIsis.checked = false;
+    const toggleClearance = document.getElementById('toggle-clearance-zones');
+    if (toggleClearance) toggleClearance.checked = false;
+    document.getElementById('clearance-toggle-container')?.classList.add('hidden');
+
     const gpxFile = document.getElementById('gpx-upload').files[0];
     const csvFile = document.getElementById('csv-upload').files[0];
     const processBtn = document.getElementById('process-btn');
@@ -1661,6 +1668,13 @@ document.getElementById('compare-btn').addEventListener('click', async () => {
     const compareBtn = document.getElementById('compare-btn');
     compareBtn.innerText = "Processing...";
 
+    // Force Comparison map overlays to default OFF state
+    const toggleCompareIsis = document.getElementById('toggle-compare-isis');
+    if (toggleCompareIsis) toggleCompareIsis.checked = false;
+    const toggleCompareClearance = document.getElementById('toggle-compare-clearance');
+    if (toggleCompareClearance) toggleCompareClearance.checked = false;
+    document.getElementById('compare-clearance-toggle-container')?.classList.add('hidden');
+
     document.getElementById('compare-map-container').classList.remove('hidden');
 
     // Initialise the comparison map if it does not exist yet
@@ -2068,6 +2082,11 @@ document.getElementById('clear-primary-btn').addEventListener('click', () => {
     const toggleIsisLine = document.getElementById('toggle-isis-line');
     if (toggleIsisLine) toggleIsisLine.checked = false;
 
+    // Reset and hide the clearance zone sub-toggle
+    const toggleClearanceZones = document.getElementById('toggle-clearance-zones');
+    if (toggleClearanceZones) toggleClearanceZones.checked = false;
+    document.getElementById('clearance-toggle-container')?.classList.add('hidden');
+
     // Reset the Tideway Bridges toggle and remove the markers
     const toggleBridgesEl = document.getElementById('toggle-bridges');
     if (toggleBridgesEl) toggleBridgesEl.checked = false;
@@ -2148,6 +2167,11 @@ document.getElementById('clear-compare-btn').addEventListener('click', () => {
     // Reset the independent Isis route toggle
     const toggleCompareIsisEl = document.getElementById('toggle-compare-isis');
     if (toggleCompareIsisEl) toggleCompareIsisEl.checked = false;
+
+    // Reset and hide the Section B clearance zone sub-toggle
+    const toggleCompareClearance = document.getElementById('toggle-compare-clearance');
+    if (toggleCompareClearance) toggleCompareClearance.checked = false;
+    document.getElementById('compare-clearance-toggle-container')?.classList.add('hidden');
 
     // Hide the comparison map container again
     document.getElementById('compare-map-container').classList.add('hidden');
