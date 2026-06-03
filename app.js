@@ -3926,19 +3926,107 @@ async function fetchIsisData() {
                 });
 
                 // Defines the underlying translucent channel band
-                const channelBandStyle = { color: '#9B59B6', weight: 20, opacity: 0.2, lineCap: 'round', lineJoin: 'round' };
+                const channelBandStyle = { color: '#126b37', weight: 20, opacity: 0.2, lineCap: 'round', lineJoin: 'round' };
                 // Adds the background band to Section A and B first so it renders at the bottom
                 const channelBand1 = L.polyline(isisRoutePoints, channelBandStyle).addTo(isisLineLayer);
                 const channelBand2 = L.polyline(isisRoutePoints, channelBandStyle).addTo(compareIsisLineLayer);
                 channelBands.push(channelBand1, channelBand2);
 
                 // Defines the primary dashed racing line
-                const lineStyle = { color: '#9B59B6', weight: 4, dashArray: '5, 8', opacity: 0.9 }; // Line style for the Isis route
+                const lineStyle = { color: '#126b37', weight: 4, dashArray: '5, 8', opacity: 0.9 }; // Line style for the Isis route
                 // Adds the primary dashed line on top of the band
                 L.polyline(isisRoutePoints, lineStyle).addTo(isisLineLayer); // Add to Section A
                 L.polyline(isisRoutePoints, lineStyle).addTo(compareIsisLineLayer); // Add to Section B
             }
         }
+
+        // Load the Clearance Zones (BHI, Longbridges, Gut, DonnyB)
+        // A. Inject a native SVG hatching pattern into the DOM for Leaflet to reference
+        // Assigns a unique ID and rotation angle to each zone
+        if (!document.getElementById('bump-hatch-patterns')) {
+            const svgHTML = `
+                <svg style="width:0; height:0; position:absolute;" aria-hidden="true" focusable="false" id="bump-hatch-patterns">
+                  <defs>
+                    <pattern id="hatch-bhi" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(-15)">
+                      <line x1="0" y1="0" x2="0" y2="10" stroke="#E74C3C" stroke-width="2" opacity="0.5" />
+                    </pattern>
+                    <pattern id="hatch-longbridges" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(-65)">
+                      <line x1="0" y1="0" x2="0" y2="10" stroke="#E74C3C" stroke-width="2" opacity="0.5" />
+                    </pattern>
+                    <pattern id="hatch-gut" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(15)">
+                      <line x1="0" y1="0" x2="0" y2="10" stroke="#E74C3C" stroke-width="2" opacity="0.5" />
+                    </pattern>
+                    <pattern id="hatch-donnyb" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(23)">
+                      <line x1="0" y1="0" x2="0" y2="10" stroke="#E74C3C" stroke-width="2" opacity="0.5" />
+                    </pattern>
+                  </defs>
+                </svg>
+            `;
+            document.body.insertAdjacentHTML('beforeend', svgHTML);
+        }
+
+        // B. Defines the exact coordinate boundaries drawn in Google Earth
+        const clearanceBhiCoords = [
+            [51.741649, -1.248329], [51.742170, -1.248395], [51.742748, -1.249167], [51.743348, -1.250118], 
+            [51.744130, -1.251399], [51.744435, -1.252057], [51.744938, -1.253053], [51.745716, -1.254531], 
+            [51.745549, -1.254763], [51.745384, -1.254603], [51.745013, -1.253953], [51.745093, -1.253836], 
+            [51.744635, -1.252955], [51.743948, -1.251512], [51.743548, -1.250759], [51.743170, -1.250243], 
+            [51.742376, -1.249188], [51.742173, -1.248936]
+        ];
+
+        const clearanceLongbridgesCoords = [
+            [51.741149, -1.248035], [51.741104, -1.248194], [51.740827, -1.248006], [51.740419, -1.247663], 
+            [51.739903, -1.247193], [51.739519, -1.246832], [51.738995, -1.246308], [51.738754, -1.246082], 
+            [51.738654, -1.245826], [51.738568, -1.245524], [51.738523, -1.244939], [51.738569, -1.244931], 
+            [51.738765, -1.245538], [51.739141, -1.245969], [51.739531, -1.246394], [51.740498, -1.247417], 
+            [51.741149, -1.248035]
+        ];
+
+        const clearanceGutCoords = [
+            [51.738248, -1.244009], [51.737449, -1.243353], [51.737500, -1.243154], [51.737651, -1.243282], 
+            [51.738019, -1.243543], [51.738277, -1.243730], [51.738473, -1.243952], [51.738586, -1.244212], 
+            [51.738593, -1.244549], [51.738248, -1.244009]
+        ];
+
+        const clearanceDonnyBCoords = [
+            [51.736565, -1.242376], [51.736186, -1.242122], [51.735939, -1.242121], [51.734548, -1.241828], 
+            [51.733351, -1.241368], [51.732867, -1.241116], [51.732146, -1.241003], [51.731675, -1.241072], 
+            [51.731671, -1.240825], [51.731895, -1.240824], [51.732149, -1.240777], [51.732487, -1.240741], 
+            [51.732703, -1.240772], [51.732910, -1.240879], [51.733132, -1.241001], [51.733365, -1.241103], 
+            [51.733635, -1.241195], [51.734226, -1.241404], [51.734505, -1.241496], [51.734519, -1.241585], 
+            [51.734927, -1.241773], [51.735339, -1.241874], [51.735345, -1.241777], [51.736188, -1.241939], 
+            [51.736914, -1.242291], [51.737147, -1.242426], [51.737237, -1.242669], [51.737160, -1.242835], 
+            [51.736565, -1.242376]
+        ];
+
+        // C. Establishes the universal styling baseline
+        const baseClearanceStyle = {
+            color: '#E74C3C',      
+            weight: 2.5,             
+            dashArray: '6, 6',     
+            fillOpacity: 1, 
+            lineCap: 'round',
+            lineJoin: 'round'
+        };
+
+        // D. Pairs each coordinate array with its unique SVG pattern and draws the polygons
+        const zones = [
+            { coords: clearanceBhiCoords, patternId: 'url(#hatch-bhi)' },
+            { coords: clearanceLongbridgesCoords, patternId: 'url(#hatch-longbridges)' },
+            { coords: clearanceGutCoords, patternId: 'url(#hatch-gut)' },
+            { coords: clearanceDonnyBCoords, patternId: 'url(#hatch-donnyb)' }
+        ];
+        
+        zones.forEach(zone => {
+            // Merges the base style with the specific pattern ID for the current zone
+            const zoneStyle = { ...baseClearanceStyle, fillColor: zone.patternId };
+            
+            L.polygon(zone.coords, zoneStyle).addTo(isisLineLayer);
+            L.polygon(zone.coords, zoneStyle).addTo(compareIsisLineLayer);
+        });
+
+        L.polygon(clearanceBhiCoords, clearanceStyle).addTo(isisLineLayer);
+        L.polygon(clearanceBhiCoords, clearanceStyle).addTo(compareIsisLineLayer);
 
         // Parse Permanent Markers
         const placemarks = xmlDoc.getElementsByTagName("Placemark");
