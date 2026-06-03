@@ -1695,6 +1695,9 @@ document.getElementById('compare-btn').addEventListener('click', async () => {
             if (compareMapInstance) compareMapInstance.invalidateSize();
         });
         resizeObserver.observe(container);
+
+        // Attaches the zoom listener to the Section B Comparison Map
+        compareMapInstance.on('zoomend', updateChannelWidth);
     }
 
     let bounds = L.latLngBounds([]);
@@ -3977,29 +3980,36 @@ async function fetchIsisData() {
 /**
  * Logic: Dynamic Scale Calculation
  * Calculates the correct pixel width for a ~4m channel at the current zoom level.
- * Safely handles both automatic map zoom events and manual initialisation calls.
+ * Independently evaluates Section A and Section B maps to prevent scale conflicts.
+ * Identifies the background band by its specific 0.2 opacity property.
  */
-function updateChannelWidth(e) {
-    // Determine the active map: use the zoom event target, or fallback to the global map instances
-    const activeMap = (e && e.target) ? e.target : (mapInstance || compareMapInstance);
-    
-    // Safety check in case the map hasn't rendered yet
-    if (!activeMap) return;
-
-    // If triggered automatically by a zoom event, abort if the Isis layers aren't visible.
-    // If triggered manually (e is undefined) during first load, bypass this check to set the initial size.
-    if (e && !activeMap.hasLayer(isisLineLayer) && !activeMap.hasLayer(compareIsisLineLayer)) return;
-
-    const currentZoom = activeMap.getZoom();
+function updateChannelWidth() {
     const baseZoom = 15;
-    const baseWidth = 2.7; // Base pixel width at zoom level 15
+    const baseWidth = 2.7; // visual thickness of the band
     
-    const scaledWeight = baseWidth * Math.pow(2, currentZoom - baseZoom);
-    
-    // Applies the dynamically calculated weight to all bands
-    channelBands.forEach(band => {
-        if (band) band.setStyle({ weight: scaledWeight });
-    });
+    // Updates Primary Map (Section A)
+    if (typeof mapInstance !== 'undefined' && mapInstance && mapInstance.hasLayer(isisLineLayer)) {
+        const zoomA = mapInstance.getZoom();
+        const weightA = baseWidth * Math.pow(2, zoomA - baseZoom);
+        
+        isisLineLayer.eachLayer(layer => {
+            if (layer.options && layer.options.opacity === 0.2) {
+                layer.setStyle({ weight: weightA });
+            }
+        });
+    }
+
+    // Updates Comparison Map (Section B)
+    if (typeof compareMapInstance !== 'undefined' && compareMapInstance && compareMapInstance.hasLayer(compareIsisLineLayer)) {
+        const zoomB = compareMapInstance.getZoom();
+        const weightB = baseWidth * Math.pow(2, zoomB - baseZoom);
+        
+        compareIsisLineLayer.eachLayer(layer => {
+            if (layer.options && layer.options.opacity === 0.2) {
+                layer.setStyle({ weight: weightB });
+            }
+        });
+    }
 }
 
 /**
